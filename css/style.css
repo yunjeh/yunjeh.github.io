@@ -12,7 +12,9 @@ p {
 	margin: 0;
 	padding: 0;
 }
-
+/*p a {
+	color: #252525;	 text-decoration: underline;
+}*/
 p a:hover {
 	color: #898989;
 }
@@ -35,6 +37,7 @@ p a:hover {
 }
 
 
+
 #header ul {
 	margin: 0;
 	padding: 25px/*56px*/ 0 0 0;
@@ -43,11 +46,12 @@ p a:hover {
 	display: inline;
 	list-style: none;
 /*	margin: 0;*/
-	padding: 0 15px;
+	padding: 0 15px/*19px*/;
 }
 
 #header ul li a {
 	color: #252525;
+	/*display: inline-block;*/
 	font-family: '맑은 고딕','나눔고딕', sans-serif;
 	font-size: 14px;	font-weight: bold/*normal*/;
 	text-decoration: none;
@@ -60,6 +64,7 @@ p a:hover {
 #body {
 	margin: 0 /*중요*/auto;
 	padding: 0 0 200px;
+/*	text-align: center;*/
 	width: 960px;
 }
 
@@ -69,6 +74,7 @@ p a:hover {
 	display: inline-block;
 	font-family: '바탕', '나눔명조', '맑은 고딕';
 	font-size: 25px;
+	/*font-weight: normal;*/
 	margin: 0;
 	padding: 0;
 }
@@ -87,6 +93,7 @@ p a:hover {
 	display: block;
 	font-family: '맑은 고딕','나눔고딕', sans-serif;
 	font-size: 11px;
+	/*font-weight: normal;*/
 	margin: 0;
 	padding: 0;
 }
@@ -130,6 +137,7 @@ p a:hover {
 	width: 960px;
 }
 #body > div img {
+	/*border: 2px solid #292929;*/
 	border:0;
 	margin: 24px 0 0;
 	padding: 0;
@@ -137,7 +145,7 @@ p a:hover {
 #body > div .article {
 	margin: 0 auto;
 	padding: 30px 30px 0;
-	width: 960px/*560px*/;
+	width: 960px;
 }
 #body > div .article h2 {
 	font-family: '맑은 고딕','나눔고딕', sans-serif;
@@ -165,7 +173,7 @@ p a:hover {
 	margin: 0 0 30px;
 }
 
-
+/*이건가*/
 #body > div span{
 	display: inline;
 	background: #0ba39c;	color: #fff;
@@ -173,7 +181,6 @@ p a:hover {
 	padding: 2px 5px 2px 5px;
 }
 input[type=range] {
-
   width: 400px;
 }
 
@@ -192,6 +199,7 @@ input[type=range] {
 /*	margin: 0 0 37px;
 	padding: 20px 10px;*/
 	text-align: center;
+/*width: 596px;*/
 }
 #body form input{
 	font-style:italic;
@@ -209,7 +217,7 @@ input[type=range] {
 #footer {
 	background: #252525;
 	margin: 0;
-	padding: 30px 0 40px;
+	padding: 36px 0 42px;
 }
 #footer div {
 	margin: 0 auto;
