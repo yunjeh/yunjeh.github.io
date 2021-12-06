@@ -32,9 +32,12 @@ p a:hover {
 	text-decoration: none;	letter-spacing: -1px;
 }
 
+
+
+
 #header ul {
 	margin: 0;
-	padding: 25px/*56px*/ 0 0 0;
+	padding: 25px 0 0 0;
 }
 #header ul li {
 	display: inline;
@@ -48,14 +51,12 @@ p a:hover {
 	font-family: '맑은 고딕','나눔고딕', sans-serif;
 	font-size: 14px;	font-weight: bold/*normal*/;
 	text-decoration: none;
-	/*	margin: 0;
-	padding: 0 0 3px;*/
 }
 #header ul li a:hover, #header ul li.selected a {	color: #00AAAA;}
 
 
 #body {
-	margin: 0 auto;
+	margin: 0 /*중요*/auto;
 	padding: 0 0 200px;
 /*	text-align: center;*/
 	width: 960px;
@@ -105,6 +106,7 @@ p a:hover {
 }
 
 
+
 #body table{
   border:0.5px solid #777;
 	border-collapse: collapse;
@@ -112,7 +114,7 @@ p a:hover {
 
 #body thead,td {
 	border:0.5px solid #777;
-		border-collapse: collapse;
+	border-collapse: collapse;
 	padding: 6px;
   vertical-align: middle;
 }
@@ -130,7 +132,7 @@ p a:hover {
 #body > div .article {
 	margin: 0 auto;
 	padding: 30px 30px 0;
-	width: 960p/;
+	width: 960px;
 }
 #body > div .article h2 {
 	font-family: '맑은 고딕','나눔고딕', sans-serif;
@@ -162,6 +164,7 @@ p a:hover {
 #body > div span{
 	display: inline;
 	background: #0ba39c;	color: #fff;
+	/*font-size: 10px;*/
 	padding: 2px 5px 2px 5px;
 }
 input[type=range] {
@@ -171,7 +174,6 @@ input[type=range] {
 
 #body form {
 	margin: 0 auto;
-	width: 620px;*/
 }
 #body form input, #body form textarea {
 	border: 2px solid #252525;
@@ -186,10 +188,12 @@ input[type=range] {
 	width: 80px;
 }
 
+
 #body form textarea {
 	overflow: auto;
 	resize: none;
 }
+
 
 #footer {
 	background: #252525;
