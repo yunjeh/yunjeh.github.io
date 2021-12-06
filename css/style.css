@@ -3,9 +3,6 @@ body {
 	background: #ededed/*#fff*/;
 	font-family: '맑은 고딕','나눔고딕', sans-serif;
 	font-size: 14px;
-	/*font-weight: normal;*/
-	/*line-height: 2;*/
-	/*margin: 0;*/
 	min-width: 960px;
 	padding: 0;
 }
@@ -15,16 +12,14 @@ p {
 	margin: 0;
 	padding: 0;
 }
-/*p a {
-	color: #252525;	 text-decoration: underline;
-}*/
+
 p a:hover {
 	color: #898989;
 }
 #header {
 	text-transform: uppercase;
 	margin: 0 auto;
-	padding: 30px/*44px*/ 0 50px/*50px*/;
+	padding: 30px 0 50px;
 	text-align: center/*left*/;
 	width: 960px;
 }
@@ -35,26 +30,7 @@ p a:hover {
 	font-family: '맑은 고딕','나눔고딕', sans-serif;
 	font-size: 25px;	font-weight: bold/*normal*/;
 	text-decoration: none;	letter-spacing: -1px;
-	/*	margin: 0;
-		padding: 0 0 3px;*/
 }
-
-/*
-#toggcontent {
-	display: none;
-	font-family: '바탕','나눔명조',serif,'맑은 고딕', sans-serif;
-
-}
-#togg {
-	cursor: pointer;
-	color: #0ba39c;
-		font-size: 10px;font-weight: bold;
-}
-#togg:hover {
-	text-decoration: underline;
-}
-*/
-
 
 #header ul {
 	margin: 0;
@@ -63,8 +39,7 @@ p a:hover {
 #header ul li {
 	display: inline;
 	list-style: none;
-/*	margin: 0;*/
-	padding: 0 15px/*19px*/;
+	padding: 0 15px;
 }
 
 #header ul li a {
@@ -80,7 +55,7 @@ p a:hover {
 
 
 #body {
-	margin: 0 /*중요*/auto;
+	margin: 0 auto;
 	padding: 0 0 200px;
 /*	text-align: center;*/
 	width: 960px;
@@ -92,7 +67,6 @@ p a:hover {
 	display: inline-block;
 	font-family: '바탕', '나눔명조', '맑은 고딕';
 	font-size: 25px;
-	/*font-weight: normal;*/
 	margin: 0;
 	padding: 0;
 }
@@ -111,7 +85,6 @@ p a:hover {
 	display: block;
 	font-family: '맑은 고딕','나눔고딕', sans-serif;
 	font-size: 11px;
-	/*font-weight: normal;*/
 	margin: 0;
 	padding: 0;
 }
@@ -124,8 +97,6 @@ p a:hover {
 }
 
 
-
-
 #body p span{
 	display: inline;
 	background: #00B0B0;	color: #fff;
@@ -134,18 +105,15 @@ p a:hover {
 }
 
 
-
 #body table{
   border:0.5px solid #777;
 	border-collapse: collapse;
-
 }
 
 #body thead,td {
 	border:0.5px solid #777;
 		border-collapse: collapse;
 	padding: 6px;
-	/*width: 150px;*/
   vertical-align: middle;
 }
 
@@ -155,7 +123,6 @@ p a:hover {
 	width: 960px;
 }
 #body > div img {
-	/*border: 2px solid #292929;*/
 	border:0;
 	margin: 24px 0 0;
 	padding: 0;
@@ -163,7 +130,7 @@ p a:hover {
 #body > div .article {
 	margin: 0 auto;
 	padding: 30px 30px 0;
-	width: 960px/*560px*/;
+	width: 960p/;
 }
 #body > div .article h2 {
 	font-family: '맑은 고딕','나눔고딕', sans-serif;
@@ -191,23 +158,19 @@ p a:hover {
 	margin: 0 0 30px;
 }
 
-/*이건가*/
+
 #body > div span{
 	display: inline;
 	background: #0ba39c;	color: #fff;
-	/*font-size: 10px;*/
 	padding: 2px 5px 2px 5px;
 }
 input[type=range] {
-  /*-webkit-appearance: none; *//* 기본슬라이드 숨기기*/
-  width: 400px; /* Firefox에서는 특정한 넓이가 필요*/
-  /*background: transparent;*/ /* Chrome에서 투명하게 출력 */
+  width: 400px;
 }
 
 
 #body form {
 	margin: 0 auto;
-/*	padding: 24px 0 0;
 	width: 620px;*/
 }
 #body form input, #body form textarea {
@@ -216,24 +179,17 @@ input[type=range] {
 	font-family: "맑은 고딕","나눔고딕", sans-serif;
 	font-size: 15px;
 	font-weight: normal;
-/*	margin: 0 0 37px;
-	padding: 20px 10px;*/
 	text-align: center;
-/*	text-transform: uppercase;
-	width: 596px;*/
 }
 #body form input{
 	font-style:italic;
 	width: 80px;
 }
 
-
 #body form textarea {
-/*	height: 175px;*/
 	overflow: auto;
 	resize: none;
 }
-
 
 #footer {
 	background: #252525;
