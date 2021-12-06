@@ -1,0 +1,255 @@
+
+body {
+	background: #ededed/*#fff*/;
+	font-family: '맑은 고딕','나눔고딕', sans-serif;
+	font-size: 14px;
+	/*font-weight: normal;*/
+	/*line-height: 2;*/
+	/*margin: 0;*/
+	min-width: 960px;
+	padding: 0;
+}
+p {
+	color: #252525;
+	line-height: 26px;
+	margin: 0;
+	padding: 0;
+}
+/*p a {
+	color: #252525;	 text-decoration: underline;
+}*/
+p a:hover {
+	color: #898989;
+}
+#header {
+	text-transform: uppercase;
+	margin: 0 auto;
+	padding: 30px/*44px*/ 0 50px/*50px*/;
+	text-align: center/*left*/;
+	width: 960px;
+}
+
+#header p a {
+	color: #252525;
+	display: inline-block;
+	font-family: '맑은 고딕','나눔고딕', sans-serif;
+	font-size: 25px;	font-weight: bold/*normal*/;
+	text-decoration: none;	letter-spacing: -1px;
+	/*	margin: 0;
+		padding: 0 0 3px;*/
+}
+
+/*
+#toggcontent {
+	display: none;
+	font-family: '바탕','나눔명조',serif,'맑은 고딕', sans-serif;
+
+}
+#togg {
+	cursor: pointer;
+	color: #0ba39c;
+		font-size: 10px;font-weight: bold;
+}
+#togg:hover {
+	text-decoration: underline;
+}
+*/
+
+
+#header ul {
+	margin: 0;
+	padding: 25px/*56px*/ 0 0 0;
+}
+#header ul li {
+	display: inline;
+	list-style: none;
+/*	margin: 0;*/
+	padding: 0 15px/*19px*/;
+}
+
+#header ul li a {
+	color: #252525;
+	/*display: inline-block;*/
+	font-family: '맑은 고딕','나눔고딕', sans-serif;
+	font-size: 14px;	font-weight: bold/*normal*/;
+	text-decoration: none;
+	/*	margin: 0;
+	padding: 0 0 3px;*/
+}
+#header ul li a:hover, #header ul li.selected a {	color: #00AAAA;}
+
+
+#body {
+	margin: 0 /*중요*/auto;
+	padding: 0 0 200px;
+/*	text-align: center;*/
+	width: 960px;
+}
+
+
+#body h2 {
+	color: #252525;
+	display: inline-block;
+	font-family: '바탕', '나눔명조', '맑은 고딕';
+	font-size: 25px;
+	/*font-weight: normal;*/
+	margin: 0;
+	padding: 0;
+}
+
+#body h2 span {
+	color: #fff;
+	background: #00B0B0;
+  display: inline-block;
+	font-family: '바탕', '나눔명조', '맑은 고딕';
+	font-size: 25px;
+	padding: 10px 10px 10px;
+}
+
+#body h6 {
+	color: #252525;
+	display: block;
+	font-family: '맑은 고딕','나눔고딕', sans-serif;
+	font-size: 11px;
+	/*font-weight: normal;*/
+	margin: 0;
+	padding: 0;
+}
+
+#body h6 span {
+	color: #fff;
+	background: #00B0B0;
+  display: inline-block;
+	padding: 2px 12px 2px;
+}
+
+
+
+
+#body p span{
+	display: inline;
+	background: #00B0B0;	color: #fff;
+	font-size: 10px;
+	padding: 2px 5px 2px 5px;
+}
+
+
+
+#body table{
+  border:0.5px solid #777;
+	border-collapse: collapse;
+
+}
+
+#body thead,td {
+	border:0.5px solid #777;
+		border-collapse: collapse;
+	padding: 6px;
+	/*width: 150px;*/
+  vertical-align: middle;
+}
+
+#body > div {
+	margin: 0 auto;
+	padding: 0;
+	width: 960px;
+}
+#body > div img {
+	/*border: 2px solid #292929;*/
+	border:0;
+	margin: 24px 0 0;
+	padding: 0;
+}
+#body > div .article {
+	margin: 0 auto;
+	padding: 30px 30px 0;
+	width: 960px/*560px*/;
+}
+#body > div .article h2 {
+	font-family: '맑은 고딕','나눔고딕', sans-serif;
+	font-size: 25px;
+	font-weight: normal;
+	margin: 0 0 30px;
+}
+#body > div .article h3 {
+	color: #252525;
+	line-height: 24px;
+	margin: 0;
+	padding: 0;
+}
+#body > div .article h4 {
+	background: #252525;
+	color: #fff;
+	display: inline-block;
+	font-family: '맑은 고딕','나눔고딕', sans-serif;
+	font-size: 25px;
+	font-weight: normal;
+	margin: 0 0 30px;
+	padding: 8px 27px 10px;
+}
+#body > div .article p {
+	margin: 0 0 30px;
+}
+
+/*이건가*/
+#body > div span{
+	display: inline;
+	background: #0ba39c;	color: #fff;
+	/*font-size: 10px;*/
+	padding: 2px 5px 2px 5px;
+}
+input[type=range] {
+  /*-webkit-appearance: none; *//* 기본슬라이드 숨기기*/
+  width: 400px; /* Firefox에서는 특정한 넓이가 필요*/
+  /*background: transparent;*/ /* Chrome에서 투명하게 출력 */
+}
+
+
+#body form {
+	margin: 0 auto;
+/*	padding: 24px 0 0;
+	width: 620px;*/
+}
+#body form input, #body form textarea {
+	border: 2px solid #252525;
+	color: #252525;
+	font-family: "맑은 고딕","나눔고딕", sans-serif;
+	font-size: 15px;
+	font-weight: normal;
+/*	margin: 0 0 37px;
+	padding: 20px 10px;*/
+	text-align: center;
+/*	text-transform: uppercase;
+	width: 596px;*/
+}
+#body form input{
+	font-style:italic;
+	width: 80px;
+}
+
+
+#body form textarea {
+/*	height: 175px;*/
+	overflow: auto;
+	resize: none;
+}
+
+
+#footer {
+	background: #252525;
+	margin: 0;
+	padding: 36px 0 42px;
+}
+#footer div {
+	margin: 0 auto;
+	overflow: hidden;
+	padding: 0;
+	width: 960px;
+}
+#footer div p {
+	color: #fff;
+	float: left;
+	line-height: 44px;
+	margin: 0 0 0 10px;
+	padding: 0;
+}
