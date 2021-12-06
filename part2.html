@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>경제수학 연습</title>
+	<link rel="stylesheet" type="text/css" href="css/style.css">
+<div id="header">
+	<p><a href="index.html" >창원OO고등학교 경제수학익힘책</a></p>
+	<ul id="navigation">
+		<li><a href="index.html">home</a></li>
+		<li><a href="part1.html">환율</a></li>
+		<li class="selected"><a href="part2.html">세금</a></li>
+		<li><a href="part3.html">예금</a></li>
+		<li><a href="part4.html">적금</a></li>
+		<li><a href="part5.html">보험</a></li>
+	</ul>
+</div>
+</head>
+
+<body>
+<div id="body">
+
+		<h6><span>39쪽</span> I. 수와 경제생활  3. 세금</h6>
+		<h2><span>세금과 누진제에 대해 알아보자</span></h2>
+
+<div class="article">
+<h3>세금</h3>
+<p>세금 또는 조세는 국가 및 지방자치단체가 국민을 위한 특정한 목적의 달성 등을 위해 조성하는 국가의 생활비로써
+<br>개개인에게 소득 또는 생활 행위에 대하여 일정한 규칙에 따라 지불을 요구하는 것이다.
+<br>
+</p>
+
+<h3>누진제도</h3>
+<p>많이 쓸수록 요금이 많아지거나, 많이 벌수록 세금 따위가 급격히 많아지는 제도.
+<br>대부분의 국가에서 소득세는 누진제를 적용하여 과세표준이 증가함에 따라 세율이 높아진다.
+<br>
+<br>
+</p>
+</div>
+
+<hr>
+
+<div class="article">
+	<p>
+	<br>전기요금도 사용량이 증가함에 따라 단위당 요금이 올라가는 누진제를 따른다.
+	<br>전기요금은 세금은 아니지만, 누진제의 원리를 이해하기 위해 이를 적용하여 요금을 계산하여 보자.
+	<br>(부가세, 전력산업기반기금 및 각종 할인제도로 인해 실제 청구금액과는 다름.)
+	</p>
+<h3>2016 개편 후 주택용 전기 요금표</h3>
+<p>
+<table>
+<colgroup><col width="50">	<col width="150">	<col width="150">	<col width="150"></colgroup>
+
+<thead bgcolor=#c1c1c1 align="center"><tr>	<td colspan="2">구간</td><td>기본요금(원/호)</td>	<td>전력량요금(원/kWh)</td></tr></thead>
+		<tr align="center">	<td>1</td>	<td>200kWh 이하</td><td>910</td>	<td>93.3</td></tr>
+		<tr align="center">	<td>2</td>	<td>201~400kWh</td><td>1600</td>	<td>187.9</td></tr>
+		<tr align="center">	<td>3</td>	<td>400kWh 초과</td><td>7300</td>	<td>280.6</td></tr>
+</table>
+</p>
+
+
+<p>
+					<br><span>예제</span> 280kWh를 사용한 가정의 전기요금 합계를 구하시오.
+					<br><span>풀이</span> 280kWh을 사용한 경우 구간2에 해당하므로 기본요금은 1600원,
+					전력량요금은 (200 * 93.3) + (80 * 187.9) = 33692원이다.
+					<br>따라서 전기요금 합계는 1600 + 33692 = 35292원이다.
+<br><br></p>
+
+</div>
+
+<hr>
+
+<div class="article">
+<p><br><span>연습문제</span> 위의 표를 이용하여
+					<form>
+					  <input type="text" id="kwh" value="300"> kWh을 사용한 가정의 전기요금 합계를 구하여라.
+					  <input type="button" id="psum" value="click!"><br><br>
+					</form>
+</p>
+
+<p><span>풀이</span></p><p id="answer"></p>
+<br>
+
+<script src="js/part2_ans.js" type="text/javascript"></script>
+
+</div>
+</div>
+
+
+
+
+<div id="footer">
+<div><p>2021-2 웹프로그래밍특론 과제</p><div>
+</div>
+
+</body>
+</html>

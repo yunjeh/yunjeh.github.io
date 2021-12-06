@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>경제수학 연습</title>
+	<link rel="stylesheet" type="text/css" href="css/style.css">
+	<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<div id="header">
+	<p><a href="index.html" >창원OO고등학교 경제수학익힘책</a></p>
+	<ul id="navigation">
+		<li><a href="index.html">home</a></li>
+		<li><a href="part1.html">환율</a></li>
+		<li><a href="part2.html">세금</a></li>
+		<li class="selected"><a href="part3.html">예금</a></li>
+		<li><a href="part4.html">적금</a></li>
+		<li><a href="part5.html">보험</a></li>
+	</ul>
+</div>
+</head>
+
+<body>
+<div id="body">
+
+
+		<h6><span>76쪽</span> II. 수열과 금융</h6>
+		<h2><span>예금의 원리합계를 구해보자</span></h2>
+
+		<!--	<img src="images/photographer.jpg" height="120px" alt="">-->
+		<div class="article">
+		<h3>단리와 복리</h3>
+		<p>단리는 단위 기간마다 원금에만 이율이 적용되어 이자가 붙고 복리는 단위 기간마다 원금 및 이자에 대해 이율이 적용되어 이자가 붙는다.
+		<br>단위 기간이 1회 지날 때까지는 동일하지만 점차 복리의 원리합계가 커진다.
+		</p>
+
+		<h3>단리와 복리의 비교</h3>
+		<p>원금 a원을 이율 r로 n 기간동안 예금해두었을 때의 단리와 복리를 이용한 원리합계가 어떻게 달라지는지 알아보자.
+		<br><br></p>
+				    <form>
+				      a: <input type="text" id="a" value="1000000">&nbsp;&nbsp;&nbsp;
+				      r: <input type="text" id="r" value="0.05">&nbsp;&nbsp;&nbsp;
+				      n: <input type="text" id="n" value="20">&nbsp;&nbsp;&nbsp;
+				        <input type="button" id="drawChart" value="click!"><br><br>
+				    </form>
+
+		<script src="js/part3_chart.js" type="text/javascript"></script>
+		<p id="comment"><br>
+		<br></p>
+		<div id="curve_chart" style="width: 600px; height: 300px"></div>
+
+		<h3>정기예금과 정기적금</h3>
+		<p>정기예금은 일정 금액을 기간을 정하여 한 번 맡기는 것이고 정기적금은 정해진 기간동안 일정액을 주기적으로 적립하는 것이다.
+		<br><br>
+		</p>
+		</div>
+<hr>
+<div id="article">
+
+	<p><br>학습한 내용을 문제를 통해 확인해보자.<br></p>
+	<p><br><span>예제</span> 원금 100만 원을 연이율 12% 월복리로 은행에 저축하였을 때, 1년 후 원리합계를 구하시오.
+	<br><span>풀이</span> 연이율 12%이므로 월이율 12/12=1(%) 즉 0.01, 기간은 12(개월)이므로 1000000 * (1 + 0.01)^12 = 약 112.68 만원이다.
+	<br><br></p>
+	<p>대출을 상환하는 것 역시 정기예금의 원리를 따른다. 다음 문제를 통해 확인해보자.<br></p>
+	<p><span>예제</span> 원금 100만 원을 연이율 10%, 연복리로 2년간 빌렸을 때 2년 후 갚아야할 원리합계 중 이자에 해당하는 금액을 구하시오.
+	<br><span>풀이</span> 100만 원을 연이율 10%, 연복리로 2년간 정기예금한 것과 같다. 원리합계가 1000000 * (1 + 0.1)^2 = 1210000원이므로
+	<br>이자는 이 중 원금 100만원을 뺀 21만 원이다.<br><br></p>
+</div>
+<hr>
+
+<div id="article">
+
+	<p>
+				<br><span>연습문제</span> 원금 a원을 월이율 r로 n개월동안 정기예금해두었을 때 만기시 원리합계를 구하여라. 단, 소숫점 미만은 반올림한다.
+				<br></p>
+				<form>
+					a: <input type="text" id="aa" value="1000000">&nbsp;&nbsp;&nbsp;
+					r: <input type="text" id="rr" value="0.01">&nbsp;&nbsp;&nbsp;
+					n: <input type="text" id="nn" value="12">&nbsp;&nbsp;&nbsp;
+						<input type="button" id="ans" value="click!"><br><br>
+				</form>
+				<script src="js/part3_ans.js" type="text/javascript"></script>
+				<p><br><span>풀이</span></p>
+				<p id="answer"></p>
+				<br><br></p>
+</div>
+
+</div>
+
+<div id="footer">
+<div><p>2021-2 웹프로그래밍특론 과제</p><div>
+</div>
+
+</body>
+</html>
