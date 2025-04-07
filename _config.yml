@@ -12,8 +12,8 @@ sass:
 
 permalink: /posts/:title/
 texture:
-  title: 주알주알
-  tagline: 취미러
+  title: untitled
+  tagline: 
   date_format: "%b %-d, %Y"
   style: blue
   showNav: false
