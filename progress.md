@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: page
 title: Activity Progress
 permalink: /progress/
 ---
