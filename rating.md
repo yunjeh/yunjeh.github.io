@@ -104,4 +104,4 @@ permalink: /rating/
 .legend-cells { display: flex; gap: 3px; }
 </style>
 
-<script src="{{ '/assets/js/rating-script.js' | relative_url }}"></script>
+<script src="{{ '/assets/js/rating.js' | relative_url }}"></script>
