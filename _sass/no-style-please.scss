@@ -59,8 +59,8 @@ li { margin: 0.4rem 0; }
 /* 2. PC 설정 (화면 너비가 800px 이상일 때만 적용) */
 @media (min-width: 800px) {
   .w {
-    max-width: 850px !important;    /* PC용 적정 너비 */
-    margin-left: 50px !important;   /* 요청하신 왼쪽 여백 50px */
+    max-width: 800px !important;    /* PC용 적정 너비 */
+    margin-left: 5% !important;   /* 요청하신 왼쪽 여백 50px */
     margin-right: auto !important;  /* 오른쪽은 비워둠 */
     padding: 4rem 2rem !important;  /* PC용 넓은 패딩 */
   }
