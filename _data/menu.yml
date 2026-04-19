@@ -37,6 +37,6 @@ entries:
   - title: 
   - title: 
   - title: Rating
-    url: rating.md
+    url: rating
   #  entries:
   #    - title: 뭐라고 하지 #to edit this menu, edit _data/menu.yml file
