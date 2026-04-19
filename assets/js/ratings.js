@@ -1,74 +1,95 @@
----
-layout: default
-title: Activity Progress
-permalink: /progress/
----
+const OWNER = 'yunjeh';
+const REPO = 'yunjeh.github.io';
 
-<style>
-    .combined-container { padding: 20px 0; width: 100%; max-width: 100%; box-sizing: border-box; }
-    .section-group { margin-bottom: 50px; border-bottom: 1px solid #eee; padding-bottom: 30px; }
-    .section-title { font-size: 1.5rem; margin-bottom: 25px; font-weight: bold; color: #222; border-left: 5px solid #30a14e; padding-left: 15px; }
-    .progress-section { margin-bottom: 40px; width: 100%; }
-    .progress-title { font-size: 1.1rem; margin-bottom: 15px; font-weight: bold; color: #555; }
+async function initRatings() {
+    const container = document.getElementById('overall-container');
+    if (!container) return;
 
-    /* 가로 스크롤 컨테이너 */
-    .scroll-container {
-        width: 100%;
-        overflow-x: auto;
-        padding-bottom: 15px;
-        -webkit-overflow-scrolling: touch;
-    }
+    const currentYear = new Date().getFullYear();
+    const years = [currentYear, currentYear - 1, currentYear - 2];
+    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    
+    const allCells = {};
+    const scoreData = {};
 
-    .scroll-content {
-        display: inline-block;
-        min-width: 900px;
-        vertical-align: top;
-    }
+    years.forEach(year => {
+        const section = document.createElement('div');
+        section.className = 'progress-section';
+        section.innerHTML = `
+            <div class="progress-title">${year} Overall Status</div>
+            <div class="scroll-container"><div class="scroll-content">
+                <div id="months-overall-${year}" class="month-labels"></div>
+                <div class="grid-wrapper">
+                    <div class="day-labels"><div>Sun</div><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div></div>
+                    <div id="grid-overall-${year}" class="rating-grid"></div>
+                </div>
+            </div></div>`;
+        container.appendChild(section);
 
-    .month-labels { position: relative; height: 20px; margin-left: 38px; margin-bottom: 5px; }
-    .month-label { position: absolute; font-size: 11px; color: #57606a; white-space: nowrap; }
+        const grid = document.getElementById(`grid-overall-${year}`);
+        const monthLabels = document.getElementById(`months-overall-${year}`);
+        const jan1 = new Date(year, 0, 1, 12, 0, 0);
+        const startCalendar = new Date(jan1);
+        startCalendar.setDate(jan1.getDate() - jan1.getDay());
 
-    .grid-wrapper { display: flex; align-items: flex-start; }
-    .day-labels {
-        display: grid;
-        grid-template-rows: repeat(7, 14px);
-        gap: 3px;
-        margin-right: 10px;
-        font-size: 10px;
-        color: #57606a;
-        padding-top: 1px;
-    }
-    .day-labels div { height: 14px; line-height: 14px; }
+        let lastMonth = -1;
+        for (let i = 0; i < 371; i++) {
+            const d = new Date(startCalendar);
+            d.setDate(startCalendar.getDate() + i);
+            const y = d.getFullYear();
+            const dateKey = `${y}.${String(d.getMonth() + 1).padStart(2, '0')}.${String(d.getDate()).padStart(2, '0')}`;
+            const cell = document.createElement('div');
+            cell.className = 'cell';
+            if (y === year) {
+                cell.setAttribute('data-date', dateKey);
+                allCells[dateKey] = cell;
+                if (d.getDay() === 0) {
+                    const currentMonth = d.getMonth();
+                    if (currentMonth !== lastMonth) {
+                        const lbl = document.createElement('div');
+                        lbl.className = 'month-label';
+                        lbl.innerText = months[currentMonth];
+                        lbl.style.left = `${Math.floor(i / 7) * 17}px`;
+                        monthLabels.appendChild(lbl);
+                        lastMonth = currentMonth;
+                    }
+                }
+            } else { cell.style.visibility = "hidden"; }
+            grid.appendChild(cell);
+        }
+    });
 
-    .rating-grid {
-        display: grid;
-        grid-template-columns: repeat(53, 14px);
-        grid-template-rows: repeat(7, 14px);
-        grid-auto-flow: column;
-        gap: 3px;
-    }
+    try {
+        const response = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents/_ratings`);
+        const files = await response.json();
+        if (!Array.isArray(files)) return;
 
-    .cell { width: 14px; height: 14px; background-color: #ebedf0; border-radius: 2px; transition: transform 0.1s; }
-    .cell:hover { transform: scale(1.2); z-index: 10; }
+        files.forEach(file => {
+            if (file.name === '.gitkeep' || !file.name.endsWith('.md')) return;
+            const parts = file.name.replace('.md', '').split('-');
+            if (parts.length >= 9) {
+                const dateKey = `${parts[0]}.${parts[1]}.${parts[2]}`;
+                const overall = parseFloat(parts[8]);
+                if (overall > 0) {
+                    if (!scoreData[dateKey]) scoreData[dateKey] = { total: 0, count: 0 };
+                    scoreData[dateKey].total += overall;
+                    scoreData[dateKey].count += 1;
+                }
+            }
+        });
 
-    /* 점수별 농도 색상 */
-    .level-1 { background-color: #9be9a8 !important; }
-    .level-2 { background-color: #40c463 !important; }
-    .level-3 { background-color: #30a14e !important; }
-    .level-4 { background-color: #216e39 !important; }
-    .level-5 { background-color: #1b4b29 !important; }
-</style>
-
-<div class="combined-container">
-    <div class="section-group">
-        <h2 class="section-title">Overall Ratings</h2>
-        <div id="overall-container"></div>
-    </div>
-
-    <div class="section-group">
-        <h2 class="section-title">Specific Progress</h2>
-        <div id="progress-container"></div>
-    </div>
-</div>
-
-<script src="{{ '/assets/js/combined_progress.js' | relative_url }}"></script>
+        for (const date in scoreData) {
+            const avg = scoreData[date].total / scoreData[date].count;
+            const target = allCells[date];
+            if (target) {
+                let level = 1;
+                if (avg > 1.0 && avg <= 2.5) level = 2;
+                else if (avg <= 3.5) level = 3;
+                else if (avg <= 4.5) level = 4;
+                else if (avg > 4.5) level = 5;
+                target.className = `cell level-${level}`;
+            }
+        }
+    } catch (e) { console.error(e); }
+}
+initRatings();
