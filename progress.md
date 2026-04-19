@@ -5,29 +5,29 @@ permalink: /progress/
 ---
 
 <style>
-    /* 전체 컨테이너 여백 */
-    .progress-container {
-        padding: 20px 0;
+    .progress-container { padding: 20px 0; }
+    .progress-section { margin-bottom: 60px; }
+    .progress-title { font-size: 1.1rem; margin-bottom: 15px; font-weight: bold; color: #333; }
+
+    /* 월 라벨과 잔디밭이 함께 스크롤되도록 감싸는 컨테이너 */
+    .scroll-container {
+        overflow-x: auto;
+        padding-bottom: 10px;
+        -webkit-overflow-scrolling: touch;
     }
 
-    /* 각 섹션(Workout, Practice) 간격 */
-    .progress-section {
-        position: relative;
-        margin-bottom: 60px; /* 월 라벨 공간 확보 */
+    .scroll-content {
+        display: inline-block;
+        min-width: min-content;
+        vertical-align: top;
     }
 
-    .progress-title {
-        font-size: 1.1rem;
-        margin-bottom: 30px;
-        font-weight: bold;
-    }
-
-    /* 월 라벨 레이어 (부모가 relative여야 함) */
+    /* 월 라벨: 요일 라벨 너비(38px)만큼 왼쪽 여백을 줌 */
     .month-labels {
         position: relative;
         height: 20px;
+        margin-left: 38px; 
         margin-bottom: 5px;
-        width: 100%;
     }
 
     .month-label {
@@ -37,7 +37,6 @@ permalink: /progress/
         white-space: nowrap;
     }
 
-    /* 그리드와 요일 라벨 정렬 */
     .grid-wrapper {
         display: flex;
         align-items: flex-start;
@@ -50,15 +49,11 @@ permalink: /progress/
         margin-right: 10px;
         font-size: 10px;
         color: #57606a;
-        padding-top: 1px; /* 그리드 셀과 수평 맞춤 */
+        padding-top: 1px;
     }
 
-    .day-labels div {
-        height: 14px;
-        line-height: 14px;
-    }
+    .day-labels div { height: 14px; line-height: 14px; }
 
-    /* 잔디 그리드 설정 */
     .rating-grid {
         display: grid;
         grid-template-columns: repeat(53, 14px);
@@ -67,7 +62,6 @@ permalink: /progress/
         gap: 3px;
     }
 
-    /* 개별 셀 스타일 */
     .cell {
         width: 14px;
         height: 14px;
@@ -75,18 +69,12 @@ permalink: /progress/
         border-radius: 2px;
     }
 
-    /* 점수별 색상 농도 */
+    /* 점수별 농도 (rating.js와 동일한 5단계) */
     .level-1 { background-color: #9be9a8 !important; }
     .level-2 { background-color: #40c463 !important; }
     .level-3 { background-color: #30a14e !important; }
     .level-4 { background-color: #216e39 !important; }
     .level-5 { background-color: #1b4b29 !important; }
-
-    /* 가로 스크롤 허용 (모바일 대응) */
-    .grid-wrapper {
-        overflow-x: auto;
-        padding-bottom: 10px;
-    }
 </style>
 
 <div class="progress-container">
