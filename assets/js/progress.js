@@ -1,6 +1,14 @@
+// OWNER와 REPO는 ratings.js와 중복 선언되어도 오류 나지 않게 처리
+if (typeof OWNER === 'undefined') var OWNER = 'yunjeh';
+if (typeof REPO === 'undefined') var REPO = 'yunjeh.github.io';
+
 async function initProgress() {
     const container = document.getElementById('progress-container');
-    if (!container) return;
+    // 컨테이너가 없으면 실행 중단
+    if (!container) {
+        console.error("progress-container를 찾을 수 없습니다.");
+        return;
+    }
 
     const currentYear = new Date().getFullYear();
     const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
@@ -12,27 +20,47 @@ async function initProgress() {
     const allCells = { workout: {}, practice: {} };
     const scoreData = { workout: {}, practice: {} };
 
+    // 1. 그리드 UI 생성
+    container.innerHTML = ''; // 기존 내용 초기화
     types.forEach(type => {
         const section = document.createElement('div');
         section.className = 'progress-section';
-        section.innerHTML = `<div class="progress-title">${type.title}</div><div class="scroll-container"><div class="scroll-content"><div id="months-${type.key}-${currentYear}" class="month-labels"></div><div class="grid-wrapper"><div class="day-labels"><div>Sun</div><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div></div><div id="grid-${type.key}-${currentYear}" class="rating-grid"></div></div></div></div>`;
+        section.innerHTML = `
+            <div class="progress-title">${type.title}</div>
+            <div class="scroll-container">
+                <div class="scroll-content">
+                    <div id="months-${type.key}-${currentYear}" class="month-labels"></div>
+                    <div class="grid-wrapper">
+                        <div class="day-labels">
+                            <div>Sun</div><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div>
+                        </div>
+                        <div id="grid-${type.key}-${currentYear}" class="rating-grid"></div>
+                    </div>
+                </div>
+            </div>`;
         container.appendChild(section);
+
         const grid = document.getElementById(`grid-${type.key}-${currentYear}`);
         const monthLabels = document.getElementById(`months-${type.key}-${currentYear}`);
+        
         const jan1 = new Date(currentYear, 0, 1, 12, 0, 0);
         const startCalendar = new Date(jan1);
         startCalendar.setDate(jan1.getDate() - jan1.getDay());
+
         let lastMonth = -1;
         for (let i = 0; i < 371; i++) {
             const d = new Date(startCalendar);
             d.setDate(startCalendar.getDate() + i);
             const y = d.getFullYear();
             const dateKey = `${y}.${String(d.getMonth() + 1).padStart(2, '0')}.${String(d.getDate()).padStart(2, '0')}`;
+            
             const cell = document.createElement('div');
             cell.className = 'cell';
+
             if (y === currentYear) {
                 cell.setAttribute('data-date', dateKey);
                 allCells[type.key][dateKey] = cell;
+                
                 if (d.getDay() === 0) {
                     const currentMonth = d.getMonth();
                     if (currentMonth !== lastMonth) {
@@ -44,25 +72,31 @@ async function initProgress() {
                         lastMonth = currentMonth;
                     }
                 }
-            } else { cell.style.visibility = "hidden"; }
+            } else {
+                cell.style.visibility = "hidden";
+            }
             grid.appendChild(cell);
         }
     });
 
+    // 2. GitHub 데이터 가져오기 및 평균 계산
     try {
         const response = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents/_ratings`);
+        if (!response.ok) throw new Error("데이터를 불러오지 못했습니다.");
+        
         const files = await response.json();
         if (!Array.isArray(files)) return;
 
         files.forEach(file => {
             if (file.name === '.gitkeep' || !file.name.endsWith('.md')) return;
+            
             const parts = file.name.replace('.md', '').split('-');
+            // 연도가 올해인 데이터만 처리
             if (parts.length >= 9 && parseInt(parts[0]) === currentYear) {
                 const dateKey = `${parts[0]}.${parts[1]}.${parts[2]}`;
                 types.forEach(t => {
                     const val = parseFloat(parts[t.idx]);
-                    
-                    // 0인 데이터는 평균 계산에서 제외
+                    // 0인 데이터는 제외하고 합산
                     if (val > 0) {
                         if (!scoreData[t.key][dateKey]) scoreData[t.key][dateKey] = { total: 0, count: 0 };
                         scoreData[t.key][dateKey].total += val;
@@ -72,6 +106,7 @@ async function initProgress() {
             }
         });
 
+        // 3. 색상 적용
         types.forEach(t => {
             for (const date in scoreData[t.key]) {
                 const avg = scoreData[t.key][date].total / scoreData[t.key][date].count;
@@ -87,6 +122,14 @@ async function initProgress() {
                 }
             }
         });
-    } catch (e) { console.error(e); }
+    } catch (e) {
+        console.error("데이터 로딩 중 오류 발생:", e);
+    }
 }
-initProgress();
+
+// DOM이 완전히 로드된 후 실행되도록 보장
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initProgress);
+} else {
+    initProgress();
+}
