@@ -15,23 +15,13 @@ async function initProgress() {
     types.forEach(type => {
         const section = document.createElement('div');
         section.className = 'progress-section';
-        section.innerHTML = `
-            <div class="progress-title">${type.title}</div>
-            <div class="scroll-container"><div class="scroll-content">
-                <div id="months-${type.key}-${currentYear}" class="month-labels"></div>
-                <div class="grid-wrapper">
-                    <div class="day-labels"><div>Sun</div><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div></div>
-                    <div id="grid-${type.key}-${currentYear}" class="rating-grid"></div>
-                </div>
-            </div></div>`;
+        section.innerHTML = `<div class="progress-title">${type.title}</div><div class="scroll-container"><div class="scroll-content"><div id="months-${type.key}-${currentYear}" class="month-labels"></div><div class="grid-wrapper"><div class="day-labels"><div>Sun</div><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div></div><div id="grid-${type.key}-${currentYear}" class="rating-grid"></div></div></div></div>`;
         container.appendChild(section);
-
         const grid = document.getElementById(`grid-${type.key}-${currentYear}`);
         const monthLabels = document.getElementById(`months-${type.key}-${currentYear}`);
         const jan1 = new Date(currentYear, 0, 1, 12, 0, 0);
         const startCalendar = new Date(jan1);
         startCalendar.setDate(jan1.getDate() - jan1.getDay());
-
         let lastMonth = -1;
         for (let i = 0; i < 371; i++) {
             const d = new Date(startCalendar);
@@ -71,6 +61,8 @@ async function initProgress() {
                 const dateKey = `${parts[0]}.${parts[1]}.${parts[2]}`;
                 types.forEach(t => {
                     const val = parseFloat(parts[t.idx]);
+                    
+                    // 0인 데이터는 평균 계산에서 제외
                     if (val > 0) {
                         if (!scoreData[t.key][dateKey]) scoreData[t.key][dateKey] = { total: 0, count: 0 };
                         scoreData[t.key][dateKey].total += val;
@@ -91,6 +83,7 @@ async function initProgress() {
                     else if (avg <= 4.5) level = 4;
                     else if (avg > 4.5) level = 5;
                     target.className = `cell level-${level}`;
+                    target.title = `${date} (Avg: ${avg.toFixed(1)})`;
                 }
             }
         });
