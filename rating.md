@@ -17,7 +17,7 @@ permalink: /rating/
             <div class="cell level-4"></div>
             <div class="cell level-5"></div>
         </div>
-        <span>More (5.0)</span>
+        <span>More</span>
     </div>
 </div>
 
