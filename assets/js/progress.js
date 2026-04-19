@@ -7,8 +7,8 @@ async function initProgress() {
 
     const currentYear = new Date().getFullYear();
     const types = [
-        { key: 'workout', title: 'Workout Progress' },
-        { key: 'practice', title: 'Practice Progress' }
+        { key: 'workout', title: 'Daily Progress' },
+        { key: 'practice', title: 'Daily Progress' }
     ];
     
     const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
