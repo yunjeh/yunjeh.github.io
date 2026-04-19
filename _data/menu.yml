@@ -35,7 +35,8 @@ entries:
   #          url: about
   - title: 
   - title: 
-  - title: 
+  - title: Progress
+    url: progress
   - title: Rating
     url: rating
   #  entries:
