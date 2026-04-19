@@ -37,7 +37,7 @@ entries:
   - title: 
   - title: Progress
     url: progress
-  - title: Rating
-    url: rating
+  # title: Rating
+  # url: rating
   #  entries:
   #    - title: 뭐라고 하지 #to edit this menu, edit _data/menu.yml file
