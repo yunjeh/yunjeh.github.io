@@ -1,4 +1,4 @@
-const OWNER = 'yunjeh'; 
+const OWNER = 'yunjeh';
 const REPO = 'yunjeh.github.io';
 
 async function initProgress() {
@@ -15,18 +15,22 @@ async function initProgress() {
     const allCells = { workout: {}, practice: {} };
     const scoreData = { workout: {}, practice: {} };
 
-    // 1. UI 구조 생성 (Workout과 Practice 각각 생성)
+    // 1. UI 구조 생성
     types.forEach(type => {
         const section = document.createElement('div');
         section.className = 'progress-section';
         section.innerHTML = `
             <h3 class="progress-title">${type.title} (${currentYear})</h3>
-            <div id="months-${type.key}" class="month-labels"></div>
-            <div class="grid-wrapper">
-                <div class="day-labels">
-                    <div>Sun</div><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div>
+            <div class="scroll-container">
+                <div class="scroll-content">
+                    <div id="months-${type.key}" class="month-labels"></div>
+                    <div class="grid-wrapper">
+                        <div class="day-labels">
+                            <div>Sun</div><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div>
+                        </div>
+                        <div id="grid-${type.key}" class="rating-grid"></div>
+                    </div>
                 </div>
-                <div id="grid-${type.key}" class="rating-grid"></div>
             </div>
         `;
         container.appendChild(section);
@@ -34,7 +38,6 @@ async function initProgress() {
         const grid = document.getElementById(`grid-${type.key}`);
         const monthLabels = document.getElementById(`months-${type.key}`);
 
-        // 해당 연도 1월 1일 기준 달력 시작일(일요일) 계산
         const jan1 = new Date(currentYear, 0, 1, 12, 0, 0);
         const startCalendar = new Date(jan1);
         startCalendar.setDate(jan1.getDate() - jan1.getDay());
@@ -54,7 +57,6 @@ async function initProgress() {
                 cell.setAttribute('data-date', dateKey);
                 allCells[type.key][dateKey] = cell;
                 
-                // 월 라벨 생성 로직
                 if (d.getDay() === 0) {
                     const currentMonth = d.getMonth();
                     if (currentMonth !== lastMonth) {
@@ -62,8 +64,8 @@ async function initProgress() {
                         lbl.className = 'month-label';
                         lbl.innerText = months[currentMonth];
                         
-                        // 위치 계산: 요일 라벨 너비(38px) + (주차수 * (셀 14px + 갭 3px))
-                        const leftOffset = 38 + (Math.floor(i / 7) * 17); 
+                        // .month-labels에 이미 margin-left가 있으므로 순수 주차수 위치만 계산
+                        const leftOffset = (Math.floor(i / 7) * 17); 
                         lbl.style.left = `${leftOffset}px`;
                         
                         monthLabels.appendChild(lbl);
@@ -71,7 +73,6 @@ async function initProgress() {
                     }
                 }
             } else {
-                // 해당 연도가 아니면 투명하게 처리하여 공간만 차지
                 cell.style.visibility = "hidden"; 
             }
             grid.appendChild(cell);
@@ -88,18 +89,16 @@ async function initProgress() {
             const res = await fetch(file.download_url);
             const text = await res.text();
             
-            // 데이터 추출 (정규식)
             const workoutMatch = text.match(/workout:\s*([\d.]+)/i);
             const practiceMatch = text.match(/practice:\s*([\d.]+)/i);
             const dateMatch = text.match(/date:\s*["']?(\d{4})[./-](\d{2})[./-](\d{2})/i);
 
             if (dateMatch) {
                 const yearOfPost = parseInt(dateMatch[1]);
-                if (yearOfPost !== currentYear) return; // 올해 데이터만 처리
+                if (yearOfPost !== currentYear) return;
 
                 const pureDate = `${dateMatch[1]}.${dateMatch[2]}.${dateMatch[3]}`;
 
-                // Workout 데이터 누적
                 if (workoutMatch) {
                     const val = parseFloat(workoutMatch[1]);
                     if (val > 0) {
@@ -108,7 +107,6 @@ async function initProgress() {
                         scoreData.workout[pureDate].count += 1;
                     }
                 }
-                // Practice 데이터 누적
                 if (practiceMatch) {
                     const val = parseFloat(practiceMatch[1]);
                     if (val > 0) {
@@ -120,7 +118,6 @@ async function initProgress() {
             }
         }));
 
-        // 셀 색칠하기
         ['workout', 'practice'].forEach(type => {
             for (const date in scoreData[type]) {
                 const avgScore = scoreData[type][date].total / scoreData[type][date].count;
