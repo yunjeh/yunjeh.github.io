@@ -7,9 +7,12 @@ permalink: /progress/
 <style>
     .progress-container { 
         padding: 20px 0;
-        width: 100%;
-        max-width: 100%;
+
+        max-width: 1000px;
         box-sizing: border-box;
+        margin: 20px auto;
+        overflow-x: auto;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
     }
     
     .progress-section { 
