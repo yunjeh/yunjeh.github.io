@@ -51,9 +51,8 @@ li { margin: 0.4rem 0; }
 
 .w {
   max-width: 640px;
-  margin-left: 50px;      /* 왼쪽 여백을 50px 주어 너무 붙지 않게 설정 */
-  margin-top: 0;          /* 상단 여백 */
-  margin-bottom: 0;
+  margin-left: 50px !important;   /* 왼쪽 여백 강제 적용 */
+  margin-right: auto !important;  /* 오른쪽 정렬 해제 */
   //margin: 0 auto;
   padding: 4rem 2rem;
 }
