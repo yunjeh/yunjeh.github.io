@@ -36,7 +36,7 @@ permalink: /rating/
     grid-template-columns: 30px repeat(53, 14px); /* 요일 라벨 공간 30px 추가 */
     gap: 3px;
     margin-bottom: 5px;
-    font-size: 11px;
+    font-size: 10px;
     color: #57606a;
 }
 
