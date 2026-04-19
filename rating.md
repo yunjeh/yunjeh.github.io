@@ -22,59 +22,59 @@ permalink: /rating/
 </div>
 
 <style>
-/* 대시보드 전체 컨테이너 */
+/* 대시보드 전체 설정 */
 .rating-dashboard { 
     max-width: 900px; 
     margin: 20px auto;
-    overflow-x: auto; /* 모바일 대응 */
+    overflow-x: auto; /* 모바일에서 가로 스크롤 허용 */
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
 }
 
 /* 연도별 섹션 */
 .year-section { 
-    margin-bottom: 40px; 
-    min-width: 820px; 
+    margin-bottom: 50px; 
+    min-width: 850px; /* PC에서 레이아웃 깨짐 방지 */
 }
 
 .year-title { 
-    font-size: 18px; 
+    font-size: 20px; 
     font-weight: 600; 
-    margin-bottom: 12px; 
+    margin-bottom: 15px; 
     color: #24292f; 
 }
 
-/* 월 라벨 스타일 (한 줄 유지) */
+/* 월 라벨 (PC 잘림 방지를 위해 절대 위치 및 줄바꿈 금지 적용) */
 .month-labels {
     display: grid;
-    /* 요일 라벨 폭(35px) + 53주(14px + gap) */
     grid-template-columns: 35px repeat(53, 14px);
     gap: 3px;
-    margin-bottom: 5px;
+    margin-bottom: 8px;
     font-size: 11px;
     color: #57606a;
     height: 15px;
+    position: relative;
 }
 
 .month-label {
-    white-space: nowrap; 
-    grid-row: 1;
+    position: absolute;
+    white-space: nowrap; /* PC에서 한 줄로 나오게 강제 */
+    top: 0;
 }
 
-/* 그리드 레이아웃 */
+/* 요일 + 잔디 그리드 정렬 */
 .grid-wrapper {
     display: flex;
     align-items: flex-start;
 }
 
-/* 요일 라벨 (Sun-Sat 전체 표시) */
+/* 요일 라벨 (Sun~Sat 전체 표시) */
 .day-labels {
     display: grid;
     grid-template-rows: repeat(7, 14px);
     gap: 3px;
-    margin-right: 8px;
+    margin-right: 10px;
     font-size: 10px;
     color: #57606a;
-    line-height: 14px;
 }
 
 .day-labels div {
@@ -83,7 +83,7 @@ permalink: /rating/
     align-items: center;
 }
 
-/* 잔디 그리드 (세로 방향 흐름) */
+/* 잔디 그리드 (세로 방향 흐름: 일요일부터 아래로 채움) */
 .rating-grid {
     display: grid;
     grid-template-columns: repeat(53, 14px);
@@ -92,7 +92,7 @@ permalink: /rating/
     grid-auto-flow: column; 
 }
 
-/* 기본 잔디 칸 */
+/* 잔디 칸 기본 스타일 */
 .cell {
     width: 14px;
     height: 14px;
@@ -101,7 +101,7 @@ permalink: /rating/
     transition: background-color 0.2s;
 }
 
-/* 점수별 레벨 색상 (짙은 녹색 테마) */
+/* 레벨별 색상 */
 .level-0 { background-color: #ebedf0; }
 .level-1 { background-color: #9be9a8; }
 .level-2 { background-color: #40c463; }
@@ -111,7 +111,7 @@ permalink: /rating/
 
 /* 하단 범례 */
 .rating-legend { 
-    margin-top: 20px; 
+    margin-top: 25px; 
     display: flex; 
     align-items: center; 
     font-size: 12px; 
