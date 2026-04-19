@@ -56,9 +56,12 @@ permalink: /rating/
 
 .rating-grid {
     display: grid;
+    /* 가로 53열, 세로 7행 고정 */
     grid-template-columns: repeat(53, 14px);
     grid-template-rows: repeat(7, 14px);
     gap: 3px;
+    /* 핵심: 데이터를 위에서 아래로(세로) 먼저 채우도록 설정 */
+    grid-auto-flow: column; 
 }
 
 .cell {
