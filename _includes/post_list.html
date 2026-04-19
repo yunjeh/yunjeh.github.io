@@ -13,11 +13,13 @@
 {%- if posts.size > 0 -%}
   <ul class="post-full-list">
     {%- for post in posts limit: include.limit -%}
-        <li style="margin-bottom: 20px; list-style: none;">
-          <span style="font-weight: bold; ">
+        <li style="margin-bottom: 15px;">
+          <span style="font-weight: bold; margin-right: 2em; white-space: nowrap;">
             {{- post.date | date: "%Y.%m.%d. %H:%M:%S" -}}
-          </span> <span style="font-weight: none; ">
-            {{ post.content }}
+          </span>
+          
+          <span class="post-content">
+            {{ post.content | strip_newlines }}
           </span>
         </li>
     {%- endfor -%}
