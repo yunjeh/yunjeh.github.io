@@ -1,5 +1,5 @@
-const OWNER = 'yunjeh';
-const REPO = 'yunjeh.github.io';
+if (typeof OWNER === 'undefined') var OWNER = 'yunjeh';
+if (typeof REPO === 'undefined') var REPO = 'yunjeh.github.io';
 
 async function initRatings() {
     const container = document.getElementById('overall-container');
@@ -9,7 +9,7 @@ async function initRatings() {
     const years = [currentYear, currentYear - 1, currentYear - 2];
     const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
     const allCells = {};
-    const scoreData = {};
+    const latestData = {}; // 날짜별 마지막 점수를 저장할 객체
 
     years.forEach(year => {
         const section = document.createElement('div');
@@ -53,6 +53,9 @@ async function initRatings() {
         const files = await response.json();
         if (!Array.isArray(files)) return;
 
+        // 파일명 정렬 (날짜/시간 순으로 오름차순 정렬하여 마지막 파일이 최신이 되게 함)
+        files.sort((a, b) => a.name.localeCompare(b.name));
+
         files.forEach(file => {
             if (file.name === '.gitkeep' || !file.name.endsWith('.md')) return;
             const parts = file.name.replace('.md', '').split('-');
@@ -60,26 +63,24 @@ async function initRatings() {
                 const dateKey = `${parts[0]}.${parts[1]}.${parts[2]}`;
                 const overall = parseFloat(parts[8]);
                 
-                // 0이 아닌 경우에만 평균 계산에 포함
+                // 0이 아니면 덮어쓰기 (마지막 파일이 결국 저장됨)
                 if (overall > 0) {
-                    if (!scoreData[dateKey]) scoreData[dateKey] = { total: 0, count: 0 };
-                    scoreData[dateKey].total += overall;
-                    scoreData[dateKey].count += 1;
+                    latestData[dateKey] = overall;
                 }
             }
         });
 
-        for (const date in scoreData) {
-            const avg = scoreData[date].total / scoreData[date].count;
+        for (const date in latestData) {
+            const score = latestData[date];
             const target = allCells[date];
             if (target) {
                 let level = 1;
-                if (avg > 1.0 && avg <= 2.5) level = 2;
-                else if (avg <= 3.5) level = 3;
-                else if (avg <= 4.5) level = 4;
-                else if (avg > 4.5) level = 5;
+                if (score > 1.0 && score <= 2.5) level = 2;
+                else if (score <= 3.5) level = 3;
+                else if (score <= 4.5) level = 4;
+                else if (score > 4.5) level = 5;
                 target.className = `cell level-${level}`;
-                target.title = `${date} (Avg: ${avg.toFixed(1)})`;
+                target.title = `${date} (Latest: ${score})`;
             }
         }
     } catch (e) { console.error(e); }
