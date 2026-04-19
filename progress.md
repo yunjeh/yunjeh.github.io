@@ -29,13 +29,13 @@ permalink: /progress/
     }
 
     /* 핵심 수정: 가로 폭을 100%로 제한하여 스크롤 유도 */
-    .scroll-container {
+    /*.scroll-container {
         width: 100%;
         overflow-x: auto;
         padding-bottom: 10px;
         -webkit-overflow-scrolling: touch;
-        display: block; /* 블록 요소로 지정 */
-    }
+        display: block; *//* 블록 요소로 지정 */
+    /*}*/
 
     .scroll-content {
         display: inline-block;
