@@ -33,13 +33,13 @@ permalink: /progress/
 
 <div class="combined-container">
     <div class="section-group">
-        <h2 class="section-title">Overall Ratings</h2>
-        <div id="overall-container"></div>
+        <h2 class="section-title">Specific Progress</h2>
+        <div id="progress-container"></div>
     </div>
 
     <div class="section-group">
-        <h2 class="section-title">Specific Progress</h2>
-        <div id="progress-container"></div>
+        <h2 class="section-title">Overall Ratings</h2>
+        <div id="overall-container"></div>
     </div>
 </div>
 
