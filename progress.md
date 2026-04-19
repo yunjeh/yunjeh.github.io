@@ -5,24 +5,40 @@ permalink: /progress/
 ---
 
 <style>
-    .progress-container { padding: 20px 0; }
-    .progress-section { margin-bottom: 60px; }
-    .progress-title { font-size: 1.1rem; margin-bottom: 15px; font-weight: bold; color: #333; }
+    .progress-container { 
+        padding: 20px 0;
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+    
+    .progress-section { 
+        margin-bottom: 60px; 
+        width: 100%;
+    }
+    
+    .progress-title { 
+        font-size: 1.1rem; 
+        margin-bottom: 15px; 
+        font-weight: bold; 
+        color: #333; 
+    }
 
-    /* 월 라벨과 잔디밭이 함께 스크롤되도록 감싸는 컨테이너 */
+    /* 핵심 수정: 가로 폭을 100%로 제한하여 스크롤 유도 */
     .scroll-container {
+        width: 100%;
         overflow-x: auto;
         padding-bottom: 10px;
         -webkit-overflow-scrolling: touch;
+        display: block; /* 블록 요소로 지정 */
     }
 
     .scroll-content {
         display: inline-block;
-        min-width: min-content;
+        min-width: 900px; /* 잔디밭의 대략적인 최소 너비 확보 */
         vertical-align: top;
     }
 
-    /* 월 라벨: 요일 라벨 너비(38px)만큼 왼쪽 여백을 줌 */
     .month-labels {
         position: relative;
         height: 20px;
@@ -69,7 +85,7 @@ permalink: /progress/
         border-radius: 2px;
     }
 
-    /* 점수별 농도 (rating.js와 동일한 5단계) */
+    /* 색상 농도 */
     .level-1 { background-color: #9be9a8 !important; }
     .level-2 { background-color: #40c463 !important; }
     .level-3 { background-color: #30a14e !important; }
