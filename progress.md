@@ -42,6 +42,6 @@ permalink: /progress/
         <div id="overall-container"></div>
     </div>
 </div>
-<script src="{{ '/assets/js/progress.js' | relative_url }}"></script>
+<!--<script src="{{ '/assets/js/progress.js' | relative_url }}"></script>-->
 <script src="{{ '/assets/js/ratings.js' | relative_url }}"></script>
 
