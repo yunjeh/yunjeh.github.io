@@ -99,7 +99,7 @@ permalink: /progress/
 
 <div class="progress-container">
     </div>
-    <div class="rating-legend">
+    <div class="progress-legend">
         <span>Less</span>
         <div class="legend-cells">
             <div class="cell level-0"></div>
@@ -110,4 +110,5 @@ permalink: /progress/
             <div class="cell level-5"></div>
         </div>
         <span>More</span>
+    </div>
 <script src="{{ '/assets/js/progress.js' | relative_url }}"></script>
