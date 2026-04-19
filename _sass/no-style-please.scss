@@ -50,12 +50,23 @@ li { margin: 0.4rem 0; }
 *:target { background: yellow; }
 
 .w {
-  max-width: 640px;
-  margin-left: 50px !important;   /* 왼쪽 여백 강제 적용 */
-  margin-right: auto !important;  /* 오른쪽 정렬 해제 */
-  //margin: 0 auto;
-  padding: 4rem 2rem;
+  max-width: 100% !important;     /* 작은 화면에서는 가로를 꽉 채움 */
+  margin-left: 0 !important;      /* 왼쪽 여백 없음 */
+  margin-right: 0 !important;     /* 오른쪽 여백 없음 */
+  padding: 2rem 1.5rem !important; /* 모바일용 좁은 패딩 */
 }
+
+/* 2. PC 설정 (화면 너비가 800px 이상일 때만 적용) */
+@media (min-width: 800px) {
+  .w {
+    max-width: 850px !important;    /* PC용 적정 너비 */
+    margin-left: 50px !important;   /* 요청하신 왼쪽 여백 50px */
+    margin-right: auto !important;  /* 오른쪽은 비워둠 */
+    padding: 4rem 2rem !important;  /* PC용 넓은 패딩 */
+  }
+}
+
+
 
 hr {
   text-align: center;
