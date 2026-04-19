@@ -30,9 +30,9 @@ permalink: /progress/
     .level-4 { background-color: #216e39 !important; }
     .level-5 { background-color: #1b4b29 !important; }
 </style>
-
+<!--
 <div class="combined-container">
-    <div class="section-group">
+    <!--<div class="section-group">
         <h2 class="section-title">Specific Progress</h2>
         <div id="progress-container"></div>
     </div>
