@@ -17,7 +17,8 @@ permalink: /progress/
     
     .progress-section { 
         margin-bottom: 60px; 
-        width: 100%;
+
+    min-width: 900px; 
     }
     
     .progress-title { 
