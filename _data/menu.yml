@@ -33,6 +33,8 @@ entries:
   #        - title: with subsubitems
   #        - title: example page
   #          url: about
-  - title: ETC.
-    entries:
-      - title: 뭐라고 하지 #to edit this menu, edit _data/menu.yml file
+  - title: 
+  - title: 
+  - title: 
+  #  entries:
+  #    - title: 뭐라고 하지 #to edit this menu, edit _data/menu.yml file
