@@ -88,11 +88,10 @@ async function initUnifiedRatings() {
     const container = document.getElementById('overall-container');
     if (!container) return;
 
-    // 스타일에 필요한 디자인 주입 실행
     injectStyles();
 
     const currentYear = new Date().getFullYear();
-    const years = [currentYear]; // 올해 잔디밭만 생성
+    const years = [currentYear];
     const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
     
     const allCells = {};
@@ -161,20 +160,19 @@ async function initUnifiedRatings() {
         const response = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents/_overall`);
         
         if (!response.ok) {
-            console.error(`GitHub API 호출 실패 (코드: ${response.status}) - _overall 폴더나 토큰 권한을 확인하세요.`);
+            console.error(`GitHub API 호출 실패 (코드: ${response.status})`);
             return;
         }
 
         const files = await response.json();
         if (!Array.isArray(files)) return;
 
-        // 파일명 정렬 (날짜순 정렬 후 최신 파일이 뒤로 가도록 설정)
+        // 🛠️ 확실한 시간순 정렬 보장: 파일명 자체가 문자열이므로 시간 정보가 담긴 순서대로 완벽히 정렬됩니다.
         files.sort((a, b) => a.name.localeCompare(b.name));
 
         files.forEach(file => {
             if (file.name === '.gitkeep' || !file.name.endsWith('.md')) return;
             
-            // 파일명 분리 (예: "2026-05-18-23-59-30-7.md")
             const cleanName = file.name.substring(0, file.name.lastIndexOf('.md'));
             const parts = cleanName.split('-');
             
@@ -184,10 +182,11 @@ async function initUnifiedRatings() {
                 const day = parts[2];
                 const dateKey = `${year}.${month}.${day}`;
                 
-                // 맨 마지막 원소인 평점 점수 파싱
                 const score = parseInt(parts[parts.length - 1], 10); 
                 
                 if (!isNaN(score) && score >= 0 && score <= 10) {
+                    // 🛠️ 하루에 여러 번 파일이 생성된 경우: 
+                    // 정렬된 순서에 의해 가장 마지막(가장 최신 시간)에 생성된 파일의 점수가 최종 등록됩니다.
                     latestData[dateKey] = score;
                 }
             }
@@ -200,10 +199,8 @@ async function initUnifiedRatings() {
             
             if (target) {
                 const level = Math.min(Math.max(score, 0), 10);
-                
-                // 기존 클래스를 유지하면서 level-X 클래스를 추가/변경합니다.
                 target.className = `cell level-${level}`;
-                target.title = `${date} (Rating: ${score}/10)`;
+                target.title = `${date} (Latest Rating: ${score}/10)`; // 툴팁에도 최신 평점임을 명시
             }
         }
     } catch (e) { 
@@ -211,7 +208,6 @@ async function initUnifiedRatings() {
     }
 }
 
-// 스크립트 로드 시점 제어
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initUnifiedRatings);
 } else {
