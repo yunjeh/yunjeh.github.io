@@ -70,19 +70,17 @@ function injectStyles() {
         }
         /* 0 ~ 10단계 세분화 초록색 테마 */
      /* 0 ~ 10단계 노란색에서 진초록색으로 변하는 테마 */
-.cell.level-0  { background-color: #ebedf0; } /* 데이터 없음 (기본 회색) */
-.cell.level-1  { background-color: #fef5d1; } /* 1점: 아주 연한 레몬 노랑 */
-.cell.level-2  { background-color: #fbe69c; } /* 2점: 부드러운 노랑 */
-.cell.level-3  { background-color: #e5df85; } /* 3점: 올리브 빛이 도는 노랑 */
-.cell.level-4  { background-color: #c0d875; } /* 4점: 연두색 연착륙 */
-.cell.level-5  { background-color: #9bcc6c; } /* 5점: 싱그러운 풀색 */
-.cell.level-6  { background-color: #74bf69; } /* 6점: 완연한 초록색 */
-.cell.level-7  { background-color: #4cb168; } /* 7점: 조금 더 진한 초록 */
-.cell.level-8  { background-color: #21a167; } /* 8점: 딥 그린 진입 */
-.cell.level-9  { background-color: #008f61; } /* 9점: 묵직한 진초록 */
-.cell.level-10 { background-color: #007348; } /* 10점: 최상위 레벨 (포인트 다크 그린) */;
-
-
+        .cell.level-0  { background-color: #ebedf0; } /* 데이터 없음 (기본 회색) */
+        .cell.level-1  { background-color: #fef5d1; } /* 1점: 아주 연한 레몬 노랑 */
+        .cell.level-2  { background-color: #fbe69c; } /* 2점: 부드러운 노랑 */
+        .cell.level-3  { background-color: #e5df85; } /* 3점: 올리브 빛이 도는 노랑 */
+        .cell.level-4  { background-color: #c0d875; } /* 4점: 연두색 연착륙 */
+        .cell.level-5  { background-color: #9bcc6c; } /* 5점: 싱그러운 풀색 */
+        .cell.level-6  { background-color: #74bf69; } /* 6점: 완연한 초록색 */
+        .cell.level-7  { background-color: #4cb168; } /* 7점: 조금 더 진한 초록 */
+        .cell.level-8  { background-color: #21a167; } /* 8점: 딥 그린 진입 */
+        .cell.level-9  { background-color: #008f61; } /* 9점: 묵직한 진초록 */
+        .cell.level-10 { background-color: #007348; } /* 10점: 최상위 레벨 (포인트 다크 그린) */;
 
     
     document.head.appendChild(style);
