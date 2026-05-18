@@ -68,21 +68,19 @@ function injectStyles() {
             background-color: #ebedf0;
             transition: background-color 0.2s ease;
         }
-        /* 0 ~ 10단계 세분화 초록색 테마 */
-     /* 0 ~ 10단계 노란색에서 진초록색으로 변하는 테마 */
-        .cell.level-0  { background-color: #ebedf0; } /* 데이터 없음 (기본 회색) */
-        .cell.level-1  { background-color: #fef5d1; } /* 1점: 아주 연한 레몬 노랑 */
-        .cell.level-2  { background-color: #fbe69c; } /* 2점: 부드러운 노랑 */
-        .cell.level-3  { background-color: #e5df85; } /* 3점: 올리브 빛이 도는 노랑 */
-        .cell.level-4  { background-color: #c0d875; } /* 4점: 연두색 연착륙 */
-        .cell.level-5  { background-color: #9bcc6c; } /* 5점: 싱그러운 풀색 */
-        .cell.level-6  { background-color: #74bf69; } /* 6점: 완연한 초록색 */
-        .cell.level-7  { background-color: #4cb168; } /* 7점: 조금 더 진한 초록 */
-        .cell.level-8  { background-color: #21a167; } /* 8점: 딥 그린 진입 */
-        .cell.level-9  { background-color: #008f61; } /* 9점: 묵직한 진초록 */
-        .cell.level-10 { background-color: #007348; } /* 10점: 최상위 레벨 (포인트 다크 그린) */;
-
-    
+        /* 0 ~ 10단계 노란색에서 진초록색으로 변하는 테마 */
+        .cell.level-0  { background-color: #ebedf0 !important; }
+        .cell.level-1  { background-color: #fef5d1 !important; }
+        .cell.level-2  { background-color: #fbe69c !important; }
+        .cell.level-3  { background-color: #e5df85 !important; }
+        .cell.level-4  { background-color: #c0d875 !important; }
+        .cell.level-5  { background-color: #9bcc6c !important; }
+        .cell.level-6  { background-color: #74bf69 !important; }
+        .cell.level-7  { background-color: #4cb168 !important; }
+        .cell.level-8  { background-color: #21a167 !important; }
+        .cell.level-9  { background-color: #008f61 !important; }
+        .cell.level-10 { background-color: #007348 !important; }
+    `;
     document.head.appendChild(style);
 }
 
@@ -158,12 +156,12 @@ async function initUnifiedRatings() {
         }
     });
 
-    // 2. GitHub API 데이터 가져오기 (🛠️ _overall 폴더로 경로 변경 완료)
+    // 2. GitHub API 데이터 가져오기
     try {
         const response = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents/_overall`);
         
         if (!response.ok) {
-            console.error(`GitHub API 호출 실패 (코드: ${response.status}) - _overall 폴더를 확인하세요.`);
+            console.error(`GitHub API 호출 실패 (코드: ${response.status}) - _overall 폴더나 토큰 권한을 확인하세요.`);
             return;
         }
 
@@ -176,22 +174,20 @@ async function initUnifiedRatings() {
         files.forEach(file => {
             if (file.name === '.gitkeep' || !file.name.endsWith('.md')) return;
             
-            // 파일명 분리 (예: "2026-05-18-23-59-30-7.md" -> ".md" 제거 후 "-"로 스플릿)
+            // 파일명 분리 (예: "2026-05-18-23-59-30-7.md")
             const cleanName = file.name.substring(0, file.name.lastIndexOf('.md'));
             const parts = cleanName.split('-');
             
-            // 🛠️ 버그 수정: yyyy-MM-dd-HH-mm-ss-score 구조이므로 최소 7개 이상의 파츠가 나옴
             if (parts.length >= 7) {
                 const year = parts[0];
                 const month = parts[1];
                 const day = parts[2];
                 const dateKey = `${year}.${month}.${day}`;
                 
-                // 🛠️ 버그 수정: 배열의 가장 마지막 원소가 진짜 평점(Score) 정수값입니다.
+                // 맨 마지막 원소인 평점 점수 파싱
                 const score = parseInt(parts[parts.length - 1], 10); 
                 
                 if (!isNaN(score) && score >= 0 && score <= 10) {
-                    // 동일한 날짜에 여러 번 올렸을 경우 최신 파일의 데이터로 덮어쓰기 위해 계속 누적 저장
                     latestData[dateKey] = score;
                 }
             }
@@ -203,9 +199,9 @@ async function initUnifiedRatings() {
             const target = allCells[date];
             
             if (target) {
-                // 0부터 10까지 정수 스케일 그대로 매핑
                 const level = Math.min(Math.max(score, 0), 10);
                 
+                // 기존 클래스를 유지하면서 level-X 클래스를 추가/변경합니다.
                 target.className = `cell level-${level}`;
                 target.title = `${date} (Rating: ${score}/10)`;
             }
