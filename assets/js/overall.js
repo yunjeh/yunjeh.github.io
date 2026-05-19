@@ -47,7 +47,7 @@ function injectStyles() {
         .day-labels {
             display: grid;
             grid-template-rows: repeat(7, 10px);
-            grid-gap: 2px;
+            grid-gap: 1px;
             font-size: 6px;
             color: #586069;
             margin-right: 8px;
