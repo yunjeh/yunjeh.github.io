@@ -7,7 +7,7 @@
   .slider-section {
     width: 100%;
     max-width: 800px;
-    margin: 30px auto;
+    margin: 20px auto; /* 상하 외부 여백 추가 축소 */
     font-family: sans-serif;
   }
 
@@ -15,17 +15,18 @@
     font-size: 14px;
     font-weight: bold;
     color: #555;
-    margin-bottom: 10px;
+    margin-bottom: 8px;
   }
 
   /* 🧊 가로 스크롤 카드 컨테이너 */
   .slider-container {
     display: flex;
-    gap: 16px;
+    gap: 14px;
     overflow-x: auto;
     scroll-snap-type: x mandatory;
     scroll-behavior: smooth;
-    padding-bottom: 10px;
+    padding-bottom: 8px;
+    
     scrollbar-width: thin;
     scrollbar-color: #b0d4de transparent;
   }
@@ -38,27 +39,28 @@
     border-radius: 10px;
   }
 
-  /* ✉️ 세로 길이를 축소한 슬림형 하늘색 카드 디자인 */
+  /* ✉️ 세로 길이를 극한으로 압축하고 위쪽 정렬을 적용한 카드 디자인 */
   .post-card {
     flex: 0 0 85%;
     max-width: 480px;
-    min-height: 100px;
-    background-color: #e6f4f8; 
-    border-radius: 12px;
-    padding: 16px 20px;
+    min-height: 70px; /* 최소 높이를 100px -> 70px로 대폭 줄임 */
+    background-color: #e6f4f8; /* 옅은 하늘색(파란 상자) */
+    border-radius: 10px;
+    padding: 10px 16px; /* 위아래 내부 패딩을 극도로 압축 */
     box-sizing: border-box;
     scroll-snap-align: center;
     box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+    
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start; /* 🛠️ [핵심 수정] 중앙 정렬 해제, 무조건 위쪽부터 시작 */
   }
 
   /* 🕒 날짜 배지 스타일 */
   .card-date {
     font-size: 11px;
     color: #6b8e96;
-    margin-bottom: 8px;
+    margin-bottom: 5px; /* 본문과의 틈새 축소 */
     font-weight: 500;
     font-family: sans-serif !important;
   }
@@ -67,18 +69,16 @@
   .card-content {
     font-size: 18px; 
     color: #2c3e50;
-    line-height: 1.4;
+    line-height: 1.35;
     white-space: pre-wrap; 
     word-break: break-all;
     
-    /* ⚠️ 평소에는 스크롤바를 완전히 숨기고, 정말 글이 넘칠 때만 브라우저 액션 허용 */
     overflow-y: auto; 
-    max-height: 140px; 
-    -ms-overflow-style: none;  /* IE, 엣지 스크롤바 숨기기 */
-    scrollbar-width: none;  /* 파이어폭스 스크롤바 숨기기 */
+    max-height: 110px; /* 카드 슬림화에 맞춰 본문 최대 한계선도 살짝 조정 */
+    -ms-overflow-style: none;
+    scrollbar-width: none;
   }
 
-  /* 크롬, 사파리, 오페라 본문 내부 세로 스크롤바 강제 숨김 */
   .card-content::-webkit-scrollbar {
     display: none;
   }
@@ -123,7 +123,7 @@
             📅 {{ time_parts[0] }}-{{ time_parts[1] }}-{{ time_parts[2] }} {{ time_parts[3] }}:{{ time_parts[4] }}:{{ time_parts[5] }}
           </div>
           
-          <!-- 카드 내부 본문 출력 (유령 공백 제거 필터 적용) -->
+          <!-- 카드 내부 본문 출력 -->
           <div class="card-content font-style-{{ random_index }}">
             {% assign clean_content = post.content | strip_newlines | strip %}
             {{ clean_content | markdownify }}
