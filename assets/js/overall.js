@@ -27,14 +27,14 @@ function injectStyles() {
             width: 100%;
         }
         .scroll-content {
-            min-width: 600px;
+            min-width: 550px; /* 💡 칸이 줄어듦에 따라 최소 전체 너비도 최적화 */
             position: relative;
-            padding-top: 24px; /* 월 라벨 공간 확보 */
+            padding-top: 24px;
         }
         .month-labels {
             position: relative;
             height: 18px;
-            font-size: 11px; /* 💡 글씨 크기를 가독성 좋게 키움 */
+            font-size: 11px;
             color: #586069;
             margin-bottom: 2px;
         }
@@ -47,14 +47,14 @@ function injectStyles() {
         }
         .rating-grid {
             display: grid;
-            grid-template-rows: repeat(7, 10px);
+            grid-template-rows: repeat(7, 9px); /* 💡 세로 9px로 축소 */
             grid-auto-flow: column;
-            grid-auto-columns: 10px;
-            grid-gap: 1px;
+            grid-auto-columns: 9px;            /* 💡 가로 9px로 축소 */
+            grid-gap: 1px;                     /* 간격 1px */
         }
         .cell {
-            width: 10px;
-            height: 10px;
+            width: 9px;                        /* 💡 셀 가로 크기 9px */
+            height: 9px;                       /* 💡 셀 세로 크기 9px */
             border-radius: 1px;
             background-color: #ebedf0;
             transition: background-color 0.2s ease;
@@ -88,7 +88,7 @@ async function initUnifiedRatings() {
     const allCells = {};
     const latestData = {}; 
 
-    // 1. 달력 그리드 HTML 구조 생성 (요일 레이블 태그 완전히 제거)
+    // 1. 달력 그리드 HTML 구조 생성
     years.forEach(year => {
         const section = document.createElement('div');
         section.className = 'progress-section';
@@ -131,8 +131,8 @@ async function initUnifiedRatings() {
                         const lbl = document.createElement('div');
                         lbl.className = 'month-label';
                         lbl.innerText = months[currentMonth];
-                        // 💡 셀 너비(10px) + 간격(1px) = 총 11px 기준으로 위치를 정밀 계산하여 어긋남을 방지합니다.
-                        lbl.style.left = `${Math.floor(i / 7) * 11}px`;
+                        // 💡 셀 너비(9px) + 간격(1px) = 총 10px 기준으로 월 라벨 위치를 정확히 정렬합니다.
+                        lbl.style.left = `${Math.floor(i / 7) * 10}px`;
                         monthLabels.appendChild(lbl);
                         lastMonth = currentMonth;
                     }
@@ -156,7 +156,6 @@ async function initUnifiedRatings() {
         const files = await response.json();
         if (!Array.isArray(files)) return;
 
-        // 파일명 기준 확실한 시간순 정렬
         files.sort((a, b) => a.name.localeCompare(b.name));
 
         files.forEach(file => {
@@ -174,7 +173,6 @@ async function initUnifiedRatings() {
                 const score = parseInt(parts[parts.length - 1], 10); 
                 
                 if (!isNaN(score) && score >= 0 && score <= 10) {
-                    // 같은 날짜 파일 중 가장 마지막(최신 시간) 파일의 점수로 최종 유지
                     latestData[dateKey] = score;
                 }
             }
