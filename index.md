@@ -17,7 +17,7 @@ layout: home
 <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns"></script>
 
 <!-- 3. 분리한 내부 자바스크립트 파일 연동 -->
-<script src="{{ '/date2graph.js' | relative_url }}"></script>
+<script src="{{ 'assets/js/date2graph.js' | relative_url }}"></script>
 
 <!-- 4. 지킬 데이터를 자바스크립트로 넘겨 차트 실행 -->
 <script>
