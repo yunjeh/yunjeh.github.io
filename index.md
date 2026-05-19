@@ -5,20 +5,9 @@ layout: home
 <div id="overall-container"></div>
 <script src="/assets/js/overall.js"></script>
 
-
-
-<!-- 그래프가 그려질 캔버스 -->
-<div class="graph-container" style="position: relative; height:40vh; width:100%; margin-bottom: 2rem;">
-  <canvas id="data2Canvas"></canvas>
-</div>
-
-<!-- 라이브러리 및 스크립트 로드 -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="{{ '/assets/js/data2graph.js' | relative_url }}"></script>
-
 <script>
   document.addEventListener("DOMContentLoaded", function() {
-    // Jekyll site.static_files를 통해 /data2/ 폴더의 모든 파일 목록을 가져옴
+    // Jekyll이 _data2 폴더 내의 정적 파일들을 수집합니다.
     const dataFromJekyll = [
       {% for file in site.static_files %}
         {% if file.path contains '/_data2/' %}
@@ -27,7 +16,13 @@ layout: home
       {% endfor %}
     ];
 
-    // 그래프 초기화 함수 호출
-    initData2Graph('data2Canvas', dataFromJekyll);
+    console.log("수집된 데이터:", dataFromJekyll); // 여기서 데이터가 나오는지 확인!
+
+    // 데이터가 있을 때만 그래프 초기화
+    if (dataFromJekyll.length > 0) {
+        initData2Graph('data2Canvas', dataFromJekyll);
+    } else {
+        console.error("_data2 폴더에서 파일을 찾지 못했습니다. _config.yml의 include 설정을 확인하세요.");
+    }
   });
 </script>
