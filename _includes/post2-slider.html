@@ -67,25 +67,49 @@
 </style>
 
 <div class="slider-section">
-  <div class="slider-title">📋 최근 수집된 메시지 기록 (_post2)</div>
+  <div class="slider-title">📋 Quotes</div>
   
   <div class="slider-container">
-    {% assign has_posts = false %}
+    {% comment %} 
+      [Step 1] _post2 내부 파일명들을 수집하여 하나의 긴 문자열 배열로 빌드 
+    {% endcomment %}
+    {% assign file_list = "" %}
     {% for file in site.static_files %}
       {% if file.path contains '/_post2/' %}
+        {% assign file_list = file_list | append: file.path | append: "|" %}
+      {% endif %}
+    {% endfor %}
+
+    {% comment %} 파이프(|) 기호로 쪼개어 정식 배열화 시킵니다. {% endcomment %}
+    {% assign file_array = file_list | split: "|" %}
+    
+    {% comment %} 
+      🛠️ 핵심: 지킬의 'sort' 필터로 파일명 오름차순 정렬을 수행한 후, 
+      'reverse' 필터로 뒤집어서 무조건 [최신 날짜 -> 과거 날짜] 순서가 되도록 강제 재배치합니다.
+    {% endcomment %}
+    {% assign sorted_files = file_array | sort | reverse %}
+
+    {% assign has_posts = false %}
+    {% for target_path in sorted_files %}
+      {% if target_path != "" %}
         {% assign has_posts = true %}
-        {% assign filename = file.name | replace: ".md", "" %}
-        {% assign parts = filename | split: "-" %}
+        
+        {% comment %} 전체 경로에서 파일 이름 분리 추출 (예: 2026-05-19-14-49-01.md) {% endcomment %}
+        {% assign path_parts = target_path | split: "/" %}
+        {% assign filename = path_parts | last %}
+        {% assign clean_name = filename | replace: ".md", "" %}
+        {% assign time_parts = clean_name | split: "-" %}
         
         <div class="post-card">
           <div>
             <div class="card-date">
-              📅 {{ parts[0] }}-{{ parts[1] }}-{{ parts[2] }} {{ parts[3] }}:{{ parts[4] }}:{{ parts[5] }}
+              📅 {{ time_parts[0] }}-{{ time_parts[1] }}-{{ time_parts[2] }} {{ time_parts[3] }}:{{ time_parts[4] }}:{{ time_parts[5] }}
             </div>
             
             <div class="card-content">
+              {% comment %} 최신순으로 정렬된 경로(target_path)와 매칭되는 본문 텍스트 매핑 출력 {% endcomment %}
               {% for p in site.pages %}
-                {% if p.path == file.path %}
+                {% if p.path == target_path %}
                   {{ p.content | markdownify }}
                 {% endif %}
               {% endfor %}
