@@ -11,10 +11,9 @@ function injectStyles() {
         .progress-section {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
             margin-bottom: 30px;
-            padding: 15px;
-            background-color: #ffffff;
-            border: 1px solid #e1e4e8;
-            border-radius: 6px;
+            padding: 0px; /* 💡 내부 여백 제거 */
+            background-color: transparent; /* 💡 배경을 투명하게 하여 블로그 본문에 맞춤 */
+            border: none; /* 💡 테두리 회색 선 완벽히 제거 */
         }
         .progress-title {
             font-size: 16px;
@@ -27,7 +26,7 @@ function injectStyles() {
             width: 100%;
         }
         .scroll-content {
-            min-width: 550px; /* 💡 칸이 줄어듦에 따라 최소 전체 너비도 최적화 */
+            min-width: 550px;
             position: relative;
             padding-top: 24px;
         }
@@ -47,19 +46,19 @@ function injectStyles() {
         }
         .rating-grid {
             display: grid;
-            grid-template-rows: repeat(7, 9px); /* 💡 세로 9px로 축소 */
+            grid-template-rows: repeat(7, 9px);
             grid-auto-flow: column;
-            grid-auto-columns: 9px;            /* 💡 가로 9px로 축소 */
-            grid-gap: 1px;                     /* 간격 1px */
+            grid-auto-columns: 9px;
+            grid-gap: 1px;
         }
         .cell {
-            width: 9px;                        /* 💡 셀 가로 크기 9px */
-            height: 9px;                       /* 💡 셀 세로 크기 9px */
+            width: 9px;
+            height: 9px;
             border-radius: 1px;
             background-color: #ebedf0;
             transition: background-color 0.2s ease;
         }
-        /* 0 ~ 10단계 노란색에서 진초록색으로 변하는 테마 */
+        /* 0 ~ 10단계 테마 색상 */
         .cell.level-0  { background-color: #ebedf0 !important; }
         .cell.level-1  { background-color: #fef5d1 !important; }
         .cell.level-2  { background-color: #fbe69c !important; }
@@ -131,7 +130,6 @@ async function initUnifiedRatings() {
                         const lbl = document.createElement('div');
                         lbl.className = 'month-label';
                         lbl.innerText = months[currentMonth];
-                        // 💡 셀 너비(9px) + 간격(1px) = 총 10px 기준으로 월 라벨 위치를 정확히 정렬합니다.
                         lbl.style.left = `${Math.floor(i / 7) * 10}px`;
                         monthLabels.appendChild(lbl);
                         lastMonth = currentMonth;
