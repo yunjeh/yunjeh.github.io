@@ -5,10 +5,6 @@ layout: home
 <div id="overall-container"></div>
 <script src="/assets/js/overall.js"></script>
 
----
-layout: default
-title: Data Timeline Chart
----
 
 <div style="width: 100%; max-width: 800px; margin: 30px auto; background: #ffffff; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
   <canvas id="dataScatterChart"></canvas>
