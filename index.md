@@ -21,7 +21,7 @@ layout: home
     // Jekyll site.static_files를 통해 /data2/ 폴더의 모든 파일 목록을 가져옴
     const dataFromJekyll = [
       {% for file in site.static_files %}
-        {% if file.path contains '/data2/' %}
+        {% if file.path contains '/_data2/' %}
           { "name": "{{ file.name }}" }{% unless forloop.last %},{% endunless %}
         {% endif %}
       {% endfor %}
