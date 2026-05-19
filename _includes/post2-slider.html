@@ -1,12 +1,13 @@
 <!-- _includes/post2-slider.html -->
-<!-- 1. 개성 넘치는 서로 다른 특성의 구글 웹폰트 6종 일괄 로드 -->
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Gamja+Flower&family=Jua&family=Nanum+Pen+Script&family=Black+Han+Sans&family=Song Myung&family=Hahmlet:wght@500&display=swap');
+  /* 1. 개성 있는 구글 웹폰트 6종 로드 */
+  @import url('https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Gamja+Flower&family=Hahmlet:wght@500&family=Jua&family=Nanum+Pen+Script&family=Song+Myung&display=swap');
 
+  /* 💙 슬라이더 레이아웃 영역 */
   .slider-section {
     width: 100%;
     max-width: 800px;
-    margin: 30px auto; /* 위아래 마진 축소 */
+    margin: 30px auto;
     font-family: sans-serif;
   }
 
@@ -17,13 +18,16 @@
     margin-bottom: 10px;
   }
 
+  /* 🧊 가로 스크롤 카드 컨테이너 */
   .slider-container {
     display: flex;
     gap: 16px;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
+    overflow-x: auto; /* 가로 스크롤 활성화 */
+    scroll-snap-type: x mandatory; /* 카드 단위 스냅(자석) 효과 */
     scroll-behavior: smooth;
     padding-bottom: 10px;
+    
+    /* 브라우저별 스크롤바 디자인 슬림화 */
     scrollbar-width: thin;
     scrollbar-color: #b0d4de transparent;
   }
@@ -36,14 +40,14 @@
     border-radius: 10px;
   }
 
-  /* ✉️ 세로 길이를 줄인 슬림한 카드 디자인 */
+  /* ✉️ 세로 길이를 축소한 슬림형 하늘색 카드 디자인 */
   .post-card {
-    flex: 0 0 85%;
+    flex: 0 0 85%; /* 다음 카드가 우측에 살짝 걸치도록 배치 */
     max-width: 480px;
-    min-height: 100px; /* 기존 150px -> 100px로 세로 최소 높이 압축 */
-    background-color: #e6f4f8; 
+    min-height: 100px; /* 기존 150px에서 100px로 세로 최소치 축소 */
+    background-color: #e6f4f8; /* 옅은 하늘색 바탕 */
     border-radius: 12px;
-    padding: 14px 18px; /* 위아래 내부 여백을 줄여 세로 크기 최적화 */
+    padding: 16px 20px; /* 위아래 패딩을 줄여 컴팩트하게 조정 */
     box-sizing: border-box;
     scroll-snap-align: center;
     box-shadow: 0 4px 10px rgba(0,0,0,0.03);
@@ -52,51 +56,65 @@
     justify-content: center;
   }
 
+  /* 🕒 날짜 배지 스타일 */
   .card-date {
-    font-size: 11px; /* 날짜 폰트 크기 소폭 축소 */
+    font-size: 11px;
     color: #6b8e96;
-    margin-bottom: 6px; /* 본문과의 간격 좁힘 */
+    margin-bottom: 8px;
     font-weight: 500;
-    font-family: sans-serif !important; /* 날짜는 가독성을 위해 고딕 고정 */
+    font-family: sans-serif !important; /* 날짜는 가독성을 위해 기본고딕 고정 */
   }
 
-  /* 📝 글자 크기를 키우고 가독성 한계를 제어한 본문 영역 */
+  /* 📝 본문 텍스트 출력 영역 */
   .card-content {
-    font-size: 18px; /* 기존 14px -> 18px로 대폭 확대 (스크롤 없이 시원하게 보이도록) */
+    font-size: 18px; /* 기존 14px에서 18px로 확대 (글자 수가 적을 때 시원하게 보이도록) */
     color: #2c3e50;
-    line-height: 1.5;
-    white-space: pre-wrap;
+    line-height: 1.4;
+    white-space: pre-wrap; /* 줄바꿈 기호(\n) 온전히 보존 */
     word-break: break-all;
+    
+    /* 글이 정말 길어져서 지정한 높이를 초과할 때만 스크롤바 허용 */
     overflow-y: auto; 
-    max-height: 120px; /* 카드가 마구 늘어나지 않도록 세로 상한선 지정 */
+    max-height: 140px; 
   }
 
-  /* 🎲 랜덤으로 주입될 특성이 다른 폰트 스타일 클래스들 */
-  .font-style-0 { font-family: 'Gamja Flower', cursive !important; font-weight: normal; } /* 귀여운 손글씨체 */
-  .font-style-1 { font-family: 'Jua', sans-serif !important; font-weight: normal; }       /* 배달의민족 둥근 배달체 */
-  .font-style-2 { font-family: 'Nanum Pen Script', cursive !important; font-size: 22px !important; } /* 얇고 날렵한 펜글씨체 (펜체 특성상 크기 보정) */
-  .font-style-3 { font-family: 'Black Han Sans', sans-serif !important; font-weight: normal; font-size: 16px !important; } /* 아주 두꺼운 포스터체 */
-  .font-style-4 { font-family: 'Song Myung', serif !important; font-weight: bold; }      /* 진중하고 예리한 명조/붓글씨체 */
-  .font-style-5 { font-family: 'Hahmlet', serif !important; font-weight: 500; }          /* 차분하고 감성적인 서적 레이아웃체 */
+  /* 🛠️ [스크롤 제거 핵심] 지킬 markdownify 필터가 자동 생성하는 <p> 태그의 외부 여백 리셋 */
+  .card-content p {
+    margin: 0 !important;
+    padding: 0 !important;
+    line-height: inherit !important;
+  }
+
+  /* 🎲 타임스탬프 초 단위 기준 무작위 매핑될 폰트 클래스들 */
+  .font-style-0 { font-family: 'Gamja Flower', cursive !important; }
+  .font-style-1 { font-family: 'Jua', sans-serif !important; }
+  .font-style-2 { font-family: 'Nanum Pen Script', cursive !important; font-size: 23px !important; } /* 펜체 특성상 작아보여 크기 추가 보정 */
+  .font-style-3 { font-family: 'Black Han Sans', sans-serif !important; font-size: 16px !important; } /* 타이틀체 특성상 너무 커서 크기 축소 보정 */
+  .font-style-4 { font-family: 'Song Myung', serif !important; font-weight: bold; }
+  .font-style-5 { font-family: 'Hahmlet', serif !important; font-weight: 500; }
 </style>
 
 <div class="slider-section">
-  <div class="slider-title">📋 최근 메시지 기록 (폰트 무작위 믹스)</div>
+  <div class="slider-title">📋 Quotes</div>
   
   <div class="slider-container">
+    {% comment %} 
+      정식 컬렉션(site.post2) 기준 정렬 후 reverse 처리하여 
+      가장 최근 전송된 .md 파일이 무조건 맨 첫 번째 카드로 오도록 세팅합니다.
+    {% endcomment %}
     {% assign sorted_posts = site.post2 | sort: "date" | reverse %}
     {% assign has_posts = false %}
 
     {% for post in sorted_posts %}
       {% assign has_posts = true %}
       
+      {% comment %} 파일 경로에서 파일명 추출 (예: 2026-05-19-14-49-01) {% endcomment %}
       {% assign filename = post.path | split: "/" | last | replace: ".md", "" %}
       {% assign time_parts = filename | split: "-" %}
       
-      {% comment %}
-        💡 [자바스크립트 없는 랜덤 알고리즘]
-        파일 이름의 마지막 '초' 단위 숫자(0~59)를 가져와서 6으로 나눈 나머지(0~5)를 구합니다.
-        이렇게 하면 글이 작성된 순간의 타임스탬프에 따라 카드마다 완벽하게 무작위 폰트 클래스가 매핑됩니다.
+      {% comment %} 
+        자바스크립트 없이 폰트를 무작위 분배하기 위해 파일명 마지막인 '초(0~59)' 숫자를 가져와 
+        총 폰트 가짓수인 6으로 나눈 나머지(0~5) 값을 스타일 인덱스로 사용합니다.
       {% endcomment %}
       {% assign seconds = time_parts[5] | plus: 0 %}
       {% assign random_index = seconds | modulo: 6 %}
@@ -109,7 +127,7 @@
             📅 {{ time_parts[0] }}-{{ time_parts[1] }}-{{ time_parts[2] }} {{ time_parts[3] }}:{{ time_parts[4] }}:{{ time_parts[5] }}
           </div>
           
-          <!-- 카드 내부 실제 내용 출력 (랜덤 클래스 조립 주입) -->
+          <!-- 카드 내부 본문 출력 (랜덤 스타일 클래스 바인딩) -->
           <div class="card-content font-style-{{ random_index }}">
             {{ post.content | markdownify }}
           </div>
@@ -118,6 +136,7 @@
     {% endfor %}
 
     {% if has_posts == false %}
+      <!-- 폴더가 완전히 비어있을 때 빌드 끊김 방지용 예외 카드 -->
       <div class="post-card" style="flex: 0 0 100%; justify-content: center; align-items: center; background: #f5f5f5;">
         <div style="color: #999; font-size: 14px; font-family: sans-serif !important;">아직 등록된 메시지 카드가 없습니다.</div>
       </div>
