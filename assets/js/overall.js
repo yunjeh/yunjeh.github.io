@@ -11,7 +11,7 @@ function injectStyles() {
         .progress-section {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
             margin-bottom: 30px;
-            padding: 15px;
+            padding: 10px;
             background-color: #ffffff;
             border: 1px solid #e1e4e8;
             border-radius: 6px;
@@ -33,8 +33,8 @@ function injectStyles() {
         }
         .month-labels {
             position: relative;
-            height: 15px;
-            font-size: 12px;
+            height: 10px;
+            font-size: 9px;
             color: #586069;
             margin-bottom: 4px;
         }
@@ -46,9 +46,9 @@ function injectStyles() {
         }
         .day-labels {
             display: grid;
-            grid-template-rows: repeat(7, 15px);
+            grid-template-rows: repeat(7, 10px);
             grid-gap: 2px;
-            font-size: 11px;
+            font-size: 9px;
             color: #586069;
             margin-right: 8px;
             text-align: right;
