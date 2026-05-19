@@ -16,7 +16,7 @@ function injectStyles() {
             border: none; /* 💡 테두리 회색 선 완벽히 제거 */
         }
         .progress-title {
-            font-size: 16px;
+            font-size: 14px;
             font-weight: 600;
             margin-bottom: 8px;
             color: #24292e;
