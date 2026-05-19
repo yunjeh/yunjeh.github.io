@@ -1,66 +1,52 @@
-/**
- * /data2/ 폴더의 파일명에서 날짜와 마지막 정수를 추출하여 차트를 생성합니다.
- */
 function initData2Graph(canvasId, rawFiles) {
     const ctx = document.getElementById(canvasId);
     if (!ctx) return;
 
-    // 1. 데이터 파싱 및 정렬
     const processedData = rawFiles
-        .filter(file => file.name.endsWith('.md'))
-        .sort((a, b) => a.name.localeCompare(b.name)) // 파일명 순 정렬 (시간순)
         .map(file => {
-            // 정규표현식 설명:
-            // ^(\d{4}-\d{2}-\d{2}) : 시작부분의 날짜(YYYY-MM-DD) 캡처
-            // .* : 중간 내용 무시
-            // -(\d+)\.md$ : 끝부분의 하이픈 뒤 숫자 캡처
-            const match = file.name.match(/^(\d{4}-\d{2}-\d{2}).*-(\d+)\.md$/);
+            const dateMatch = file.name.match(/^(\d{4}-\d{2}-\d{2})/);
+            const valueMatch = file.name.match(/-(\d+)\.md$/);
             
-            if (match) {
+            if (dateMatch && valueMatch) {
                 return {
-                    date: match[1],      // 가로축: YYYY-MM-DD
-                    value: parseInt(match[2]) // 세로축: 마지막 정수
+                    // x축 데이터: 단순 문자열이 아닌 Date 객체로 변환
+                    x: new Date(dateMatch[1]), 
+                    // y축 데이터: 정수
+                    y: parseInt(valueMatch[1])
                 };
             }
             return null;
         })
-        .filter(item => item !== null);
+        .filter(item => item !== null)
+        .sort((a, b) => a.x - b.x); // 날짜순 정렬
 
-    // 2. Chart.js 실행
     new Chart(ctx.getContext('2d'), {
         type: 'line',
         data: {
-            labels: processedData.map(d => d.date), // 가로축 (날짜)
             datasets: [{
-                label: 'Post Value',
-                data: processedData.map(d => d.value), // 세로축 (정수값)
+                label: 'Value over Time',
+                data: processedData, // [{x: Date, y: 123}, ...] 형태
                 borderColor: '#4a90e2',
                 backgroundColor: 'rgba(74, 144, 226, 0.1)',
-                borderWidth: 2,
-                pointRadius: 5,
-                pointHoverRadius: 7,
-                tension: 0.3, // 선을 부드럽게
-                fill: true
+                fill: true,
+                tension: 0.2
             }]
         },
         options: {
             responsive: true,
             scales: {
                 x: {
-                    title: { display: true, text: 'Date' }
+                    type: 'time', // 시간 비례 축 설정
+                    time: {
+                        unit: 'day', // 표시 단위 (day, week, month 등)
+                        displayFormats: {
+                            day: 'yyyy-MM-dd'
+                        }
+                    },
+                    title: { display: true, text: 'Date (Proportional)' }
                 },
                 y: {
-                    beginAtZero: false,
-                    title: { display: true, text: 'Integer Value' }
-                }
-            },
-            plugins: {
-                tooltip: {
-                    callbacks: {
-                        label: function(context) {
-                            return ` Value: ${context.parsed.y}`;
-                        }
-                    }
+                    title: { display: true, text: 'Value' }
                 }
             }
         }
