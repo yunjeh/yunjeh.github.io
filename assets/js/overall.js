@@ -34,7 +34,7 @@ function injectStyles() {
         .month-labels {
             position: relative;
             height: 10px;
-            font-size: 9px;
+            font-size: 6px;
             color: #586069;
             margin-bottom: 4px;
         }
@@ -48,7 +48,7 @@ function injectStyles() {
             display: grid;
             grid-template-rows: repeat(7, 10px);
             grid-gap: 2px;
-            font-size: 9px;
+            font-size: 6px;
             color: #586069;
             margin-right: 8px;
             text-align: right;
