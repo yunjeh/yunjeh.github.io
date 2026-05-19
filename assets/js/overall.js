@@ -56,15 +56,15 @@ function injectStyles() {
         }
         .rating-grid {
             display: grid;
-            grid-template-rows: repeat(7, 15px);
+            grid-template-rows: repeat(7, 10px);
             grid-auto-flow: column;
-            grid-auto-columns: 15px;
-            grid-gap: 2px;
+            grid-auto-columns: 10px;
+            grid-gap: 1px;
         }
         .cell {
-            width: 15px;
-            height: 15px;
-            border-radius: 2px;
+            width: 10px;
+            height: 10px;
+            border-radius: 1px;
             background-color: #ebedf0;
             transition: background-color 0.2s ease;
         }
