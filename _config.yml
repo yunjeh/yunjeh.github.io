@@ -37,5 +37,8 @@ jektex:
     - ["\\Q", "\\mathbb{Q}"]
     - ["\\C", "\\mathbb{C}"]
 include:
-  - _post2
   - _overall
+collections:
+  post2:
+    output: true
+    permalink: /post2/:path/
