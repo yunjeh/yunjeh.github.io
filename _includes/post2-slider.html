@@ -22,12 +22,10 @@
   .slider-container {
     display: flex;
     gap: 16px;
-    overflow-x: auto; /* 가로 스크롤 활성화 */
-    scroll-snap-type: x mandatory; /* 카드 단위 스냅(자석) 효과 */
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
     scroll-behavior: smooth;
     padding-bottom: 10px;
-    
-    /* 브라우저별 스크롤바 디자인 슬림화 */
     scrollbar-width: thin;
     scrollbar-color: #b0d4de transparent;
   }
@@ -42,12 +40,12 @@
 
   /* ✉️ 세로 길이를 축소한 슬림형 하늘색 카드 디자인 */
   .post-card {
-    flex: 0 0 85%; /* 다음 카드가 우측에 살짝 걸치도록 배치 */
+    flex: 0 0 85%;
     max-width: 480px;
-    min-height: 100px; /* 기존 150px에서 100px로 세로 최소치 축소 */
-    background-color: #e6f4f8; /* 옅은 하늘색 바탕 */
+    min-height: 100px;
+    background-color: #e6f4f8; 
     border-radius: 12px;
-    padding: 16px 20px; /* 위아래 패딩을 줄여 컴팩트하게 조정 */
+    padding: 16px 20px;
     box-sizing: border-box;
     scroll-snap-align: center;
     box-shadow: 0 4px 10px rgba(0,0,0,0.03);
@@ -62,23 +60,30 @@
     color: #6b8e96;
     margin-bottom: 8px;
     font-weight: 500;
-    font-family: sans-serif !important; /* 날짜는 가독성을 위해 기본고딕 고정 */
+    font-family: sans-serif !important;
   }
 
   /* 📝 본문 텍스트 출력 영역 */
   .card-content {
-    font-size: 18px; /* 기존 14px에서 18px로 확대 (글자 수가 적을 때 시원하게 보이도록) */
+    font-size: 18px; 
     color: #2c3e50;
     line-height: 1.4;
-    white-space: pre-wrap; /* 줄바꿈 기호(\n) 온전히 보존 */
+    white-space: pre-wrap; 
     word-break: break-all;
     
-    /* 글이 정말 길어져서 지정한 높이를 초과할 때만 스크롤바 허용 */
+    /* ⚠️ 평소에는 스크롤바를 완전히 숨기고, 정말 글이 넘칠 때만 브라우저 액션 허용 */
     overflow-y: auto; 
     max-height: 140px; 
+    -ms-overflow-style: none;  /* IE, 엣지 스크롤바 숨기기 */
+    scrollbar-width: none;  /* 파이어폭스 스크롤바 숨기기 */
   }
 
-  /* 🛠️ [스크롤 제거 핵심] 지킬 markdownify 필터가 자동 생성하는 <p> 태그의 외부 여백 리셋 */
+  /* 크롬, 사파리, 오페라 본문 내부 세로 스크롤바 강제 숨김 */
+  .card-content::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* 지킬 markdownify 필터가 자동 생성하는 <p> 태그의 외부 여백 리셋 */
   .card-content p {
     margin: 0 !important;
     padding: 0 !important;
@@ -88,8 +93,8 @@
   /* 🎲 타임스탬프 초 단위 기준 무작위 매핑될 폰트 클래스들 */
   .font-style-0 { font-family: 'Gamja Flower', cursive !important; }
   .font-style-1 { font-family: 'Jua', sans-serif !important; }
-  .font-style-2 { font-family: 'Nanum Pen Script', cursive !important; font-size: 23px !important; } /* 펜체 특성상 작아보여 크기 추가 보정 */
-  .font-style-3 { font-family: 'Black Han Sans', sans-serif !important; font-size: 16px !important; } /* 타이틀체 특성상 너무 커서 크기 축소 보정 */
+  .font-style-2 { font-family: 'Nanum Pen Script', cursive !important; font-size: 23px !important; } 
+  .font-style-3 { font-family: 'Black Han Sans', sans-serif !important; font-size: 16px !important; } 
   .font-style-4 { font-family: 'Song Myung', serif !important; font-weight: bold; }
   .font-style-5 { font-family: 'Hahmlet', serif !important; font-weight: 500; }
 </style>
@@ -98,24 +103,15 @@
   <div class="slider-title">📋 Quotes</div>
   
   <div class="slider-container">
-    {% comment %} 
-      정식 컬렉션(site.post2) 기준 정렬 후 reverse 처리하여 
-      가장 최근 전송된 .md 파일이 무조건 맨 첫 번째 카드로 오도록 세팅합니다.
-    {% endcomment %}
     {% assign sorted_posts = site.post2 | sort: "date" | reverse %}
     {% assign has_posts = false %}
 
     {% for post in sorted_posts %}
       {% assign has_posts = true %}
       
-      {% comment %} 파일 경로에서 파일명 추출 (예: 2026-05-19-14-49-01) {% endcomment %}
       {% assign filename = post.path | split: "/" | last | replace: ".md", "" %}
       {% assign time_parts = filename | split: "-" %}
       
-      {% comment %} 
-        자바스크립트 없이 폰트를 무작위 분배하기 위해 파일명 마지막인 '초(0~59)' 숫자를 가져와 
-        총 폰트 가짓수인 6으로 나눈 나머지(0~5) 값을 스타일 인덱스로 사용합니다.
-      {% endcomment %}
       {% assign seconds = time_parts[5] | plus: 0 %}
       {% assign random_index = seconds | modulo: 6 %}
       
@@ -127,16 +123,16 @@
             📅 {{ time_parts[0] }}-{{ time_parts[1] }}-{{ time_parts[2] }} {{ time_parts[3] }}:{{ time_parts[4] }}:{{ time_parts[5] }}
           </div>
           
-          <!-- 카드 내부 본문 출력 (랜덤 스타일 클래스 바인딩) -->
+          <!-- 카드 내부 본문 출력 (유령 공백 제거 필터 적용) -->
           <div class="card-content font-style-{{ random_index }}">
-            {{ post.content | markdownify }}
+            {% assign clean_content = post.content | strip_newlines | strip %}
+            {{ clean_content | markdownify }}
           </div>
         </div>
       </div>
     {% endfor %}
 
     {% if has_posts == false %}
-      <!-- 폴더가 완전히 비어있을 때 빌드 끊김 방지용 예외 카드 -->
       <div class="post-card" style="flex: 0 0 100%; justify-content: center; align-items: center; background: #f5f5f5;">
         <div style="color: #999; font-size: 14px; font-family: sans-serif !important;">아직 등록된 메시지 카드가 없습니다.</div>
       </div>
