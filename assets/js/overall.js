@@ -11,7 +11,7 @@ function injectStyles() {
         .progress-section {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
             margin-bottom: 30px;
-            padding: 10px;
+            padding: 15px;
             background-color: #ffffff;
             border: 1px solid #e1e4e8;
             border-radius: 6px;
@@ -27,32 +27,23 @@ function injectStyles() {
             width: 100%;
         }
         .scroll-content {
-            min-width: 670px;
+            min-width: 600px;
             position: relative;
-            padding-top: 20px;
+            padding-top: 24px; /* 월 라벨 공간 확보 */
         }
         .month-labels {
             position: relative;
-            height: 10px;
-            font-size: 4px;
+            height: 18px;
+            font-size: 11px; /* 💡 글씨 크기를 가독성 좋게 키움 */
             color: #586069;
-            margin-bottom: 4px;
+            margin-bottom: 2px;
         }
         .month-label {
             position: absolute;
+            white-space: nowrap;
         }
         .grid-wrapper {
             display: flex;
-        }
-        .day-labels {
-            display: grid;
-            grid-template-rows: repeat(7, 10px);
-            grid-gap: 1px;
-            font-size: 4px;
-            color: #586069;
-            margin-right: 8px;
-            text-align: right;
-            line-height: 15px;
         }
         .rating-grid {
             display: grid;
@@ -97,7 +88,7 @@ async function initUnifiedRatings() {
     const allCells = {};
     const latestData = {}; 
 
-    // 1. 달력 그리드 HTML 구조 생성
+    // 1. 달력 그리드 HTML 구조 생성 (요일 레이블 태그 완전히 제거)
     years.forEach(year => {
         const section = document.createElement('div');
         section.className = 'progress-section';
@@ -107,9 +98,6 @@ async function initUnifiedRatings() {
                 <div class="scroll-content">
                     <div id="months-overall-${year}" class="month-labels"></div>
                     <div class="grid-wrapper">
-                        <div class="day-labels">
-                            <div>Sun</div><div></div><div>Tue</div><div></div><div>Thu</div><div></div><div>Sat</div>
-                        </div>
                         <div id="grid-overall-${year}" class="rating-grid"></div>
                     </div>
                 </div>
@@ -143,7 +131,8 @@ async function initUnifiedRatings() {
                         const lbl = document.createElement('div');
                         lbl.className = 'month-label';
                         lbl.innerText = months[currentMonth];
-                        lbl.style.left = `${Math.floor(i / 7) * 17}px`;
+                        // 💡 셀 너비(10px) + 간격(1px) = 총 11px 기준으로 위치를 정밀 계산하여 어긋남을 방지합니다.
+                        lbl.style.left = `${Math.floor(i / 7) * 11}px`;
                         monthLabels.appendChild(lbl);
                         lastMonth = currentMonth;
                     }
@@ -167,7 +156,7 @@ async function initUnifiedRatings() {
         const files = await response.json();
         if (!Array.isArray(files)) return;
 
-        // 🛠️ 확실한 시간순 정렬 보장: 파일명 자체가 문자열이므로 시간 정보가 담긴 순서대로 완벽히 정렬됩니다.
+        // 파일명 기준 확실한 시간순 정렬
         files.sort((a, b) => a.name.localeCompare(b.name));
 
         files.forEach(file => {
@@ -185,8 +174,7 @@ async function initUnifiedRatings() {
                 const score = parseInt(parts[parts.length - 1], 10); 
                 
                 if (!isNaN(score) && score >= 0 && score <= 10) {
-                    // 🛠️ 하루에 여러 번 파일이 생성된 경우: 
-                    // 정렬된 순서에 의해 가장 마지막(가장 최신 시간)에 생성된 파일의 점수가 최종 등록됩니다.
+                    // 같은 날짜 파일 중 가장 마지막(최신 시간) 파일의 점수로 최종 유지
                     latestData[dateKey] = score;
                 }
             }
@@ -200,7 +188,7 @@ async function initUnifiedRatings() {
             if (target) {
                 const level = Math.min(Math.max(score, 0), 10);
                 target.className = `cell level-${level}`;
-                target.title = `${date} (Latest Rating: ${score}/10)`; // 툴팁에도 최신 평점임을 명시
+                target.title = `${date} (Latest Rating: ${score}/10)`;
             }
         }
     } catch (e) { 
