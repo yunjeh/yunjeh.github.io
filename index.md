@@ -5,3 +5,4 @@ layout: home
 <div id="overall-container"></div>
 <script src="/assets/js/overall.js"></script>
 
+{% include post2-slider.html %}
