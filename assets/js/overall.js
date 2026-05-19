@@ -18,7 +18,7 @@ function injectStyles() {
         .progress-title {
             font-size: 14px;
             font-weight: 600;
-            margin-bottom: 8px;
+            margin-bottom: 4px;
             color: #24292e;
         }
         .scroll-container {
