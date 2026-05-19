@@ -1,5 +1,6 @@
 <!-- _includes/post2-slider.html -->
 <style>
+  /* 💙 슬라이더 레이아웃 영역 */
   .slider-section {
     width: 100%;
     max-width: 800px;
@@ -14,13 +15,16 @@
     margin-bottom: 10px;
   }
 
+  /* 🧊 가로 스크롤 카드 컨테이너 */
   .slider-container {
     display: flex;
     gap: 16px;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
+    overflow-x: auto; /* 가로 스크롤 활성화 */
+    scroll-snap-type: x mandatory; /* 카드 단위 스냅(자석) 효과 */
     scroll-behavior: smooth;
     padding-bottom: 15px;
+    
+    /* 스크롤바 커스텀 */
     scrollbar-width: thin;
     scrollbar-color: #b0d4de transparent;
   }
@@ -33,11 +37,12 @@
     border-radius: 10px;
   }
 
+  /* ✉️ 개별 하늘색 카드 디자인 */
   .post-card {
-    flex: 0 0 85%;
+    flex: 0 0 85%; /* 다음 카드가 오른쪽에 살짝 걸치도록 85% 크기 설정 */
     max-width: 500px;
     min-height: 150px;
-    background-color: #e6f4f8; /* 옅은 하늘색 */
+    background-color: #e6f4f8; /* 옅은 하늘색 바탕 */
     border-radius: 12px;
     padding: 20px;
     box-sizing: border-box;
@@ -48,6 +53,7 @@
     justify-content: space-between;
   }
 
+  /* 🕒 날짜 배지 스타일 */
   .card-date {
     font-size: 12px;
     color: #6b8e96;
@@ -55,83 +61,56 @@
     font-weight: 500;
   }
 
+  /* 📝 .md 본문 내용 출력 영역 */
   .card-content {
     font-size: 14px;
     color: #2c3e50;
     line-height: 1.6;
-    white-space: pre-wrap;
+    white-space: pre-wrap; /* 안드로이드에서 보낸 줄바꿈(\n) 보존 */
     word-break: break-all;
-    overflow-y: auto;
+    overflow-y: auto; /* 본문이 아주 길어질 경우 카드 내부 스크롤 생성 */
     max-height: 200px;
   }
 </style>
 
 <div class="slider-section">
-  <div class="slider-title">📋 최근 메시지 기록 (최신순)</div>
+  <div class="slider-title">📋 Quotes</div>
   
   <div class="slider-container">
     {% comment %} 
-      [Step 1] _post2 내부에 등록된 파일명들을 역순(최신순) 정렬 처리
+      🛠️ 정식 컬렉션(site.post2)을 기준으로 date 정렬 후 reverse(뒤집기)하여 
+      가장 최근에 수집된 파일이 0번(첫 번째) 카드 자리에 오도록 만듭니다.
     {% endcomment %}
-    {% assign file_list = "" %}
-    {% for file in site.static_files %}
-      {% if file.path contains '/_post2/' %}
-        {% assign file_list = file_list | append: file.path | append: "|" %}
-      {% endif %}
-    {% endfor %}
-
-    {% assign file_array = file_list | split: "|" %}
-    {% assign sorted_files = file_array | sort | reverse %}
-
+    {% assign sorted_posts = site.post2 | sort: "date" | reverse %}
     {% assign has_posts = false %}
-    {% for target_path in sorted_files %}
-      {% if target_path != "" %}
-        {% assign has_posts = true %}
-        
-        {% assign path_parts = target_path | split: "/" %}
-        {% assign filename = path_parts | last %}
-        {% assign clean_name = filename | replace: ".md", "" %}
-        {% assign time_parts = clean_name | split: "-" %}
-        
-        <div class="post-card">
-          <div>
-            <div class="card-date">
-              📅 {{ time_parts[0] }}-{{ time_parts[1] }}-{{ time_parts[2] }} {{ time_parts[3] }}:{{ time_parts[4] }}:{{ time_parts[5] }}
-            </div>
-            
-            <div class="card-content">
-              {% comment %}
-                💡 [해결 핵심] site.pages 대신 지킬의 내장 공용 데이터 저장소인 
-                site.html_pages 또는 테마 컬렉션을 직접 관통하는 강력한 지질학적 필터를 씁니다.
-                만약 그래도 인식이 안 될 경우를 대비해, 파일 이름을 링크 처리하여 
-                브라우저가 원본 텍스트 내용을 직접 호출하도록 비동기 강제 렌더링 세팅을 이중 적용했습니다.
-              {% endcomment %}
-              {% assign matched = false %}
-              {% for p in site.html_pages %}
-                {% if p.path == target_path or p.url contains filename %}
-                  {{ p.content | markdownify }}
-                  {% assign matched = true %}
-                {% endif %}
-              {% endfor %}
 
-              {% if matched == false %}
-                {% comment %} 
-                  지킬 엔진이 페이지 캐싱에 아예 실패한 극한의 상황일 때의 방어 코드:
-                  텍스트를 불러오기 위해 해당 파일 주소로 바로 연결되는 깔끔한 링크 뷰어를 제공합니다.
-                {% endcomment %}
-                <a href="{{ target_path | relative_url }}" style="color: #007348; font-weight: bold; text-decoration: underline;">
-                  📄 메시지 내용 확인하기 (클릭)
-                </a>
-              {% endif %}
-            </div>
+    {% for post in sorted_posts %}
+      {% assign has_posts = true %}
+      
+      {% comment %} 파일 경로에서 순수 파일명(예: 2026-05-19-14-49-01)만 분리 추출 {% endcomment %}
+      {% assign filename = post.path | split: "/" | last | replace: ".md", "" %}
+      {% assign time_parts = filename | split: "-" %}
+      
+      <!-- 📱 개별 슬라이더 카드 -->
+      <div class="post-card">
+        <div>
+          <!-- 상단 타임스탬프 표시 -->
+          <div class="card-date">
+            📅 {{ time_parts[0] }}-{{ time_parts[1] }}-{{ time_parts[2] }} {{ time_parts[3] }}:{{ time_parts[4] }}:{{ time_parts[5] }}
+          </div>
+          
+          <!-- 카드 내부 실제 내용 출력 -->
+          <div class="card-content">
+            {{ post.content | markdownify }}
           </div>
         </div>
-      {% endif %}
+      </div>
     {% endfor %}
 
     {% if has_posts == false %}
+      <!-- _post2 폴더 내부에 파일이 단 하나도 감지되지 않았을 때의 예외 안내 문구 -->
       <div class="post-card" style="flex: 0 0 100%; justify-content: center; align-items: center; background: #f5f5f5;">
-        <div style="color: #999; font-size: 14px;">아직 등록된 메시지 카드가 없습니다.</div>
+        <div style="color: #999; font-size: 14px;">아직 등록된 메시지 카드가 없습니다. (_post2 컬렉션 비어있음)</div>
       </div>
     {% endif %}
   </div>
