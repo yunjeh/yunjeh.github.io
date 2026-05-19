@@ -5,6 +5,11 @@ layout: home
 <div id="overall-container"></div>
 <script src="/assets/js/overall.js"></script>
 
+<!-- Chart.js 라이브러리 -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<!-- 날짜 계산용 어댑터 (비례 축을 위해 필수!) -->
+<script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns"></script>
+<script src="{{ '/assets/js/data2graph.js' | relative_url }}"></script>
 <script>
   document.addEventListener("DOMContentLoaded", function() {
     // Jekyll이 _data2 폴더 내의 정적 파일들을 수집합니다.
