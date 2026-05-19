@@ -6,7 +6,7 @@ layout: home
 <script src="/assets/js/overall.js"></script>
 
 <!-- 1. 그래프가 그려질 공간 (부모 div로 크기를 잡아주는 것이 좋습니다) -->
-<div style="width: 100%; height: 400px; padding: 20px;">
+<div style="width: 100%; height: 200px; padding: 20px;">
     <canvas id="myDataGraph"></canvas>
 </div>
 
