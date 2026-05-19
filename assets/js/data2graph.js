@@ -1,22 +1,20 @@
 /**
  * date2graph.js - GitHub Pages Jekyll Scatter Chart Engine
- * 가로축: 파일명 기반 타임스탬프 (X)
- * 세로축: 파일명 끝자리 자연수 (Y)
  */
 
 function renderDataChart(chartData) {
-  // 시간 순서대로 데이터 정렬
+  // 시간 순서대로 정렬 (안전하게 Date 객체 변환 후 비교)
   chartData.sort((a, b) => new Date(a.x) - new Date(b.x));
 
   const ctx = document.getElementById('dataScatterChart').getContext('2d');
   
   new Chart(ctx, {
-    type: 'scatter', // 점을 찍는 산점도 그래프
+    type: 'scatter',
     data: {
       datasets: [{
         label: '업로드 데이터 추이',
         data: chartData,
-        backgroundColor: '#007348', // 사용자 선호 다크 그린 컬러
+        backgroundColor: '#007348', // 다크 그린 컬러
         pointRadius: 6,
         pointHoverRadius: 8
       }]
@@ -25,9 +23,9 @@ function renderDataChart(chartData) {
       responsive: true,
       scales: {
         x: {
-          type: 'time', // 가로축 시간축 설정
+          type: 'time',
           time: {
-            parser: "yyyy-MM-dd'T'HH:mm:ss",
+            // 다양한 ISO 포맷을 유연하게 수용하도록 기본 파서 위임
             unit: 'hour',
             displayFormats: {
               hour: 'MM/dd HH:mm',
@@ -49,7 +47,7 @@ function renderDataChart(chartData) {
           },
           beginAtZero: true,
           ticks: {
-            stepSize: 1 // 정수(자연수) 단위 격자
+            stepSize: 1
           },
           grid: {
             color: '#eef0f2'
