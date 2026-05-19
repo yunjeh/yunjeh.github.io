@@ -37,4 +37,5 @@ jektex:
     - ["\\Q", "\\mathbb{Q}"]
     - ["\\C", "\\mathbb{C}"]
 include:
-  - _data2
+  - _post2
+  - _overall
