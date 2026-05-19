@@ -5,35 +5,79 @@ layout: home
 <div id="overall-container"></div>
 <script src="/assets/js/overall.js"></script>
 
-<!-- 1. 라이브러리 로드 (순서 중요) -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<!-- 날짜 어댑터 라이브러리 (비례 축 필수 라이브러리) -->
-<script src="https://cdn.jsdelivr.net/npm/date-fns@2.29.3/dist/date-fns.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@2.0.0/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
-<script src="{{ '/assets/js/data2graph.js' | relative_url }}"></script>
-
-<div style="width: 100%; height: 400px;">
-  <canvas id="data2Canvas"></canvas>
+<!-- 1. 그래프가 그려질 공간 (부모 div로 크기를 잡아주는 것이 좋습니다) -->
+<div style="width: 100%; height: 400px; padding: 20px;">
+    <canvas id="myDataGraph"></canvas>
 </div>
 
+<!-- 2. Chart.js 라이브러리 및 시간 축 처리를 위한 날짜 어댑터 로드 -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns"></script>
+
+<!-- 3. 차트 실행 스크립트 -->
 <script>
-  document.addEventListener("DOMContentLoaded", function() {
-    // Jekyll 데이터 추출
-    const jekyllData = [
-      {% for file in site.static_files %}
-        {% if file.path contains '/_data2/' %}
-          { "name": "{{ file.name }}" }{% unless forloop.last %},{% endunless %}
-        {% endif %}
-      {% endfor %}
+    // 이전에 작성한 함수를 여기에 넣습니다.
+    function initData2Graph(canvasId, rawFiles) {
+        const ctx = document.getElementById(canvasId);
+        if (!ctx) return;
+
+        const processedData = rawFiles
+            .map(file => {
+                // 파일명 파싱: yyyy-mm-dd-hh-mm-ss-정수.md
+                const match = file.name.match(/^(\d{4}-\d{2}-\d{2})-(\d{2}-\d{2}-\d{2})-(\d+)\.md$/);
+                if (match) {
+                    return {
+                        x: new Date(match[1]), // 가로축: 날짜 (일수 비례)
+                        y: parseInt(match[3])  // 세로축: 정수값
+                    };
+                }
+                return null;
+            })
+            .filter(item => item !== null)
+            .sort((a, b) => a.x - b.x);
+
+        new Chart(ctx, {
+            type: 'scatter', // 'line' 대신 'scatter'를 써야 점만 찍힙니다.
+            data: {
+                datasets: [{
+                    label: '파일 데이터 지점',
+                    data: processedData,
+                    backgroundColor: 'rgba(54, 162, 235, 1)', // 점 색상 (파랑)
+                    pointRadius: 6,
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: {
+                        type: 'time',
+                        time: { 
+                            unit: 'day',
+                            displayFormats: { day: 'yyyy-MM-dd' }
+                        },
+                        grid: { color: 'rgba(0, 0, 0, 0.1)' }, // 격자선 선명하게
+                        title: { display: true, text: '날짜' }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        grid: { color: 'rgba(0, 0, 0, 0.1)' }, // 세로 격자선
+                        title: { display: true, text: '값' }
+                    }
+                }
+            }
+        });
+    }
+
+    // 4. 실제로 데이터를 넣어 실행하는 부분
+    // (이 부분은 실제로 데이터를 가져오는 방식에 따라 수정이 필요합니다.)
+    // 예시 데이터:
+    const myFiles = [
+        { name: "2026-05-10-10-00-00-50.md" },
+        { name: "2026-05-15-12-00-00-80.md" },
+        { name: "2026-05-19-11-41-00-123.md" }
     ];
 
-    // [디버깅] 브라우저 콘솔(F12)에서 데이터 확인용
-    console.log("1. Jekyll Raw Data:", jekyllData);
-
-    if (jekyllData.length === 0) {
-      console.error("에러: _data2 폴더에서 파일을 찾지 못했습니다. _config.yml 설정을 확인하세요.");
-    } else {
-      initData2Graph('data2Canvas', jekyllData);
-    }
-  });
+    // 차트 초기화 함수 호출
+    initData2Graph('myDataGraph', myFiles);
 </script>
