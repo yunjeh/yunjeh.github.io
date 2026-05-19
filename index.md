@@ -5,69 +5,35 @@ layout: home
 <div id="overall-container"></div>
 <script src="/assets/js/overall.js"></script>
 
-<!-- 1. 그래프가 그려질 공간 (부모 div로 크기를 잡아주는 것이 좋습니다) -->
-<div style="width: 100%; height: 200px; padding: 20px;">
-    <canvas id="myDataGraph"></canvas>
+---
+layout: default
+title: Data Timeline Chart
+---
+
+<div style="width: 100%; max-width: 800px; margin: 30px auto; background: #ffffff; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+  <canvas id="dataScatterChart"></canvas>
 </div>
 
-<!-- 2. Chart.js 라이브러리 및 시간 축 처리를 위한 날짜 어댑터 로드 -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns"></script>
 
-<!-- 3. 차트 실행 스크립트 -->
+<script src="{{ '/assets/js/date2graph.js' | relative_url }}"></script>
 <script>
-    // 이전에 작성한 함수를 여기에 넣습니다.
-    function initData2Graph(canvasId, rawFiles) {
-        const ctx = document.getElementById(canvasId);
-        if (!ctx) return;
+  const rawData = [
+    {% for file in site.static_files %}
+      {% if file.path contains '/_data2/' %}
+        {% assign filename = file.name %}
+        {% assign cleanName = filename | replace: ".md", "" %}
+        {% assign parts = cleanName | split: "-" %}
+        {% assign value = parts | last %}
+        {
+          x: '{{ parts[0] }}-{{ parts[1] }}-{{ parts[2] }}T{{ parts[3] }}:{{ parts[4] }}:{{ parts[5] }}',
+          y: {{ value | plus: 0 }}
+        },
+      {% endif %}
+    {% endfor %}
+  ];
 
-        const processedData = rawFiles
-            .map(file => {
-                // 파일명 파싱: yyyy-mm-dd-hh-mm-ss-정수.md
-                const match = file.name.match(/^(\d{4}-\d{2}-\d{2})-(\d{2}-\d{2}-\d{2})-(\d+)\.md$/);
-                if (match) {
-                    return {
-                        x: new Date(match[1]), // 가로축: 날짜 (일수 비례)
-                        y: parseInt(match[3])  // 세로축: 정수값
-                    };
-                }
-                return null;
-            })
-            .filter(item => item !== null)
-            .sort((a, b) => a.x - b.x);
-
-        new Chart(ctx, {
-            type: 'scatter', // 'line' 대신 'scatter'를 써야 점만 찍힙니다.
-            data: {
-                datasets: [{
-                    label: '파일 데이터 지점',
-                    data: processedData,
-                    backgroundColor: 'rgba(54, 162, 235, 1)', // 점 색상 (파랑)
-                    pointRadius: 6,
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    x: {
-                        type: 'time',
-                        time: { 
-                            unit: 'day',
-                            displayFormats: { day: 'yyyy-MM-dd' }
-                        },
-                        grid: { color: 'rgba(0, 0, 0, 0.1)' }, // 격자선 선명하게
-                        title: { display: true, text: '날짜' }
-                    },
-                    y: {
-                        beginAtZero: true,
-                        grid: { color: 'rgba(0, 0, 0, 0.1)' }, // 세로 격자선
-                        title: { display: true, text: '값' }
-                    }
-                }
-            }
-        });
-    }
-    // 차트 초기화 함수 호출
-    initData2Graph('myDataGraph', myFiles);
+  // 외부 스크립트 파일(date2graph.js)에 선언된 함수 호출
+  renderDataChart(rawData);
 </script>
