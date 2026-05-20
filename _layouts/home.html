@@ -13,7 +13,7 @@ layout: default
 {{ content }}
 
   <!-- 💡 Tags 페이지 링크 직접 추가 -->
-  <h6>💡<a class="page-link" href="{{ '/tags' | relative_url }}">Tags</a></h6>
+  <h5>💡<a class="page-link" href="{{ '/tags' | relative_url }}">Tags</a></h5>
   {% assign tags = site.tags | sort %}
 <div class="tags-cloud" style="margin-bottom: 30px;">
   {% for tag in tags %}
