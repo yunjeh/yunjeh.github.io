@@ -94,7 +94,7 @@ async function initUnifiedRatings() {
         const section = document.createElement('div');
         section.className = 'progress-section';
         section.innerHTML = `
-            <div class="progress-title">${year} Overall Status</div>
+            <div class="progress-title">✅ ${year} Overall Status</div>
             <div class="scroll-container">
                 <div class="scroll-content">
                     <div id="months-overall-${year}" class="month-labels"></div>
