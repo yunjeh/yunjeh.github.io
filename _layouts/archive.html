@@ -7,15 +7,4 @@ layout: default
 <h1>{{ page.title }}</h1>
 
 {%-include post_list.html category=page.which_category-%}
-<!-- 태그 영역 추가 시작 -->
-  {% if page.tags.size > 0 %}
-  <div class="post-tags" style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #eee;">
-    <span style="font-weight: bold; margin-right: 10px;">Tags:</span>
-    {% for tag in page.tags %}
-      <a href="{{ '/tags/' | relative_url }}#{{ tag | slugify }}" style="margin-right: 8px; color: #007bff; text-decoration: none;">
-        #{{ tag }}
-      </a>
-    {% endfor %}
-  </div>
-  {% endif %}
-  <!-- 태그 영역 추가 끝 -->
+
