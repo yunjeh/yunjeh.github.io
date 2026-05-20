@@ -1,60 +1,31 @@
 ---
 layout: page
-title: Tags
-permalink: /tags/
+title: "Tags"
+permalink: /tags
 ---
 
-<!-- 1. 태그 클라우드 (상단에 전체 태그 나열) -->
-<div class="tag-cloud" style="margin-bottom: 30px;">
-  {% assign sorted_tags = site.tags | sort %}
-  {% for tag in sorted_tags %}
-    <a href="#{{ tag[0] | slugify }}" class="tag-link" style="margin-right: 10px;">
-      #{{ tag[0] }} ({{ tag[1].size }})
-    </a>
+{% assign tags = site.tags | sort %}
+
+<div class="tags-cloud">
+  {% for tag in tags %}
+    <a href="#{{ tag[0] }}" style="margin-right: 10px;">{{ tag[0] }} ({{ tag[1].size }})</a>
   {% endfor %}
 </div>
 
 <hr>
 
-<!-- 2. 게시물 리스트 영역 -->
-<div id="tag-results">
-  {% for tag in sorted_tags %}
-    <div class="tag-section" id="{{ tag[0] | slugify }}" style="display:none;">
-      <h2>#{{ tag[0] }} 관련 글</h2>
-      <ul>
-        {% for post in tag[1] %}
-          <li>
-            <span class="post-date">{{ post.date | date: "%Y-%m-%d" }}</span>
-            <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
-          </li>
-        {% endfor %}
-      </ul>
-    </div>
-  {% endfor %}
-</div>
+{% for tag in tags %}
+  <h2 id="{{ tag[0] }}">{{ tag[0] }}</h2>
+  <ul>
+    {% for post in tag[1] %}
+      <li>
+        <a href="{{ post.url }}">{{ post.title }}</a> - {{ post.date | date: "%Y.%m.%d" }}
+      </li>
+    {% endfor %}
+  </ul>
+{% endfor %}
 
-<!-- 3. 필터링 자바스크립트 -->
 <script>
-  function showSelectedTag() {
-    // URL에서 # 뒤의 값을 가져옴 (예: #github)
-    const hash = decodeURIComponent(window.location.hash.substring(1));
-    const sections = document.querySelectorAll('.tag-section');
-    
-    if (!hash) {
-      // 해시가 없으면 모든 섹션을 숨기거나 첫 번째 섹션을 보여줄 수 있음
-      return;
-    }
-
-    sections.forEach(section => {
-      if (section.id === hash) {
-        section.style.display = 'block';
-      } else {
-        section.style.display = 'none';
-      }
-    });
-  }
-
-  // 페이지 로드 시와 URL 해시가 변경될 때 실행
-  window.addEventListener('hashchange', showSelectedTag);
-  window.addEventListener('DOMContentLoaded', showSelectedTag);
+  // URL의 해시(#단어)를 감지하여 해당 섹션으로 부드럽게 이동하거나 
+  // 특정 태그 게시물만 강조하고 싶을 때 자바스크립트를 추가할 수 있습니다.
 </script>
