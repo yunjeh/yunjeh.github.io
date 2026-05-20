@@ -8,10 +8,11 @@ layout: default
   {%-endif-%}
 </header>
 
-{%-include menu_item.html collection=site.data.menu.entries-%}
+
 <nav class="site-nav">
   {%-include menu_item.html collection=site.data.menu.entries-%}
   <!-- 💡 Tags 페이지 링크 직접 추가 -->
   <a class="page-link" href="{{ '/tags/' | relative_url }}">Tags</a>
 </nav>
+
 {{ content }}
