@@ -20,9 +20,9 @@ permalink: /tags
 <!-- 태그별 포스트 리스트 영역 -->
 {% for tag in tags %}
   <div id="{{ tag[0] }}" class="tag-section" style="margin-bottom: 50px;">
-    <h2 style="border-left: 5px solid #007bff; padding-left: 10px; margin-bottom: 20px;">
+    <h4 style="border-left: 5px solid #007bff; padding-left: 10px; margin-bottom: 20px;">
       {{ tag[0] }} <small style="color: #888;">({{ tag[1].size }})</small>
-    </h2>
+    </h4>
 
     <ul class="post-full-list" style="padding-left: 0;">
       {% for post in tag[1] %}
@@ -42,7 +42,7 @@ permalink: /tags
       {% endfor %}
     </ul>
     
-    <a href="#" style="font-size: 0.8em; color: #bbb;">↑ 위로 가기</a>
+    <!--<a href="#" style="font-size: 0.8em; color: #bbb;">↑ 위로 가기</a>-->
   </div>
 {% endfor %}
 
@@ -52,6 +52,6 @@ permalink: /tags
     scroll-behavior: smooth;
   }
   .tag-section:target h2 {
-    color: #007bff; /* 클릭해서 이동했을 때 제목 강조 */
+    color: ;#999999 /* #007bff클릭해서 이동했을 때 제목 강조 */
   }
 </style>
