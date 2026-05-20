@@ -9,54 +9,24 @@
 {%-else-%}
   {%-assign limit_exceeded = false-%}
 {%-endif-%}
-
 <style>
-  li::marker { content: ""; font-size: 1.0em; }
-  /* 필터링 중일 때 상단에 표시될 안내바 스타일 */
-  .filter-notice {
-    display: none;
-    padding: 10px;
-    background: #f0f0f0;
-    margin-bottom: 20px;
-    border-radius: 5px;
-    font-size: 0.9em;
+  li::marker {
+    content: ""; /* 원하는 이모지나 특수문자 입력 */
+    font-size: 1.0em;
   }
-  .hashtag-link {
-    color: #007bff;
-    text-decoration: none;
-    cursor: pointer;
-  }
-  .hashtag-link:hover { text-decoration: underline; }
 </style>
-
-<!-- 필터링 상태 안내 -->
-<div id="filter-info" class="filter-notice">
-  <strong>#<span id="active-tag"></span></strong> 태그 모아보기 중 
-  <a href="javascript:void(0)" onclick="resetFilter()" style="margin-left:10px; color:#666;">[전체보기]</a>
-</div>
-
 {%- if posts.size > 0 -%}
   <ul class="post-full-list">
     {%- for post in posts limit: include.limit -%}
-    {%- assign tag_string = post.tags | join: ' ' | downcase -%}
-    <li class="post-entry" data-tags="{{ tag_string }}" style="margin-bottom: 15px; list-style: none;">
-      <span style="font-weight: bold; margin-right: 16px; white-space: nowrap;">
-        {{- post.date | date: "%Y.%m.%d. %H:%M:%S" -}}
-      </span>
-      
-      <span class="post-content">
-        {%- assign content = post.content | strip_html | strip_newlines -%}
-        <!-- 정규표현식 대신 liquid 필터를 이용해 #태그를 링크로 치환 (심플 버전) -->
-        {{ content }}
-      </span>
-
-      <!-- 만약 Front Matter에 tags를 명시했다면 하단에 클릭용 태그 노출 -->
-      <div style="margin-top: 5px;">
-        {% for tag in post.tags %}
-          <a href="javascript:void(0)" onclick="filterTag('{{ tag | downcase }}')" class="hashtag-link">#{{ tag }}</a>
-        {% endfor %}
-      </div>
-    </li>
+<li style="margin-bottom: 15px; list-style: none;">
+  <span style="font-weight: bold; margin-right: 16px; white-space: nowrap;">
+    {{- post.date | date: "%Y.%m.%d. %H:%M:%S" -}}
+  </span>
+  
+  <span>
+    {{ post.content | strip_html | strip_newlines }}
+  </span>
+</li>
     {%- endfor -%}
     
     {%- if include.show_more and limit_exceeded -%}
@@ -64,35 +34,3 @@
     {%- endif -%}
   </ul>
 {%- endif -%}
-
-<script>
-  function filterTag(tag) {
-    const posts = document.querySelectorAll('.post-entry');
-    const filterInfo = document.getElementById('filter-info');
-    const activeTagSpan = document.getElementById('active-tag');
-
-    posts.forEach(post => {
-      const tags = post.getAttribute('data-tags').split(' ');
-      if (tags.includes(tag.toLowerCase())) {
-        post.style.display = 'block';
-      } else {
-        post.style.display = 'none';
-      }
-    });
-
-    filterInfo.style.display = 'block';
-    activeTagSpan.innerText = tag;
-    window.scrollTo(0, 0);
-  }
-
-  function resetFilter() {
-    const posts = document.querySelectorAll('.post-entry');
-    const filterInfo = document.getElementById('filter-info');
-
-    posts.forEach(post => {
-      post.style.display = 'block';
-    });
-
-    filterInfo.style.display = 'none';
-  }
-</script>
