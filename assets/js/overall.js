@@ -50,6 +50,8 @@ function injectStyles() {
             grid-auto-flow: column;
             grid-auto-columns: 9px;
             grid-gap: 1px;
+
+            margin-bottom: 4px;
         }
         .cell {
             width: 9px;
