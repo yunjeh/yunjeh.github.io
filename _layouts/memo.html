@@ -70,7 +70,8 @@ layout: default
             color: #2c3e50;
             text-align: center; /* 글자 자체도 가운데 정렬 */
             margin: 0;
-            word-break: break-all;
+            word-break: keep-all;     /* 한글/영문 모두 단어 중간이 끊기지 않게 보호 */
+            word-wrap: break-word;    /* 단어가 포스트잇 폭보다 길 때만 예외적으로 줄바꿈 */
             
             /* 글이 포스트잇 밖으로 넘치면 말줄임표(...) 처리 */
             display: -webkit-box;
