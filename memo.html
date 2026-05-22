@@ -1,0 +1,119 @@
+---
+layout: null
+title: Memo Wall
+---
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Post-it Wall</title>
+    <style>
+        body {
+            background: #f0f0f0; /* 배경색 */
+            margin: 0;
+            padding: 20px;
+            font-family: 'Nanum Pen Script', cursive, sans-serif; /* 손글씨 폰트 추천 */
+            overflow-x: hidden;
+        }
+
+        #wall {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+        }
+
+        .post-it {
+            position: absolute;
+            width: 180px;
+            min-height: 180px;
+            padding: 20px;
+            box-shadow: 5px 5px 10px rgba(0,0,0,0.1);
+            text-decoration: none;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.2s ease;
+            cursor: pointer;
+            word-break: break-all;
+        }
+
+        .post-it:hover {
+            transform: scale(1.1) !important;
+            z-index: 100 !important;
+            box-shadow: 10px 10px 15px rgba(0,0,0,0.2);
+        }
+
+        .post-it h3 {
+            margin: 0 0 10px 0;
+            font-size: 1.2rem;
+            border-bottom: 1px solid rgba(0,0,0,0.1);
+            padding-bottom: 5px;
+        }
+
+        .post-it p {
+            margin: 0;
+            font-size: 1rem;
+            line-height: 1.4;
+        }
+    </style>
+</head>
+<body>
+
+<div id="wall">
+    {% for post in site.post2 %}
+    <a href="{{ post.url | relative_url }}" class="post-it">
+        <h3>{{ post.title }}</h3>
+        <p>{{ post.content | strip_html | truncate: 100 }}</p>
+    </a>
+    {% endfor %}
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const postIts = document.querySelectorAll('.post-it');
+        const colors = ['#fff740', '#ff7eb9', '#7afcff', '#feff9c', '#ff9de2']; // 포스트잇 색상들
+
+        postIts.forEach(post => {
+            // 1. 랜덤 색상 지정
+            const randomColor = colors[Math.floor(Math.random() * colors.length)];
+            post.style.backgroundColor = randomColor;
+
+            // 2. 랜덤 위치 (화면 안쪽으로 제한)
+            const x = Math.random() * (window.innerWidth - 250);
+            const y = Math.random() * (window.innerHeight - 250);
+            
+            // 3. 랜덤 회전 ( -10도 ~ 10도 )
+            const rotate = (Math.random() * 20) - 10;
+
+            post.style.left```
+
+---
+
+### 3. 코드 포인트 설명
+
+#### **랜덤 배치 로직 (JavaScript)**
+*   `Math.random()`을 사용하여 화면의 가로(`innerWidth`)와 세로(`innerHeight`) 범위 내에서 포스트잇의 `top`과 `left` 값을 매번 다르게 생성합니다.
+*   `rotate` 값을 줘서 포스트잇이 약간 삐딱하게 붙어있는 생동감을 주었습니다.
+*   `colors` 배열에 원하는 색상(파스텔톤 추천)을 넣어두면 로딩할 때마다 색상도 랜덤하게 바뀝니다.
+
+#### **포스트잇 디자인 (CSS)**
+*   `box-shadow`를 통해 종이가 떠 있는 듯한 입체감을 주었습니다.
+*   `hover` 효과를 넣어 마우스를 올리면 해당 포스트잇이 가장 앞으로(`z-index`) 튀어나오며 확대되도록 설계했습니다.
+
+---
+
+### 4. 어떻게 확인하나요?
+1. 위의 파일을 루트 폴더에 저장합니다.
+2. 브라우저에서 `내도메인/postit` (또는 `postit.html`)으로 접속합니다.
+3. 새로고침을 할 때마다 `_post2`에 저장된 포스트잇들이 사방으로 흩어지며 배치되는 것을 확인할 수 있습니다.
+
+> **Tip:** 안드로이드 앱에서 `sendPostFile4` 기능을 통해 `_post2`에 글을 올리면, 이 보 = x + 'px';
+            post.style.top = y + 'px';
+            post.style.transform = `rotate(${rotate}deg)`;
+            post.style.zIndex = Math.floor(Math.random() * 10);
+        });
+    });
+</script>
+
+</body>
+</html>
