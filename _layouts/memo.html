@@ -7,12 +7,12 @@ layout: default
 {%-include back_link.html-%}
 
 <h1>{{ page.title }}</h1>
+
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <!-- 🎯 개성 있고 가독성 좋은 다양한 구글 폰트 로드 -->
+    <title>Post-it Wall</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Gaegu:wght@400;700&family=Gowun+Dodum&family=Gamja+Flower&family=Nanum+Pen+Script&family=Noto+Serif+KR:wght@500&family=Sunflower:wght@500&display=swap" rel="stylesheet">
@@ -29,40 +29,35 @@ layout: default
             min-height: 100vh;
         }
 
+        /* 🎯 [수정] 40% 여백을 제거하고, 기존보다 대폭 줄어든 120px 고정 여백을 적용합니다. */
         #wall {
             position: relative;
             width: 100%;
             min-height: 100vh;
-            padding: 50px;
+            padding: 50px 50px 50px 120px; 
             box-sizing: border-box;
         }
 
-        /* 🎯 [변경] 포스트잇 크기 기존 160px에서 1.5배 스케일업 (240px) */
         .post-it {
             position: absolute;
             width: 240px;
             height: 240px;
             padding: 24px;
             box-sizing: border-box;
-            
             box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.08), 
                         0px 8px 16px rgba(0, 0, 0, 0.04);
-            
-            /* 클릭 차단 유지 */
             pointer-events: auto;
             cursor: default;
             
             display: flex;
             flex-direction: column;
-            justify-content: center; /* 세로 가운데 */
-            align-items: center;     /* 가로 가운데 */
+            justify-content: center;
+            align-items: center;
             overflow: hidden;
             
-            /* 위치 변경이나 마우스 호버 시 부드러운 애니메이션 효과 */
             transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.25s ease, z-index 0.1s step-end;
         }
 
-        /* 🎯 마우스를 올렸을 때 다른 포스트잇을 완벽히 덮고 똑바로 보이게 설정 */
         .post-it:hover {
             transform: scale(1.12) rotate(0deg) !important;
             z-index: 99999 !important;
@@ -70,7 +65,6 @@ layout: default
             transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
 
-        /* 본문 텍스트 기본 스타일 */
         .post-it .content-body {
             font-size: 1.05rem;
             font-weight: 500;
@@ -81,14 +75,11 @@ layout: default
             width: 100%;
             word-break: keep-all;     
             word-wrap: break-word;    
-            
-            /* 더 커진 크기에 맞게 말줄임 제한 완화 */
             display: -webkit-box;
             -webkit-line-clamp: 6; 
             -webkit-box-orient: vertical;
         }
 
-        /* 🎯 날짜 하단 우측 고정 배치 */
         .post-it .date {
             position: absolute;
             bottom: 12px;
@@ -107,35 +98,37 @@ layout: default
     {% for post in site.post2 %}
     <div class="post-it">
         <div class="content-body">{{ post.content | strip_html | trim }}</div>
-        <!-- 🎯 [변경] 날짜 포맷을 yyyy-mm-dd 형식으로 변경 -->
         <div class="date">{{ post.date | date: "%Y-%m-%d" }}</div>
     </div>
     {% endfor %}
 </div>
 
 <script>
-    // 파스텔 톤 포스트잇 색상 리스트
     const colors = ['#fff9ae', '#ffdfd3', '#f0ffdf', '#d6f5ff', '#fce1ff'];
 
-    // 🎯 [신규] 뚜렷한 개성을 가진 5가지 폰트 패밀리 배열 지정
     const fonts = [
-        "'Gaegu', sans-serif",         /* 귀여운 손글씨 느낌 1 */
-        "'Gamja Flower', sans-serif",  /* 개성 있는 아날로그 느낌 2 */
-        "'Gowun Dodum', sans-serif",   /* 정갈하고 깔끔한 서체 */
-        "'Noto Serif KR', serif",      /* 클래식하고 가독성 좋은 명조 계열 */
-        "'Sunflower', sans-serif"      /* 형태감이 뚜렷한 굵은 고딕 계열 */
+        "'Gaegu', sans-serif",
+        "'Gamja Flower', sans-serif",
+        "'Gowun Dodum', sans-serif",
+        "'Noto Serif KR', serif",
+        "'Sunflower', sans-serif"
     ];
 
-    const postIts = document.querySelectorAll('.post-it');
     const wall = document.getElementById('wall');
 
     function layoutPostIts() {
-        const wallWidth = wall.clientWidth - 100;
+        let postIts = Array.from(document.querySelectorAll('.post-it'));
         
-        // 🎯 [변경] 가로세로 240px로 커진 크기를 자바스크립트 수식에 반영
+        // 피셔-예이츠 셔플로 무작위 섞기 유지
+        for (let i = postIts.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [postIts[i], postIts[j]] = [postIts[j], postIts[i]];
+        }
+
+        // 줄어든 패딩에 맞춰 가로 가용 너비 자동 계산
+        const paddingLeft = parseFloat(window.getComputedStyle(wall).paddingLeft);
+        const wallWidth = wall.clientWidth - paddingLeft - 50;
         const cardSize = 240; 
-        
-        // 포스트잇끼리 글자가 절대 완전히 겹치지 않도록 표준 안전 여백(Stride)을 265px로 확장
         const stride = cardSize + 25; 
 
         const cols = Math.floor(wallWidth / stride) || 1;
@@ -147,34 +140,27 @@ layout: default
             const col = index % cols;
             const row = Math.floor(index / cols);
 
-            const baseLeft = 50 + col * stride;
+            // 🎯 줄어든 120px 여백을 기준선으로 삼아 첫 열부터 촘촘히 배치됩니다.
+            const baseLeft = paddingLeft + col * stride;
             const baseTop = 50 + row * stride;
 
-            // 끝부분만 자연스럽게 살짝 포개지도록 무작위 오프셋 세밀화 (최대 20px 안팎 조정)
             const offsetX = (Math.random() - 0.5) * 40;
             const offsetY = (Math.random() - 0.5) * 40;
-            const rotate = (Math.random() - 0.5) * 14; // -7도 ~ +7도 사이 회전
+            const rotate = (Math.random() - 0.5) * 14;
 
             const randomColor = colors[Math.floor(Math.random() * colors.length)];
-            
-            // 🎯 [신규] 루프를 돌며 포스트잇마다 무작위로 다른 폰트를 지정
             const randomFont = fonts[Math.floor(Math.random() * fonts.length)];
 
             const contentEl = item.querySelector('.content-body');
             if (contentEl) {
                 let text = contentEl.innerHTML;
-                
-                // 중복 처리를 방지하기 위해 원본에 이미 <br> 구조 변경이 안 일어났을 때만 치환
                 if (!text.includes('<br>')) {
                     text = text.replace(/"([^"]*)"/g, '"$1"<br>'); 
                     contentEl.innerHTML = text.replace(/(<br>)+$/g, '');
                 }
-                
-                // 폰트 스타일 실시간 주입
                 contentEl.style.fontFamily = randomFont;
             }
 
-            // 렌더링 스타일 구조 배치
             item.style.left = `${baseLeft + offsetX}px`;
             item.style.top = `${baseTop + offsetY}px`;
             item.style.transform = `rotate(${rotate}deg)`;
