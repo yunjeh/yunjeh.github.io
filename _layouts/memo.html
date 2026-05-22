@@ -137,6 +137,19 @@ layout: default
 
             const randomColor = colors[Math.floor(Math.random() * colors.length)];
 
+        // 🎯 [새로 추가] "" 문장 뒤에 자동으로 줄바꿈(<br>) 넣기
+            const contentEl = item.querySelector('.content-body');
+            if (contentEl) {
+                let text = contentEl.innerHTML;
+            
+                // 정규식을 사용해 닫는 쌍따옴표(") 뒤에 글자나 문장 성분이 있으면 줄바꿈 테그를 붙입니다.
+                // 단, 문장 맨 끝에 있는 쌍따옴표 뒤에는 줄바꿈이 불필요하므로 제외합니다.
+                text = text.replace(/"([^"]*)"/g, '"$1"<br>'); 
+            
+                // 혹시 <br>이 연속으로 생겨 공백이 너무 넓어지는 걸 방지
+                contentEl.innerHTML = text.replace(/(<br>)+$/g, '');
+
+            
             item.style.left = `${baseLeft + offsetX}px`;
             item.style.top = `${baseTop + offsetY}px`;
             item.style.transform = `rotate(${rotate}deg)`;
