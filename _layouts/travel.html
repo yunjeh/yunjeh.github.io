@@ -39,6 +39,11 @@ layout: default
       name: "2025-01-25",
       coords: [64.312555, -20.300197],
       imgUrl: "https://raw.githubusercontent.com/yunjeh/yunjeh.github.io/master/_images/travel/20250125_142437.jpeg"
+    },
+    {
+      name: "2025-01-28",
+      coords: [55.686658, 12.599238],
+      imgUrl: "https://raw.githubusercontent.com/yunjeh/yunjeh.github.io/master/_images/travel/20250128_105557.jpeg"
     }
   ];
 
@@ -50,12 +55,12 @@ layout: default
     // 기본 마커 생성
     const marker = L.marker(spot.coords).addTo(map);
 
-    // 마우스 오버 시 나타날 HTML 템플릿 정의 (장축 400px 제한 적용)
+    // 마우스 오버 시 나타날 HTML 템플릿 정의 (장축 240px 제한 적용)
     const tooltipContent = `
       <div style="text-align: center; font-family: sans-serif; padding: 4px;">
-        <strong style="display: block; margin-bottom: 8px; font-size: 14px;">${spot.name}</strong>
+        <strong style="display: block; margin-bottom: 6px; font-size: 13px;">${spot.name}</strong>
         <img src="${spot.imgUrl}" alt="${spot.name}" 
-             style="max-width: 400px; max-height: 400px; width: auto; height: auto; border-radius: 4px; display: block; margin: 0 auto;" />
+             style="max-width: 240px; max-height: 240px; width: auto; height: auto; border-radius: 4px; display: block; margin: 0 auto;" />
       </div>
     `;
 
