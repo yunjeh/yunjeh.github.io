@@ -2,9 +2,9 @@
 layout: default
 ---
 
-{%-include back_link.html-%}
-
 <!DOCTYPE html>
+
+{%-include back_link.html-%}
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
@@ -30,7 +30,7 @@ layout: default
             box-sizing: border-box;
         }
 
-        /* 포스트잇 컴포넌트 */
+        /* 포스트잇 디자인 컴포넌트 */
         .post-it {
             position: absolute;
             width: 160px;
@@ -38,47 +38,54 @@ layout: default
             padding: 16px;
             box-sizing: border-box;
             
-            /* 테두리가 자연스럽게 겹치는 느낌을 주는 그림자 */
             box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.1), 
                         0px 6px 12px rgba(0, 0, 0, 0.05);
             
-            /* 🚫 절대 클릭되거나 열리지 않도록 차단 */
+            /* 클릭 차단 */
             pointer-events: auto;
             cursor: default;
             
+            /* 🎯 정중앙 정렬을 위한 설정 */
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
+            justify-content: center; /* 세로 중앙 */
+            align-items: center;     /* 가로 중앙 */
             overflow: hidden;
             
             transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
 
-        /* 마우스를 올리면 완전히 드러나며 위로 점프 */
         .post-it:hover {
             transform: scale(1.1) rotate(0deg) !important;
             z-index: 9999 !important;
             box-shadow: 0px 12px 20px rgba(0, 0, 0, 0.2);
         }
 
-        .post-it h3 {
+        /* 🎯 본문 텍스트 스타일 지정 */
+        .post-it .content-body {
             font-family: 'Segoe UI', Roboto, sans-serif;
-            font-size: 0.95rem;
-            font-weight: 600;
-            line-height: 1.4;
+            font-size: 0.9rem;
+            font-weight: 500;
+            line-height: 1.5;
             color: #2c3e50;
+            text-align: center; /* 글자 자체도 가운데 정렬 */
             margin: 0;
             word-break: break-all;
+            
+            /* 글이 포스트잇 밖으로 넘치면 말줄임표(...) 처리 */
             display: -webkit-box;
-            -webkit-line-clamp: 5;
+            -webkit-line-clamp: 5; 
             -webkit-box-orient: vertical;
         }
 
+        /* 날짜는 오른쪽 아래에 작고 연하게 배치 */
         .post-it .date {
+            position: absolute;
+            bottom: 10px;
+            right: 12px;
             font-family: monospace;
-            font-size: 0.75rem;
-            color: rgba(0, 0, 0, 0.35);
-            text-align: right;
+            font-size: 0.7rem;
+            color: rgba(0, 0, 0, 0.3);
         }
     </style>
 </head>
@@ -87,7 +94,8 @@ layout: default
 <div id="wall">
     {% for post in site.post2 %}
     <div class="post-it">
-        <h3>{{ post.title }}</h3>
+        <!-- 🎯 제목 대신 본문 내용(strip_html로 마크다운/HTML 태그 제거)을 넣습니다 -->
+        <div class="content-body">{{ post.content | strip_html | trim }}</div>
         <div class="date">{{ post.date | date: "%y.%m.%d" }}</div>
     </div>
     {% endfor %}
@@ -106,11 +114,8 @@ layout: default
     const wall = document.getElementById('wall');
 
     function layoutPostIts() {
-        const wallWidth = wall.clientWidth - 100; // 패딩 공간 제외
-        const cardSize = 160;  // 포스트잇 가로세로 크기
-        
-        // 💡 핵심: 배치 간격을 카드 크기보다 살짝 넓게 세팅 (185px)
-        // 이렇게 하면 기본적으로 글자가 있는 몸통은 서로 닿지 않습니다.
+        const wallWidth = wall.clientWidth - 100;
+        const cardSize = 160; 
         const stride = cardSize + 25; 
 
         const cols = Math.floor(wallWidth / stride) || 1;
@@ -122,21 +127,17 @@ layout: default
             const col = index % cols;
             const row = Math.floor(index / cols);
 
-            // 표준 고정 위치 계산
             const baseLeft = 50 + col * stride;
             const baseTop = 50 + row * stride;
 
-            // 🎲 랜덤 '기울기'와 '미세 이동'을 조합해 모서리 끝부분만 닿게 조절
-            // 가로세로 최대 18px 범위 안에서만 흔들리므로 글씨가 덮이지 않습니다.
             const offsetX = (Math.random() - 0.5) * 36;
             const offsetY = (Math.random() - 0.5) * 36;
-            const rotate = (Math.random() - 0.5) * 16; // -8도 ~ +8도 회전
+            const rotate = (Math.random() - 0.5) * 16;
 
             const randomColor = colors[Math.floor(Math.random() * colors.length)];
 
             item.style.left = `${baseLeft + offsetX}px`;
             item.style.top = `${baseTop + offsetY}px`;
-            item.style.transform = `rotate(${rotate}degpx)`;
             item.style.transform = `rotate(${rotate}deg)`;
             item.style.backgroundColor = randomColor;
             item.style.zIndex = index + 1;
