@@ -15,13 +15,10 @@ layout: default
     <title>Post-it Wall</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Gaegu:wght@400;700&family=Gowun+Dodum&family=Gamja+Flower&family=Nanum+Pen+Script&family=Noto+Serif+KR:wght@500&family=Sunflower:wght@500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Gaegu:wght=400;700&family=Gowun+Dodum&family=Gamja+Flower&family=Nanum+Pen+Script&family=Noto+Serif+KR:wght=500&family=Sunflower:wght=500&display=swap" rel="stylesheet">
     
     <style>
         body {
-            background-color: #f5f5f3;
-            background-image: radial-gradient(#dbdbd7 1.2px, transparent 0);
-            background-size: 28px 28px;
             margin: 0;
             padding: 0;
             overflow-x: hidden;
@@ -29,12 +26,11 @@ layout: default
             min-height: 100vh;
         }
 
-        /* 🎯 [수정] 40% 여백을 제거하고, 기존보다 대폭 줄어든 120px 고정 여백을 적용합니다. */
         #wall {
             position: relative;
             width: 100%;
             min-height: 100vh;
-            padding: 50px 50px 50px 24px; 
+            padding: 50px 50px 50px 120px; 
             box-sizing: border-box;
         }
 
@@ -66,9 +62,8 @@ layout: default
         }
 
         .post-it .content-body {
-            font-size: 1.05rem;
+            /* 🎯 고정 폰트 크기 설정을 제거하고 자바스크립트가 동적으로 제어합니다 */
             font-weight: 500;
-            line-height: 1.6;
             color: #2c3e50;
             text-align: center;
             margin: 0;
@@ -76,7 +71,7 @@ layout: default
             word-break: keep-all;     
             word-wrap: break-word;    
             display: -webkit-box;
-            -webkit-line-clamp: 6; 
+            -webkit-line-clamp: 7; /* 글씨가 작아지므로 최대 보여주는 줄 수도 7줄로 소폭 확장 */
             -webkit-box-orient: vertical;
         }
 
@@ -119,13 +114,12 @@ layout: default
     function layoutPostIts() {
         let postIts = Array.from(document.querySelectorAll('.post-it'));
         
-        // 피셔-예이츠 셔플로 무작위 섞기 유지
+        // 피셔-예이츠 셔플 알고리즘 (랜덤 정렬)
         for (let i = postIts.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
             [postIts[i], postIts[j]] = [postIts[j], postIts[i]];
         }
 
-        // 줄어든 패딩에 맞춰 가로 가용 너비 자동 계산
         const paddingLeft = parseFloat(window.getComputedStyle(wall).paddingLeft);
         const wallWidth = wall.clientWidth - paddingLeft - 50;
         const cardSize = 240; 
@@ -140,7 +134,6 @@ layout: default
             const col = index % cols;
             const row = Math.floor(index / cols);
 
-            // 🎯 줄어든 120px 여백을 기준선으로 삼아 첫 열부터 촘촘히 배치됩니다.
             const baseLeft = paddingLeft + col * stride;
             const baseTop = 50 + row * stride;
 
@@ -153,12 +146,29 @@ layout: default
 
             const contentEl = item.querySelector('.content-body');
             if (contentEl) {
-                let text = contentEl.innerHTML;
-                if (!text.includes('<br>')) {
-                    text = text.replace(/"([^"]*)"/g, '"$1"<br>'); 
-                    contentEl.innerHTML = text.replace(/(<br>)+$/g, '');
-                }
                 contentEl.style.fontFamily = randomFont;
+
+                // 🎯 [신규] 글자 수 계산 및 크기 동적 할당
+                const textLength = contentEl.textContent.trim().length;
+                let fontSize = '1.05rem';
+                let lineHeight = '1.6';
+
+                if (textLength <= 15) {
+                    // 아주 짧은 문장 (한두 단어) -> 크게 강조
+                    fontSize = '1.45rem';
+                    lineHeight = '1.4';
+                } else if (textLength <= 30) {
+                    // 단문 -> 살짝 크게
+                    fontSize = '1.25rem';
+                    lineHeight = '1.5';
+                } else if (textLength > 70) {
+                    // 장문 (글자 수가 70자 이상으로 빽빽할 때) -> 읽을 수 있는 선에서 작게 압축
+                    fontSize = '0.92rem';
+                    lineHeight = '1.4';
+                } // 31자 ~ 70자는 기본 크기(1.05rem)를 유지합니다.
+
+                contentEl.style.fontSize = fontSize;
+                contentEl.style.lineHeight = lineHeight;
             }
 
             item.style.left = `${baseLeft + offsetX}px`;
