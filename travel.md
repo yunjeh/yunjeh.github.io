@@ -1,4 +1,4 @@
 ---
 layout: travel
-title: Travel
+title: Been there, done that
 ---
