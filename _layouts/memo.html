@@ -4,60 +4,89 @@ layout: default
 
 {%-include back_link.html-%}
 
-<h1>{{ page.title }}</h1>
-
+---
+layout: null
+title: Post-it Board
+---
 <!DOCTYPE html>
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Post-it Wall</title>
     <style>
+        /* 벽지 느낌의 배경 스타일링 */
         body {
-            background: #f0f0f0; /* 배경색 */
+            background-color: #f4f1ea;
+            background-image: radial-gradient(#e1dbcd 1px, transparent 0);
+            background-size: 24px 24px;
             margin: 0;
-            padding: 20px;
-            font-family: 'Nanum Pen Script', cursive, sans-serif; /* 손글씨 폰트 추천 */
+            padding: 0;
             overflow-x: hidden;
+            overflow-y: auto;
+            min-height: 100vh;
         }
 
+        /* 포스트잇들이 붙을 벽면 */
         #wall {
             position: relative;
-            width: 100vw;
-            height: 100vh;
+            width: 100%;
+            min-height: 100vh;
+            padding: 40px;
+            box-sizing: border-box;
         }
 
+        /* 포스트잇 기본 디자인 */
         .post-it {
             position: absolute;
-            width: 180px;
-            min-height: 180px;
-            padding: 20px;
-            box-shadow: 5px 5px 10px rgba(0,0,0,0.1);
-            text-decoration: none;
-            color: #333;
+            width: 160px;
+            height: 160px;
+            padding: 18px;
+            box-sizing: border-box;
+            
+            /* 실제 종이 같은 그림자 효과 */
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.15), 
+                        0px 8px 15px rgba(0, 0, 0, 0.06);
+            
+            /* 클릭 불가능하게 설정 (마우스 커서도 기본으로) */
+            pointer-events: auto; 
+            cursor: default;
+            
             display: flex;
             flex-direction: column;
-            transition: transform 0.2s ease;
-            cursor: pointer;
-            word-break: break-all;
+            justify-content: space-between;
+            overflow: hidden;
+            
+            /* 부드러운 호버 효과 */
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
         }
 
+        /* 살짝 겹쳐있다가 마우스를 올리면 슥- 위로 올라오는 효과 */
         .post-it:hover {
-            transform: scale(1.1) !important;
-            z-index: 100 !important;
-            box-shadow: 10px 10px 15px rgba(0,0,0,0.2);
+            transform: scale(1.08) rotate(0deg) !important;
+            z-index: 9999 !important;
+            box-shadow: 0px 15px 25px rgba(0, 0, 0, 0.25);
         }
 
+        /* 포스트잇 폰트 및 텍스트 스타일 */
         .post-it h3 {
-            margin: 0 0 10px 0;
-            font-size: 1.2rem;
-            border-bottom: 1px solid rgba(0,0,0,0.1);
-            padding-bottom: 5px;
+            font-family: 'Segoe UI', Roboto, sans-serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            line-height: 1.4;
+            color: #2c3e50;
+            margin: 0;
+            word-break: break-all;
+            display: -webkit-box;
+            -webkit-line-clamp: 5; /* 제목이 너무 길면 5줄까지만 표시 */
+            -webkit-box-orient: vertical;
         }
 
-        .post-it p {
-            margin: 0;
-            font-size: 1rem;
-            line-height: 1.4;
+        .post-it .date {
+            font-family: monospace;
+            font-size: 0.75rem;
+            color: rgba(0, 0, 0, 0.4);
+            text-align: right;
         }
     </style>
 </head>
@@ -65,58 +94,72 @@ layout: default
 
 <div id="wall">
     {% for post in site.post2 %}
-    <a href="{{ post.url | relative_url }}" class="post-it">
+    <div class="post-it">
         <h3>{{ post.title }}</h3>
-        <p>{{ post.content | strip_html | truncate: 100 }}</p>
-    </a>
+        <div class="date">{{ post.date | date: "%y.%m.%d" }}</div>
+    </div>
     {% endfor %}
 </div>
 
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
-        const postIts = document.querySelectorAll('.post-it');
-        const colors = ['#fff740', '#ff7eb9', '#7afcff', '#feff9c', '#ff9de2']; // 포스트잇 색상들
+    // 벽에 붙일 포스트잇의 따뜻한 파스텔 색상들
+    const colors = [
+        '#fff9ae', // 레몬 옐로우
+        '#ffdfd3', // 살구 피치
+        '#f0ffdf', // 연녹색 애플
+        '#d6f5ff', // 하늘색 민트
+        '#fce1ff', // 연보라 라벤더
+        '#e3f2fd'  // 옅은 블루
+    ];
 
-        postIts.forEach(post => {
-            // 1. 랜덤 색상 지정
+    const postIts = document.querySelectorAll('.post-it');
+    const wall = document.getElementById('wall');
+
+    function layoutPostIts() {
+        const wallWidth = wall.clientWidth - 80; // 패딩 제외 여유공간
+        const cardWidth = 160;
+        const cardHeight = 160;
+
+        // 1. 화면 크기에 맞춰 가상 격자(Grid) 배치 칸 계산
+        const cols = Math.floor(wallWidth / (cardWidth + 20)) || 1;
+        const rows = Math.ceil(postIts.length / cols);
+
+        // 높이가 부족하면 벽면 전체 높이를 동적으로 늘려줍니다.
+        wall.style.height = `${rows * (cardHeight + 40) + 100}px`;
+
+        postIts.forEach((item, index) => {
+            // 현재 카드가 들어갈 행과 열 위치
+            const col = index % cols;
+            const row = Math.floor(index / cols);
+
+            // 기본 격자 중심 좌표 계산
+            const baseLeft = 40 + col * (cardWidth + 35);
+            const baseTop = 40 + row * (cardHeight + 35);
+
+            // 🎲 [핵심] 가려지지 않게 살짝 삐져나오는 랜덤 오프셋 (-25px ~ +25px)
+            const offsetX = (Math.random() - 0.5) * 50;
+            const offsetY = (Math.random() - 0.5) * 50;
+
+            // 🎲 살짝 삐딱하게 붙이는 랜덤 회전 각도 (-10도 ~ 10도)
+            const rotate = (Math.random() - 0.5) * 20;
+
+            // 🎲 색상 무작위 선택
             const randomColor = colors[Math.floor(Math.random() * colors.length)];
-            post.style.backgroundColor = randomColor;
 
-            // 2. 랜덤 위치 (화면 안쪽으로 제한)
-            const x = Math.random() * (window.innerWidth - 250);
-            const y = Math.random() * (window.innerHeight - 250);
+            // 스타일 실시간 주입
+            item.style.left = `${baseLeft + offsetX}px`;
+            item.style.top = `${baseTop + offsetY}px`;
+            item.style.transform = `rotate(${rotate}deg)`;
+            item.style.backgroundColor = randomColor;
             
-            // 3. 랜덤 회전 ( -10도 ~ 10도 )
-            const rotate = (Math.random() * 20) - 10;
-
-            post.style.left```
-
----
-
-### 3. 코드 포인트 설명
-
-#### **랜덤 배치 로직 (JavaScript)**
-*   `Math.random()`을 사용하여 화면의 가로(`innerWidth`)와 세로(`innerHeight`) 범위 내에서 포스트잇의 `top`과 `left` 값을 매번 다르게 생성합니다.
-*   `rotate` 값을 줘서 포스트잇이 약간 삐딱하게 붙어있는 생동감을 주었습니다.
-*   `colors` 배열에 원하는 색상(파스텔톤 추천)을 넣어두면 로딩할 때마다 색상도 랜덤하게 바뀝니다.
-
-#### **포스트잇 디자인 (CSS)**
-*   `box-shadow`를 통해 종이가 떠 있는 듯한 입체감을 주었습니다.
-*   `hover` 효과를 넣어 마우스를 올리면 해당 포스트잇이 가장 앞으로(`z-index`) 튀어나오며 확대되도록 설계했습니다.
-
----
-
-### 4. 어떻게 확인하나요?
-1. 위의 파일을 루트 폴더에 저장합니다.
-2. 브라우저에서 `내도메인/postit` (또는 `postit.html`)으로 접속합니다.
-3. 새로고침을 할 때마다 `_post2`에 저장된 포스트잇들이 사방으로 흩어지며 배치되는 것을 확인할 수 있습니다.
-
-> **Tip:** 안드로이드 앱에서 `sendPostFile4` 기능을 통해 `_post2`에 글을 올리면, 이 보 = x + 'px';
-            post.style.top = y + 'px';
-            post.style.transform = `rotate(${rotate}deg)`;
-            post.style.zIndex = Math.floor(Math.random() * 10);
+            // 기본 배치 순서대로 z-index 배치 (자연스러운 겹침 유도)
+            item.style.zIndex = index + 1;
         });
-    });
+    }
+
+    // 초기 실행 및 브라우저 창 크기가 바뀔 때 재정렬
+    window.addEventListener('DOMContentLoaded', layoutPostIts);
+    window.addEventListener('resize', layoutPostIts);
 </script>
 
 </body>
