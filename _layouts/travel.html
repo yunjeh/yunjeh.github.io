@@ -23,35 +23,39 @@ layout: default
     attribution: '© OpenStreetMap'
   }).addTo(map);
 
-  // 5. 내가 다녀온 여행지 데이터 배열 (여기에 사진과 좌표를 추가하면 됩니다)
+  // 5. 내가 다녀온 여행지 데이터 배열
   const travelSpots = [
     {
       name: "2025-01-22",
       coords: [47.443645, -122.303303],
-      imgUrl: "https://raw.githubusercontent.com/yunjeh/yunjeh.github.io/master/_images/travel/20250122_114224.jpeg?w=400"
+      imgUrl: "https://raw.githubusercontent.com/yunjeh/yunjeh.github.io/master/_images/travel/20250122_114224.jpeg"
     },
     {
       name: "2025-01-24",
       coords: [64.142714, -21.927713],
-      imgUrl: "https://raw.githubusercontent.com/yunjeh/yunjeh.github.io/master/_images/travel/20250124_225115.jpeg?w=400"
+      imgUrl: "https://raw.githubusercontent.com/yunjeh/yunjeh.github.io/master/_images/travel/20250124_225115.jpeg"
     },
     {
-      name: "미국 뉴욕 타임스퀘어",
-      coords: [40.7580, -73.9855],
-      //imgUrl: "https://raw.githubusercontent.com/yunjeh/yunjeh.github.io/master/_images/travel/"
+      name: "2025-01-25",
+      coords: [64.312555, -20.300197],
+      imgUrl: "https://raw.githubusercontent.com/yunjeh/yunjeh.github.io/master/_images/travel/20250125_142437.jpeg"
     }
   ];
 
   // 6. 데이터 배열을 돌며 지도에 마커 및 마우스 오버(Hover) 툴팁 바인딩
   travelSpots.forEach(spot => {
+    // 안전장치: 좌표나 이미지 주소가 없는 데이터는 건너뜁니다.
+    if (!spot.coords || !spot.imgUrl) return;
+
     // 기본 마커 생성
     const marker = L.marker(spot.coords).addTo(map);
 
-    // 마우스 오버 시 나타날 HTML 템플릿 정의 (사진 크기를 제한하여 팝업이 깨지지 않게 방지)
+    // 마우스 오버 시 나타날 HTML 템플릿 정의 (장축 400px 제한 적용)
     const tooltipContent = `
-      <div style="text-align: center; font-family: sans-serif; padding: 2px;">
-        <strong style="display: block; margin-bottom: 5px;">${spot.name}</strong>
-        <img src="${spot.imgUrl}" alt="${spot.name}" style="width: 400px; height: auto; border-radius: 4px; display: block; margin: 0 auto;" />
+      <div style="text-align: center; font-family: sans-serif; padding: 4px;">
+        <strong style="display: block; margin-bottom: 8px; font-size: 14px;">${spot.name}</strong>
+        <img src="${spot.imgUrl}" alt="${spot.name}" 
+             style="max-width: 400px; max-height: 400px; width: auto; height: auto; border-radius: 4px; display: block; margin: 0 auto;" />
       </div>
     `;
 
