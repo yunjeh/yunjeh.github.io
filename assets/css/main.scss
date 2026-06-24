@@ -1,16 +1,202 @@
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap');
+@import url('https://cdn.jsdelivr.net/npm/pretendard/dist/web/static/pretendard.css');
 
-/* 2. 블로그 전체 요소에 폰트 강제 적용 */
-html, body, p, h1, h2, h3, h4, h5, h6, span, a, input, textarea, button {
-  font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif !important;
-  
-  /* 글자 가독성을 높여주는 부드러운 안티앨리어싱 설정 */
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+// -------------- THEME SWITCHER -------------- //
+@mixin dark-appearance {
+filter: invert(1);
+
+img {
+filter: invert(1);
+
+```
+&.ioda {
+  filter: invert(0);
+}
+```
+
 }
 
-/* 3. (선택) 본문 줄간격 및 자간 미세 조정으로 가독성 최적화 */
+.emoji {
+filter: invert(1);
+}
+
+iframe {
+filter: invert(1);
+}
+}
+
+body[a="dark"] {
+@include dark-appearance;
+}
+
+@media (prefers-color-scheme: dark) {
+body[a="auto"] {
+@include dark-appearance;
+}
+}
+// -------------------------------------------- //
+
+// bg color is also needed in html in order to
+// block body's background propagation
+html {
+background: #f5f5f3;
+height: 100%;
+scroll-behavior: smooth;
+}
+
+/* 전체 페이지 */
 body {
-  line-height: 1.7 !important;
-  letter-spacing: -0.02em !important;
+color: #222;
+font-family: "Pretendard", -apple-system, BlinkMacSystemFont,
+"Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+font-size: 16px;
+line-height: 1.8;
+letter-spacing: -0.02em;
+
+margin: 0;
+padding: 0;
+
+min-height: 100vh;
+
+overflow-wrap: break-word;
+overflow-x: hidden;
+overflow-y: auto;
+
+-webkit-font-smoothing: antialiased;
+-moz-osx-font-smoothing: grayscale;
+
+/* 포스트잇 벽면 느낌 */
+background-color: #f5f5f3;
+background-image: radial-gradient(#dbdbd7 1.2px, transparent 0);
+background-size: 28px 28px;
+}
+
+/* 제목 */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+font-weight: 700;
+line-height: 1.4;
+letter-spacing: -0.03em;
+}
+
+h2,
+h3,
+h4,
+h5,
+h6 {
+margin-top: 3rem;
+}
+
+.post-meta {
+text-align: right;
+opacity: 0.7;
+}
+
+p {
+margin: 1.2rem 0;
+}
+
+/* 리스트 */
+ul,
+ol {
+padding-left: 0 !important;
+margin-left: 0 !important;
+margin-top: 1.5rem !important;
+margin-bottom: 2rem !important;
+list-style-position: inside;
+}
+
+li {
+margin: 0.25rem 0;
+}
+
+*:target {
+background: #fff6a9;
+}
+
+/* 본문 영역 */
+.w {
+max-width: 100% !important;
+margin-left: 0 !important;
+margin-right: 0 !important;
+padding: 2rem 1.5rem !important;
+}
+
+/* PC */
+@media (min-width: 800px) {
+.w {
+max-width: 800px !important;
+margin-left: 5% !important;
+margin-right: auto !important;
+padding: 4rem 2rem !important;
+}
+}
+
+/* 구분선 */
+hr {
+margin: 2rem 0;
+text-align: center;
+border: 0;
+
+&:before {
+content: "/////";
+}
+
+&:after {
+content: attr(data-content) "/////";
+}
+}
+
+/* 표 */
+table {
+width: 100%;
+}
+
+table,
+th,
+td {
+border: thin solid black;
+border-collapse: collapse;
+padding: 0.4rem;
+}
+
+/* 코드 */
+code,
+pre {
+font-family: Consolas, Monaco, "Courier New", monospace;
+}
+
+code {
+color: white;
+background: black;
+}
+
+div.highlighter-rouge code {
+display: block;
+overflow-x: auto;
+white-space: pre-wrap;
+padding: 1rem;
+}
+
+/* 인용문 */
+blockquote {
+font-style: italic;
+border-left: 4px solid #999;
+padding: 1rem 1.25rem;
+margin: 2rem 0;
+background: rgba(255, 255, 255, 0.45);
+}
+
+blockquote p {
+margin: 0;
+}
+
+/* 이미지 */
+img {
+max-width: 100%;
+display: block;
+margin: 0 auto;
 }
