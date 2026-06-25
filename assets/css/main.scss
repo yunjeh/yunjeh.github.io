@@ -186,7 +186,9 @@ p {
 /* ===== 포스트잇 영역 ===== */
 .side-note {
   position: fixed;
-  top: 40px;   /* ← 여기 숫자만 줄이면 더 위로 올라감 */
+  top: 20px;   /* ← 여기 숫자만 줄이면 더 위로 올라감 */
+  width: 160px;
+  height: 160px;
   padding: 12px;
   border-radius: 10px;
   box-shadow: 0 6px 15px rgba(0,0,0,0.15);
