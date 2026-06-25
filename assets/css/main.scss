@@ -96,6 +96,16 @@ p {
   list-style: none !important;
    
 }
+
+.post-list > div {
+  position: relative;
+  background: #f5f5f5;
+  padding: 12px 14px;
+  margin-bottom: 12px;
+  border-radius: 12px;
+  border: 1px solid #ddd;
+}
+
 /*
 .post-list li {
   display: flex;
