@@ -24,27 +24,23 @@ permalink: /tags
       {{ tag[0] }} <small style="color: #888;">({{ tag[1].size }})</small>
     </h4>
 
-    <ul class="post-full-list" style="padding-left: 0;">
+    <div class="post-list" style="padding-left: 0;">
       {% for post in tag[1] %}
-        <li style="margin-bottom: 15px; list-style: none;">
-          <!-- 날짜 표시 -->
-          <span style="font-weight: bold; margin-right: 16px; white-space: nowrap;">
-            {{ post.date | date: "%Y.%m.%d. %H:%M:%S" }}
-          </span>
-          
-          <!-- 클릭 시 해당 포스트로 이동하는 제목 또는 본문 요약 -->
-          <!--<a href="{{ post.url }}" style="text-decoration: none; color: inherit;">-->
-            <span>
-              {{ post.content | strip_html | strip_newlines | truncate: 150 }}
-            </span>
-          <!--</a>-->
-        </li>
+      <div>
+        {{ post.content | strip_html | strip_newlines }}
+        <time class="post-date">
+          {{ post.date | date: "%Y.%m.%d. %H:%M:%S" }}
+        </time>
+      </div>
       {% endfor %}
-    </ul>
+    </div>
     
     <!--<a href="#" style="font-size: 0.8em; color: #bbb;">↑ 위로 가기</a>-->
   </div>
 {% endfor %}
+
+
+
 
 <style>
   /* 부드러운 스크롤 효과 */
