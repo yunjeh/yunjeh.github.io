@@ -41,6 +41,6 @@ include:
   - _images
   - _overall
 collections:
-  post2:
+  notes:
     output: true
-    permalink: /post2/:path/
+    permalink: /notes/:path/
