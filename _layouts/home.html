@@ -20,9 +20,17 @@ layout: default
 
 
 
+  <!-- 포스트잇 출력 -->
+  <div class="side-note">
+    {{ note.content }}
+  </div>
+{% endfor %}
 
-{% assign shuffled_notes = site.notes | sample: 4 %}
-{% assign colors = "#fff9ae,#ffdfd3,#f0ffdf,#d6f5ff,#fce1ff" | split: "," %}
+{% assign shuffled_notes = site.notes | shuffle %}
+
+{% assign r = "2,3,4" | split: "," | sample | plus: 0 %}
+
+{% for note in shuffled_notes limit:r %}{% assign colors = "#fff9ae,#ffdfd3,#f0ffdf,#d6f5ff,#fce1ff" | split: "," %}
 
 <div class="side-notes">
 
