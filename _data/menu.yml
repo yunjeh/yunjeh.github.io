@@ -34,9 +34,9 @@ entries:
   #        - title: example page
   #          url: about
   - title: 
-  - title: The Quote Journal
+  - title: "The Quote Journal"
     url: notes.html
-  - title: Places I''ve been #Progress
+  - title: "Places I''ve been" #Progress
     url: places.html #progress
   # title: Rating
   # url: rating
