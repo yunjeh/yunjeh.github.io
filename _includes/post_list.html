@@ -4,32 +4,18 @@
   {%- assign posts = site.posts -%}
 {%- endif -%}
 
-{%- if include.limit and posts.size > include.limit -%}
-  {%- assign limit_exceeded = true -%}
-{%- else -%}
-  {%- assign limit_exceeded = false -%}
-{%- endif -%}
-
 {%- if posts.size > 0 -%}
-  <ul class="post-full-list">
+  <ul class="post-list">
     {%- for post in posts limit: include.limit -%}
       <li>
         <time class="post-date">
-          {{ post.date | date: "%Y.%m.%d %H:%M" }}
+          {{ post.date | date: "%Y.%m.%d" }}
         </time>
 
-        <a class="post-title" ><!--href="{{ post.url }}"-->
-          {{ post.content | strip_html | strip_newlines }}
+        <a class="post-title"><!-- href="{{ post.url }}"-->
+          {{ post.title }}
         </a>
       </li>
     {%- endfor -%}
-
-    {%- if include.show_more and limit_exceeded -%}
-      <li class="post-more">
-        <a href="{{ include.show_more_url }}">
-          {{ include.show_more_text | default: "Show more..." }}
-        </a>
-      </li>
-    {%- endif -%}
   </ul>
 {%- endif -%}
