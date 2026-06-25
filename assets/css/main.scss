@@ -184,19 +184,6 @@ p {
   min-width: 0;
 }
 /* ===== 포스트잇 영역 ===== */
-.side-notes {
-  width: 260px;
-  position: sticky;
-  top: 120px;
-
-  margin-left: 20px; /* 오른쪽 너무 붙는 것 방지 */
-
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-}
-
-/* ===== 포스트잇 카드 ===== */
 .side-note {
   padding: 12px;
   border-radius: 10px;
@@ -207,23 +194,21 @@ p {
 
   margin-bottom: 14px;
 
-  position: relative;
   transition: transform 0.2s ease;
 }
 
-/* hover 효과 */
 .side-note:hover {
   transform: scale(1.05) rotate(0deg) !important;
   z-index: 10;
 }
 
-/* 날짜 */
 .side-note .date {
   margin-top: 8px;
   font-size: 11px;
   opacity: 0.6;
   text-align: right;
 }
+
 
 /* ===== 모바일 숨김 ===== */
 @media (max-width: 768px) {
