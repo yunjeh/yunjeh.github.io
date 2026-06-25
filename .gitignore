@@ -1,9 +1,6 @@
-*.gem
-*.css
-*.css.map
-.bundle
+_site
 .jekyll-cache
 .sass-cache
-_site
+.bundle
 vendor
-Gemfile.lock
+*.gem
