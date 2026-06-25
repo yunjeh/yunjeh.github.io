@@ -105,7 +105,20 @@ p {
   border-radius: 12px;
   border: 1px solid #ddd;
 }
+.post-list > div::after {
+  content: "";
+  position: absolute;
+  left: 16px;
+  bottom: -8px;
 
+  width: 12px;
+  height: 12px;
+  background: #f5f5f5;
+  border-left: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
+
+  transform: rotate(45deg);
+}
 /*
 .post-list li {
   display: flex;
