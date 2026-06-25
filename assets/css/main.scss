@@ -93,6 +93,9 @@ ul, ol {
 li {
   list-style: none !important;
 }
+li::marker {
+  content: "" !important;
+}
 
 /* post list 전용 */
 .post-full-list {
