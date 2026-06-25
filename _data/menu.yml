@@ -34,9 +34,10 @@ entries:
   #        - title: example page
   #          url: about
   - title: 
-  - title: 
-  - title: #Progress
-    url: #progress
+  - title: The Quote Journal
+    url: memo.html
+  - title: Tags #Progress
+    url: tags.html #progress
   # title: Rating
   # url: rating
   #  entries:
