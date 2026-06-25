@@ -24,7 +24,7 @@ permalink: /tags
       {{ tag[0] }} <small style="color: #888;">({{ tag[1].size }})</small>
     </h4>
 
-    <div>
+    <div class="post-highlight">
       {% for post in tag[1] %}
       <div>
         {{ post.content | strip_html | strip_newlines }}
