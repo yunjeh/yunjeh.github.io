@@ -26,7 +26,7 @@ html, body, p, h1, h2, h3, h4, h5, h6,
 span, a, li, ul, ol, input, textarea, button {
   font-family: "Pretendard", "Noto Sans KR",
     -apple-system, BlinkMacSystemFont,
-    "Segoe UI", Roboto, Helvetica, Arial, sans-serif !important;
+    Helvetica, Arial, sans-serif !important;
 
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -82,26 +82,6 @@ p {
   margin: 1rem 0;
 }
 
-
-/* ===================================================
-   LIST RESET (핵심: 들여쓰기 + bullet 완전 제거)
-=================================================== */
-ul, ol {
-  margin: 0 !important;
-  padding: 0 !important;
-  list-style: none !important;
-}
-
-li {
-  margin: 0 !important;
-  padding: 0 !important;
-  list-style: none !important;
-}
-
-/* 브라우저 marker 완전 제거 */
-li::marker {
-  content: "" !important;
-}
 
 
 /* ===================================================
