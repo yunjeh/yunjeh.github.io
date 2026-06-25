@@ -199,6 +199,14 @@ p {
   margin-bottom: 14px;
 
   transition: transform 0.2s ease;
+
+
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+
+  z-index: 9999;
+}
 }
 
 .side-note:hover {
