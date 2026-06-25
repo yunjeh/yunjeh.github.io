@@ -31,7 +31,17 @@ layout: default
       data.forEach(spot => {
         if (!spot.coords || !spot.imgUrl) return;
 
-        const marker = L.marker(spot.coords).addTo(map);
+        //const marker = L.marker(spot.coords).addTo(map);
+
+        const marker = L.circleMarker(spot.coords, {
+          radius: 2,
+          fillColor: "#3333CC",
+          color: "#3333CC",
+          weight: 1,
+          opacity: 1,
+          fillOpacity: 0.8
+        }).addTo(map);
+
         
         const tooltipContent = `
           <div style="text-align: center; font-family: sans-serif; padding: 4px;">
