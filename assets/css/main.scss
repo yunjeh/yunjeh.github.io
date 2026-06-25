@@ -183,25 +183,38 @@ p {
   flex: 1;
   min-width: 0;
 }
-
-/* 사이드 포스트잇 */
+/* ===== 포스트잇 영역 ===== */
 .side-notes {
-  width: 220px;
+  width: 260px;
   position: sticky;
   top: 120px;
 
+  margin-left: 20px; /* 오른쪽 너무 붙는 것 방지 */
+
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 0;
 }
 
-/* 포스트잇 */
+/* ===== 포스트잇 카드 ===== */
 .side-note {
   padding: 12px;
   border-radius: 10px;
   box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+
   font-size: 13px;
   line-height: 1.4;
+
+  margin-bottom: 14px;
+
+  position: relative;
+  transition: transform 0.2s ease;
+}
+
+/* hover 효과 */
+.side-note:hover {
+  transform: scale(1.05) rotate(0deg) !important;
+  z-index: 10;
 }
 
 /* 날짜 */
@@ -212,17 +225,12 @@ p {
   text-align: right;
 }
 
-/* 모바일 숨김 */
+/* ===== 모바일 숨김 ===== */
 @media (max-width: 768px) {
   .side-notes {
     display: none;
   }
-
-  .layout-wrapper {
-    display: block;
-  }
 }
-
 
 
 /* ===================================================
