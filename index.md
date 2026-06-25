@@ -1,4 +1,4 @@
 ---
-layout: default
-title: Home
+layout: home
+title: Test log
 ---
