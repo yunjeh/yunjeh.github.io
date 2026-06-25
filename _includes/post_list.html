@@ -18,7 +18,7 @@
           {{ post.date | date: "%Y.%m.%d %H:%M" }}
         </time>
 
-        <a class="post-title" href="{{ post.url }}">
+        <a class="post-title" ><!--href="{{ post.url }}"-->
           {{ post.content | strip_html | strip_newlines }}
         </a>
       </li>
