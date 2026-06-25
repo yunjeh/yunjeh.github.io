@@ -11,11 +11,10 @@
 
     {%- for post in posts limit: limit -%}
       <div>
+        {{ post.content | strip_html | strip_newlines }}
         <time class="post-date">
           {{ post.date | date: "%Y.%m.%d. %H:%M:%S" }}
         </time>
-
-        {{ post.content | strip_html | strip_newlines }}
       </div>
     {%- endfor -%}
 
