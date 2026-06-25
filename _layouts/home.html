@@ -24,12 +24,19 @@ layout: default
 
 
 {% assign shuffled_notes = site.notes | sample: 4 %}
+{% assign colors = "#fff9ae,#ffdfd3,#f0ffdf,#d6f5ff,#fce1ff" | split: "," %}
 
 <div class="side-notes">
   {% for post in shuffled_notes %}
-    <div class="side-note">
+    <div class="side-note"
+         style="background: {{ colors | sample }}; transform: rotate({{ '2, -2, 1, -1, 3' | split: ',' | sample }}deg);">
+      
       <div class="text">
-        {{ post.content | strip_html | truncate: 80 }}
+        {{ post.content | strip_html | truncate: 90 }}
+      </div>
+
+      <div class="date">
+        {{ post.date | date: "%Y.%m.%d" }}
       </div>
     </div>
   {% endfor %}
