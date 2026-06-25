@@ -10,14 +10,14 @@
   <div class="post-list">
 
     {%- for post in posts limit: limit -%}
-      <div class="post-cloud">
+      <div>
         {{ post.content | strip_html | strip_newlines }}
         <time class="post-date">
           {{ post.date | date: "%Y.%m.%d. %H:%M:%S" }}
         </time>
       </div>
     {%- endfor -%}
-
+  </div>
     <!--  더보기  -->
     {%- if include.show_more and posts.size > limit -%}
       <div class="post-more">
@@ -27,5 +27,5 @@
       </div>
     {%- endif -%}
 
-  </div>
+
 {%- endif -%}
