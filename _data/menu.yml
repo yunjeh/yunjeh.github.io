@@ -35,7 +35,7 @@ entries:
   #          url: about
   - title: 
   - title: The Quote Journal
-    url: memo.html
+    url: notes.html
   - title: Tags #Progress
     url: tags.html #progress
   # title: Rating
