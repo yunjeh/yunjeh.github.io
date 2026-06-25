@@ -3,7 +3,9 @@ layout: default
 title: "Tags"
 permalink: /tags
 ---
+{%-include back_link.html-%}
 
+<h1>{{ page.title }}</h1>
 {% assign tags = site.tags | sort %}
 
 <!-- 상단 태그 클라우드 (색인) -->
