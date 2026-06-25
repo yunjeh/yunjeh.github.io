@@ -171,6 +171,58 @@ p {
    font-color: #555;
 }
 
+/* ===== 사이드 포스트잇 ===== */
+.side-notes {
+  position: fixed;
+  right: 24px;
+  top: 120px;
+  width: 220px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  z-index: 1000;
+}
+
+/* 포스트잇 기본 */
+.side-note {
+  padding: 12px 12px 10px 12px;
+  border-radius: 12px;
+  font-size: 0.85rem;
+  line-height: 1.4;
+  box-shadow: 2px 6px 14px rgba(0,0,0,0.12);
+  cursor: pointer;
+  transition: all 0.25s ease;
+  position: relative;
+}
+
+/* 텍스트 */
+.side-note .text {
+  font-weight: 400;
+  color: #333;
+}
+
+/* 날짜 */
+.side-note .date {
+  margin-top: 8px;
+  font-size: 0.7rem;
+  opacity: 0.6;
+  text-align: right;
+}
+
+/* ===== hover 업그레이드 ===== */
+.side-note:hover {
+  transform: scale(1.08) rotate(0deg) !important;
+  z-index: 9999;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+}
+
+/* ===== 모바일 숨김 ===== */
+@media (max-width: 768px) {
+  .side-notes {
+    display: none;
+  }
+}
+
 /* ===================================================
    LINKS
 =================================================== */
