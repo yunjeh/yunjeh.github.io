@@ -1,43 +1,52 @@
 ---
 layout: default
 ---
+
 <header>
   <h1>{{ site.title }}</h1>
-  {%-if site.theme_config.show_description-%}
+  {%- if site.theme_config.show_description -%}
     <p>{{ site.description }}</p>
-  {%-endif-%}
+  {%- endif -%}
 </header>
 
-{%-include menu_item.html collection=site.data.menu.entries-%}
+{%- include menu_item.html collection=site.data.menu.entries -%}
 
-{{ content }}
-  <!-- 💡 Tags 페이지 링크 직접 추가 -->
-  <h5>💡<!--a class="page-link" href="{{ '/tags' | relative_url }}"-->Tags<!--/a--></h5>
-  {% assign tags = site.tags | sort %}
-<div class="tags-cloud" style="margin-bottom: 30px;">
-  {% for tag in tags %}
-    <a href="{{ '/tags' | relative_url }}#{{ tag[0] }}" style="margin-right: 15px; font-weight: bold; text-decoration: none; color: #007bff;">
-      #{{ tag[0] }} <span style="font-weight: normal; color: #666;">({{ tag[1].size }})</span>
-    </a>
-  {% endfor %}
-</div>
+<div class="layout-wrapper">
 
+  <main class="content-area">
+    {{ content }}
 
-{% assign shuffled_notes = site.notes | sample: 4 %}
-{% assign colors = "#fff9ae,#ffdfd3,#f0ffdf,#d6f5ff,#fce1ff" | split: "," %}
+    <!-- 💡 Tags -->
+    <h5>💡 Tags</h5>
 
-<div class="side-notes">
-  {% for post in shuffled_notes %}
-    <div class="side-note"
-         style="background: {{ colors | sample }}; transform: rotate({{ '2, -2, 1, -1, 3' | split: ',' | sample }}deg);">
-      
-      <div class="text">
-        {{ post.content | strip_html | truncate: 90 }}
-      </div>
-
-      <div class="date">
-        {{ post.date | date: "%Y.%m.%d" }}
-      </div>
+    {% assign tags = site.tags | sort %}
+    <div class="tags-cloud" style="margin-bottom: 30px;">
+      {% for tag in tags %}
+        <a href="{{ '/tags' | relative_url }}#{{ tag[0] }}"
+           style="margin-right: 15px; font-weight: bold; text-decoration: none; color: #007bff;">
+          #{{ tag[0] }} <span style="font-weight: normal; color: #666;">({{ tag[1].size }})</span>
+        </a>
+      {% endfor %}
     </div>
-  {% endfor %}
+  </main>
+
+  <aside class="side-notes">
+    {% assign shuffled_notes = site.notes | sample: 4 %}
+    {% assign colors = "#fff9ae,#ffdfd3,#f0ffdf,#d6f5ff,#fce1ff" | split: "," %}
+
+    {% for post in shuffled_notes %}
+      <div class="side-note"
+           style="background: {{ colors | sample }}; transform: rotate({{ '2, -2, 1, -1, 3' | split: ',' | sample }}deg);">
+
+        <div class="text">
+          {{ post.content | strip_html | truncate: 90 }}
+        </div>
+
+        <div class="date">
+          {{ post.date | date: "%Y.%m.%d" }}
+        </div>
+      </div>
+    {% endfor %}
+  </aside>
+
 </div>
