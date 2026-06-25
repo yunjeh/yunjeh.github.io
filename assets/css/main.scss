@@ -175,15 +175,11 @@ p {
 
 
 /* 본문 */
-.content-area {
-  flex: 1;
-  min-width: 0;
-}
+
+
 /* ===== 포스트잇 영역 ===== */
 .side-note {
-  position: fixed;
-  top: 60px;   /* ← 여기 숫자만 줄이면 더 위로 올라감 */
-  right: 30px;
+  /*position: fixed;*/
   width: 160px;
   height: 160px;
   padding: 12px;
