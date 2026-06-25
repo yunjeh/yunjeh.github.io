@@ -89,7 +89,7 @@ layout: default
 <body>
 
 <div id="wall">
-    {% for post in site.memo %}
+    {% for post in site.notes %}
     <div class="post-it">
         <div class="content-body">{{ post.content | strip_html | trim }}</div>
         <div class="date">{{ post.date | date: "%Y-%m-%d" }}</div>
