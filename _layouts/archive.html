@@ -47,3 +47,18 @@ layout: default
 
 </div>
 
+<script>
+function toggleYear(btn) {
+  const block = btn.nextElementSibling;
+  block.style.display = (block.style.display === "none" || !block.style.display)
+    ? "block"
+    : "none";
+}
+
+function toggleMonth(btn) {
+  const list = btn.nextElementSibling;
+  list.style.display = (list.style.display === "none" || !list.style.display)
+    ? "block"
+    : "none";
+}
+</script>
