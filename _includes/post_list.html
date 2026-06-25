@@ -7,15 +7,15 @@
 {%- if posts.size > 0 -%}
   <ul class="post-list">
     {%- for post in posts limit: include.limit -%}
-      <li>
+      <!--li-->
         <time class="post-date">
-          {{ post.date | date: "%Y.%m.%d" }}
+          {{ post.date | date: "%Y.%m.%d. %H:%M:%S" -}}
         </time>
-
-        <a class="post-title"><!-- href="{{ post.url }}"-->
-          {{ post.title }}
-        </a>
-      </li>
+        <!--a class="post-title" href="{{ post.url }}"-->
+         <!-- {{ post.title }}-->
+          {{ post.content | strip_html | strip_newlines }}
+        <!--/a-->
+      <!--/li-->
     {%- endfor -%}
   </ul>
 {%- endif -%}
