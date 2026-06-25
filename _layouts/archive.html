@@ -6,7 +6,9 @@ layout: default
 
 <h1>{{ page.title }}</h1>
 
-<!--{%-include post_list.html category=page.which_category-%}-->
+<!--
+{%-include post_list.html category=page.which_category-%} 
+-->
 {% assign posts = site.categories[page.which_category] | default: site.posts %}
 {% assign posts_by_year = posts | group_by_exp:"post", "post.date | date: '%Y'" %}
 
