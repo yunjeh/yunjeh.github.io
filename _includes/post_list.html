@@ -10,7 +10,7 @@
   <div class="post-list">
 
     {%- for post in posts limit: limit -%}
-      <div>
+      <div class="post-cloud">
         {{ post.content | strip_html | strip_newlines }}
         <time class="post-date">
           {{ post.date | date: "%Y.%m.%d. %H:%M:%S" }}
