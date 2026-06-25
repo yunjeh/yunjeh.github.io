@@ -11,3 +11,13 @@ layout: default
 {%-include menu_item.html collection=site.data.menu.entries-%}
 
 {{ content }}
+  <!-- 💡 Tags 페이지 링크 직접 추가 -->
+  <h5>💡<a class="page-link" href="{{ '/tags' | relative_url }}">Tags</a></h5>
+  {% assign tags = site.tags | sort %}
+<div class="tags-cloud" style="margin-bottom: 30px;">
+  {% for tag in tags %}
+    <a href="{{ '/tags' | relative_url }}#{{ tag[0] }}" style="margin-right: 15px; font-weight: bold; text-decoration: none; color: #007bff;">
+      #{{ tag[0] }} <span style="font-weight: normal; color: #666;">({{ tag[1].size }})</span>
+    </a>
+  {% endfor %}
+</div>
