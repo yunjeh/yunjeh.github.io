@@ -172,27 +172,54 @@ p {
 }
 
 
-
+/* ===== 사이드 포스트잇 ===== */
 .side-notes {
   position: fixed;
-  right: 24px;
   top: 120px;
+  right: 20px;
   width: 220px;
+
   display: flex;
   flex-direction: column;
-  gap: 14px;
-  z-index: 1000;
+  gap: 12px;
+
+  z-index: 9999;
 }
 
-/* 강제 차단 */
+/* 개별 포스트잇 */
+.side-note {
+  padding: 12px;
+  border-radius: 10px;
+  box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+
+  font-size: 13px;
+  line-height: 1.4;
+
+  position: relative;
+  transition: transform 0.2s ease;
+}
+
+/* hover 효과 */
+.side-note:hover {
+  transform: scale(1.05) rotate(0deg) !important;
+}
+
+/* 날짜 */
+.side-note .date {
+  margin-top: 8px;
+  font-size: 11px;
+  opacity: 0.6;
+  text-align: right;
+}
+
+/* ===== 모바일 숨김 ===== */
 @media (max-width: 768px) {
   .side-notes {
-    display: none !important;
-    visibility: hidden;
-    opacity: 0;
-    pointer-events: none;
+    display: none;
   }
 }
+
+
 
 
 /* ===================================================
