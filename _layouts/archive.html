@@ -6,5 +6,44 @@ layout: default
 
 <h1>{{ page.title }}</h1>
 
-{%-include post_list.html category=page.which_category-%}
+<!--{%-include post_list.html category=page.which_category-%}-->
+{% assign posts = site.categories[page.which_category] | default: site.posts %}
+{% assign posts_by_year = posts | group_by_exp:"post", "post.date | date: '%Y'" %}
+
+<div class="archive">
+
+  {% for year in posts_by_year %}
+    <div class="year-block">
+
+      <button class="year-btn" onclick="toggleYear(this)">
+        {{ year.name }}
+      </button>
+
+      <div class="months">
+
+        {% assign posts_by_month = year.items | group_by_exp:"post", "post.date | date: '%m'" %}
+
+        {% for month in posts_by_month %}
+          <div class="month-block">
+
+            <button class="month-btn" onclick="toggleMonth(this)">
+              {{ month.name }}월
+            </button>
+
+            <div class="post-list" style="display:none;">
+              {% for post in month.items %}
+                <div class="post-item">
+                  <a href="{{ post.url }}">{{ post.title }}</a>
+                </div>
+              {% endfor %}
+            </div>
+
+          </div>
+        {% endfor %}
+
+      </div>
+    </div>
+  {% endfor %}
+
+</div>
 
