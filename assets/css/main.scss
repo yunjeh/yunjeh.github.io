@@ -123,22 +123,13 @@ p {
   border: 1px solid #ddd;
 }
 
-.post-highlight {
-  max-width: 400px !important;  /* 원하는 최대 가로 폭 */
-  padding: 0 1px !important;   /* 좌우 여백 (선택) */
-  margin: 0.5rem 0 0.5rem 0 !important;
-  list-style: none !important;
-   
+
+
+.tag-section:target .post-items > div {
+  background: #e0f5b5;
+  color: white;
 }
 
-.post-highlight > div {
-  position: relative;
-  background: #007bff;
-  padding: 8px 10px;
-  margin-bottom: 10px;
-  border-radius: 12px;
-  border: 1px solid #ddd;
-}
 /*
 .post-list > div::after {
   content: "";
