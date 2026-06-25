@@ -4,18 +4,29 @@
   {%- assign posts = site.posts -%}
 {%- endif -%}
 
+{%- assign limit = include.limit | default: posts.size -%}
+
 {%- if posts.size > 0 -%}
   <div class="post-list">
-    {%- for post in posts limit: include.limit -%}
-      <!--li--><div>
+
+    {%- for post in posts limit: limit -%}
+      <div>
         <time class="post-date">
-          {{ post.date | date: "%Y.%m.%d. %H:%M:%S" -}}
+          {{ post.date | date: "%Y.%m.%d. %H:%M:%S" }}
         </time>
-        <!--a class="post-title" href="{{ post.url }}"-->
-         <!-- {{ post.title }}-->
-          {{ post.content | strip_html | strip_newlines }}
-        <!--/a-->
-      <!--/li--></div>
+
+        {{ post.content | strip_html | strip_newlines }}
+      </div>
     {%- endfor -%}
+
+    <!--  더보기  -->
+    {%- if include.show_more and posts.size > limit -%}
+      <div class="post-more">
+        <a href="{{ include.show_more_url }}">
+          {{ include.show_more_text | default: "More posts →" }}
+        </a>
+      </div>
+    {%- endif -%}
+
   </div>
 {%- endif -%}
