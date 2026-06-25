@@ -172,55 +172,31 @@ p {
 }
 
 
+/* ===================================================
+   ARCHIVE
+=================================================== */
 
-
-/* 본문 */
-
-
-/* ===== 포스트잇 영역 ===== */
-.side-note {
-  /*position: fixed;*/
-  width: 160px;
-  height: 160px;
-  padding: 12px;
-  border-radius: 10px;
-  box-shadow: 0 6px 15px rgba(0,0,0,0.15);
-
-  font-size: 13px;
-  line-height: 1.4;
-
-  margin-bottom: 14px;
-
-  transition: transform 0.2s ease;
-
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-
-  z-index: 9999;
+.archive {
+  max-width: 600px;
 }
 
-
-.side-note:hover {
-  transform: scale(1.05) rotate(0deg) !important;
-  z-index: 10;
+.year-btn, .month-btn {
+  width: 100%;
+  text-align: left;
+  padding: 10px;
+  background: #f5f5f5;
+  border: none;
+  cursor: pointer;
+  margin-top: 6px;
 }
 
-.side-note .date {
-  margin-top: 8px;
-  font-size: 11px;
-  opacity: 0.6;
-  text-align: right;
+.months {
+  margin-left: 15px;
 }
 
-
-/* ===== 모바일 숨김 ===== */
-@media (max-width: 768px) {
-  .side-notes {
-    display: none;
-  }
+.post-item {
+  padding: 6px 10px;
 }
-
 
 /* ===================================================
    LINKS
