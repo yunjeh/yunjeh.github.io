@@ -1,0 +1,57 @@
+---
+layout: default
+title: "Tags"
+permalink: /tags
+---
+
+{% assign tags = site.tags | sort %}
+
+<!-- 상단 태그 클라우드 (색인) -->
+<div class="tags-cloud" style="margin-bottom: 30px;">
+  {% for tag in tags %}
+    <a href="#{{ tag[0] }}" style="margin-right: 15px; font-weight: bold; text-decoration: none; color: #007bff;">
+      #{{ tag[0] }} <span style="font-weight: normal; color: #666;">({{ tag[1].size }})</span>
+    </a>
+  {% endfor %}
+</div>
+
+<!--<hr style="margin: 40px 0;">-->
+
+<!-- 태그별 포스트 리스트 영역 -->
+{% for tag in tags %}
+  <div id="{{ tag[0] }}" class="tag-section" style="margin-bottom: 50px;">
+    <h4 style="border-left: 5px solid #007bff; padding-left: 10px; margin-bottom: 20px;">
+      {{ tag[0] }} <small style="color: #888;">({{ tag[1].size }})</small>
+    </h4>
+
+    <ul class="post-full-list" style="padding-left: 0;">
+      {% for post in tag[1] %}
+        <li style="margin-bottom: 15px; list-style: none;">
+          <!-- 날짜 표시 -->
+          <span style="font-weight: bold; margin-right: 16px; white-space: nowrap;">
+            {{ post.date | date: "%Y.%m.%d. %H:%M:%S" }}
+          </span>
+          
+          <!-- 클릭 시 해당 포스트로 이동하는 제목 또는 본문 요약 -->
+          <!--<a href="{{ post.url }}" style="text-decoration: none; color: inherit;">-->
+            <span>
+              {{ post.content | strip_html | strip_newlines | truncate: 150 }}
+            </span>
+          <!--</a>-->
+        </li>
+      {% endfor %}
+    </ul>
+    
+    <!--<a href="#" style="font-size: 0.8em; color: #bbb;">↑ 위로 가기</a>-->
+  </div>
+{% endfor %}
+
+<style>
+  /* 부드러운 스크롤 효과 */
+  html {
+    scroll-behavior: smooth;
+  }
+  .tag-section:target h2 {
+    color: ;#007bff /* 클릭해서 이동했을 때 제목 강조 */
+  }
+</style>
