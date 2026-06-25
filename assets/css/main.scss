@@ -80,11 +80,10 @@ h1, h2, h3, h4, h5, h6 {
 p {
   margin: 1rem 0;
 }
+/* ================================
+   LIST RESET (완전 강제 제거)
+================================ */
 
-
-/* =========================================
-   LIST RESET (핵심: 들여쓰기 제거)
-========================================= */
 ul, ol {
   margin: 0 !important;
   padding-left: 0 !important;
@@ -92,14 +91,10 @@ ul, ol {
 }
 
 li {
-  margin: 0.3rem 0;
-  padding: 0 !important;
+  list-style: none !important;
 }
 
-
-/* =========================================
-   POST LIST (Recent Posts 전용 강제 초기화)
-========================================= */
+/* post list 전용 */
 .post-full-list {
   margin: 0 !important;
   padding: 0 !important;
@@ -115,8 +110,6 @@ li {
   padding: 0.4rem 0 !important;
   list-style: none !important;
 }
-
-
 /* =========================================
    LINKS
 ========================================= */
