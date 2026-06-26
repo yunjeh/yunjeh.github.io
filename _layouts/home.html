@@ -57,8 +57,8 @@ document.addEventListener('DOMContentLoaded', () => {
       content.style.fontFamily = fonts[Math.floor(Math.random() * fonts.length)];
     }
     
-    const rotate = (Math.random() * 30 - 15);
-    const top = Math.random() * 30;
+    const rotate = (Math.random() * 20 - 15);
+    const top = Math.random() * 20;
     const right = (notes.indexOf(note) * 160) + (Math.random() * 20); // 간격 유지
     
     note.style.transform = `rotate(${rotate}deg)`;
