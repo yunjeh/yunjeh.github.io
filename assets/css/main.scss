@@ -285,7 +285,7 @@ img {
 *:target {
   background: #fff6a9 ;
 }*/
-.tag-section:target .post-list {
+.tag-section:target .post-list > div{
   background: #fff6a9;
 }
 
