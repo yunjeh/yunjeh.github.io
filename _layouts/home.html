@@ -9,7 +9,7 @@ layout: default
 
   <div class="home-notes-wall" style="position:absolute; top:0; right:0; width:40%; height:200px; pointer-events:none;">
     {% for note in site.notes limit: 50 %}
-      <div class="home-sticky" style="display:none; position:absolute; width:150px; height:150px; padding:20px; box-shadow:3px 3px 8px rgba(0,0,0,0.2); cursor:pointer; z-index:10; border-radius:0;">
+      <div class="home-sticky" style="display:none; position:absolute; width:180px; height:180px; padding:20px; box-shadow:3px 3px 8px rgba(0,0,0,0.2); cursor:pointer; z-index:10; border-radius:0;">
         <div class="content-body" style="font-family:sans-serif; font-size:1rem; color:#333;">{{ note.content | strip_html | truncate: 50 }}</div>
         <div class="date" style="font-size:0.7rem; color:#666; margin-top:10px;">{{ note.date | date: "%y.%m.%d" }}</div>
       </div>
@@ -27,27 +27,33 @@ layout: default
   @media screen and (max-width: 768px) { .home-notes-wall { display: none !important; } }
 </style>
 
+
 <script>
 document.addEventListener('DOMContentLoaded', () => {
   const notes = Array.from(document.querySelectorAll('.home-sticky'));
   const colors = ['#FFEB3B', '#FFCC80', '#C8E6C9', '#B3E5FC', '#E1BEE7'];
+  
+  // 4개 선택 (개수를 늘리고 싶다면 이 숫자를 수정하세요)
   const selected = notes.sort(() => 0.5 - Math.random()).slice(0, 4);
 
-  selected.forEach((note) => {
+  selected.forEach((note, index) => {
     note.style.display = 'flex';
     note.style.flexDirection = 'column';
     note.style.justifyContent = 'center';
     note.style.alignItems = 'center';
     note.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
     
-    // 배치 조정: 헤더 안에서 더 자유롭게
-    const rotate = (Math.random() * 40 - 20);
-    const top = Math.random() * 50; 
-    const right = Math.random() * 200; 
+    // 배치 조정: 겹침 방지를 위해 index를 활용해 간격 확보
+    const rotate = (Math.random() * 30 - 15); // -15~15도 회전
+    
+    // index * 160을 사용하여 각 포스트잇이 가로로 일정 간격을 유지하며 시작하게 합니다.
+    const baseRight = (index * 160); 
+    const randomTop = Math.random() * 30;    // 위아래로만 살짝 랜덤성 추가
+    const randomRight = baseRight + (Math.random() * 20); 
     
     note.style.transform = `rotate(${rotate}deg)`;
-    note.style.top = top + 'px';
-    note.style.right = right + 'px';
+    note.style.top = randomTop + 'px';
+    note.style.right = randomRight + 'px';
   });
 });
 </script>
