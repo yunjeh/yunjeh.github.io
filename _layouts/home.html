@@ -41,6 +41,36 @@ layout: default
 </div>
 
 <script>
+  /* home.html에만 적용할 CSS (헤더와 포스트잇 배치용) */
+.home-notes-wall {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 40%;        /* 헤더 오른쪽 40% 영역 차지 */
+  height: 200px;     /* 헤더 높이만큼 설정 */
+  pointer-events: none; /* 헤더 메뉴 클릭 방해 방지 */
+}
+
+.home-sticky {
+  pointer-events: auto; /* 포스트잇만 클릭 가능하게 */
+  /* notes.html의 스타일과 일치시키기 위한 최소 세팅 */
+  display: flex !important;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  overflow: hidden;
+  box-shadow: 2px 4px 8px rgba(0,0,0,0.1);
+  padding: 10px;
+}
+
+.home-sticky .content-body {
+  font-size: 0.9rem;
+  -webkit-line-clamp: 4; /* 포스트잇 크기에 맞춰 조절 */
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+}
+  
 document.addEventListener('DOMContentLoaded', () => {
   const allNotes = Array.from(document.querySelectorAll('.home-sticky'));
   const colors = ['#fff6a5', '#ffd6c9', '#d9f7c9', '#cfefff', '#f3d7ff'];
