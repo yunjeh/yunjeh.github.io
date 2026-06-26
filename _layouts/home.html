@@ -33,7 +33,7 @@ layout: default
 
 <div class="home-notes-wall">
   {% for note in site.notes limit: 50 %}
-    <div class="post-it home-sticky" 
+    <div class="sticky-notes home-sticky" 
          data-color-index="{{ forloop.index0 | modulo: 5 }}"
          style="display:none; width: 150px; height: 150px; position: absolute;">
       <div class="content-body">{{ note.content | strip_html | truncate: 50 }}</div>
