@@ -1,13 +1,3 @@
-/* assets/css/home-sticky.css */
-.home-notes-wall {
-  position: absolute;
-  top: 20px;
-  right: 5%;
-  width: 40%;
-  height: 200px;
-  pointer-events: none;
-}
-
 .home-sticky {
   pointer-events: auto;
   display: flex !important;
@@ -16,33 +6,25 @@
   align-items: center;
   text-align: center;
   overflow: hidden;
+  padding: 15px;
   
-  /* 포스트잇 형태 복구 */
-  width: 150px !important;
-  height: 150px !important;
-  padding: 15px !important;
-  box-sizing: border-box;
-  
-  /* 입체감과 디자인 */
-  box-shadow: 2px 4px 8px rgba(0,0,0,0.15);
-  border-radius: 2px;
-  transition: transform 0.2s;
-  
-  /* 배경색이 적용되지 않을 경우를 대비한 기본값 */
-  background-color: #fff6a5; 
+  /* 포스트잇 질감 및 입체감 */
+  border-radius: 2px 15px 2px 15px; /* 약간 뒤틀린 종이 느낌 */
+  box-shadow: 3px 3px 10px rgba(0,0,0,0.15), 
+              inset 0 0 5px rgba(255,255,255,0.5); /* 안쪽 하이라이트로 입체감 */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+}
+
+.home-sticky:hover {
+  transform: scale(1.05) rotate(0deg) !important; /* 마우스 올리면 똑바로 펴짐 */
+  box-shadow: 5px 5px 15px rgba(0,0,0,0.2);
 }
 
 .home-sticky .content-body {
-  font-size: 0.9rem;
-  line-height: 1.4;
-  -webkit-line-clamp: 4;
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  color: #333;
-}
-
-.home-sticky .date {
-  margin-top: 5px;
-  font-size: 0.7rem;
-  color: #999;
+  font-family: 'Gamja Flower', cursive; /* 손글씨 폰트 적용 */
+  font-size: 1.1rem;
+  line-height: 1.3;
+  color: #444;
+  word-break: keep-all;
 }
