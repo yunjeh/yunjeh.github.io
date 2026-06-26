@@ -1,13 +1,12 @@
 ---
 layout: default
 ---
-<link rel="stylesheet" href="/assets/css/home-sticky.css">
-
 <header>
   <h1>{{ site.title }}</h1>
   {%- if site.theme_config.show_description -%}
     <p>{{ site.description }}</p>
   {%- endif -%}
+  <link rel="stylesheet" href="/assets/css/home-sticky.css">
 </header>
 
 {%- include menu_item.html collection=site.data.menu.entries -%}
