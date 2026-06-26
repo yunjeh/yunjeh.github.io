@@ -16,14 +16,33 @@
   align-items: center;
   text-align: center;
   overflow: hidden;
-  box-shadow: 2px 4px 8px rgba(0,0,0,0.1);
-  padding: 10px;
+  
+  /* 포스트잇 형태 복구 */
+  width: 150px !important;
+  height: 150px !important;
+  padding: 15px !important;
+  box-sizing: border-box;
+  
+  /* 입체감과 디자인 */
+  box-shadow: 2px 4px 8px rgba(0,0,0,0.15);
   border-radius: 2px;
+  transition: transform 0.2s;
+  
+  /* 배경색이 적용되지 않을 경우를 대비한 기본값 */
+  background-color: #fff6a5; 
 }
 
 .home-sticky .content-body {
   font-size: 0.9rem;
+  line-height: 1.4;
   -webkit-line-clamp: 4;
   display: -webkit-box;
   -webkit-box-orient: vertical;
+  color: #333;
+}
+
+.home-sticky .date {
+  margin-top: 5px;
+  font-size: 0.7rem;
+  color: #999;
 }
