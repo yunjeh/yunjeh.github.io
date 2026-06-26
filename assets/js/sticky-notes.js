@@ -1,4 +1,4 @@
-<script>
+
     const wall = document.getElementById('wall');
 
     function layoutStickyNotes() {
@@ -34,4 +34,4 @@
 
     window.addEventListener('DOMContentLoaded', layoutStickyNotes);
     window.addEventListener('resize', layoutStickyNotes);
-</script>
+
