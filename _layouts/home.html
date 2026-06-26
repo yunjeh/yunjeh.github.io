@@ -1,7 +1,9 @@
 ---
 layout: default
 ---
-
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gaegu&family=Gowun+Dodum&family=Gamja+Flower&family=Nanum+Pen+Script&display=swap" rel="stylesheet">
 <header>
   <h1>{{ site.title }}</h1>
   {%- if site.theme_config.show_description -%}
@@ -71,6 +73,33 @@ layout: default
   -webkit-box-orient: vertical;
 }
 </style>
+    <script>
+document.addEventListener('DOMContentLoaded', () => {
+  const allNotes = Array.from(document.querySelectorAll('.home-sticky'));
+  
+  // 1. 4개만 랜덤으로 뽑기 (데이터가 충분할 때)
+  const shuffled = allNotes.sort(() => 0.5 - Math.random());
+  const selected = shuffled.slice(0, 4); // 4개만 선택
+
+  selected.forEach((note, index) => {
+    note.style.display = 'flex'; // 숨겨진 것을 보이게 함
+    note.style.position = 'absolute';
+    note.style.zIndex = '10';
+    
+    // 2. 위치를 랜덤하게 (헤더 오른쪽 구역에 흩뿌리기)
+    // right: 0~30%, top: 0~100px 사이로 배치
+    note.style.top = (Math.random() * 50) + 'px';
+    note.style.right = (50 + (index * 130)) + 'px'; // 겹치지 않게 간격 조절
+    
+    // 3. 폰트 강제 적용
+    const contentBody = note.querySelector('.content-body');
+    if(contentBody) {
+        contentBody.style.fontFamily = "'Gowun Dodum', sans-serif";
+        contentBody.style.fontSize = '0.9rem';
+    }
+  });
+});
+</script>
 <script>
 document.addEventListener('DOMContentLoaded', () => {
   const notes = document.querySelectorAll('.home-sticky');
