@@ -29,14 +29,7 @@ plugins:
   - jekyll-seo-tag
   - jekyll-remote-theme
   - jektex
-  - jekyll-archives
 
-jekyll-archives:
-  enabled:
-    - year
-  layout: 'archive_year.html' # 각 연도 페이지에 적용할 레이아웃
-  permalinks:
-    year: '/archive/:year/'
 
 jektex:
   cache_dir: ".jektex-cache"
