@@ -17,7 +17,7 @@ layout: default
 
   <div class="home-notes-wall">
     {% for note in site.notes limit: 50 %}
-      <div class="sticky-notes home-sticky" style="display:none;">
+      <div class="sticky-notes home-sticky" >
         <div class="content-body">{{ note.content | strip_html | truncate: 50 }}</div>
         <div class="date">{{ note.date | date: "%y.%m.%d" }}</div>
       </div>
