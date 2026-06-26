@@ -1,23 +1,29 @@
-/* 홈페이지용 포스트잇 기본 스타일 */
-.home-sticky {
-    width: 150px !important;
-    height: 150px !important;
-    padding: 15px !important;
-    box-sizing: border-box;
-    display: flex !important;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    overflow: hidden;
-    box-shadow: 2px 4px 8px rgba(0,0,0,0.1);
-    transition: transform 0.2s;
-    cursor: pointer;
+/* assets/css/home-sticky.css */
+.home-notes-wall {
+  position: absolute;
+  top: 20px;
+  right: 5%;
+  width: 40%;
+  height: 200px;
+  pointer-events: none;
 }
 
-/* 모바일 숨김 처리 */
-@media screen and (max-width: 768px) {
-  .home-notes-wall {
-    display: none !important;
-  }
+.home-sticky {
+  pointer-events: auto;
+  display: flex !important;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  overflow: hidden;
+  box-shadow: 2px 4px 8px rgba(0,0,0,0.1);
+  padding: 10px;
+  border-radius: 2px;
+}
+
+.home-sticky .content-body {
+  font-size: 0.9rem;
+  -webkit-line-clamp: 4;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
 }
