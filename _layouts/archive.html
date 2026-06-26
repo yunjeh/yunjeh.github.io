@@ -5,12 +5,87 @@ layout: default
 {%-include back_link.html-%}
 
 <h1>{{ page.title }}</h1>
-<h1>연도별 보기</h1>
-<div class="year-grid">
-  {% assign years = site.posts | map: 'date' | date: '%Y' | uniq %}
-  {% for year in years %}
-    <a href="/archive/{{ year }}/" class="year-button">
-      {{ year }}년 ({{ site.posts | where_exp: "post", "post.date | date: '%Y' == year" | size }}개)
-    </a>
+
+
+{% assign posts = site.categories[page.which_category] | default: site.posts %}
+{% assign posts_by_year = posts | group_by_exp:"post", "post.date | date: '%Y'" %}
+
+<div class="archive">
+
+  {% for year in posts_by_year %}
+    <div class="year-block">
+
+      <button class="year-btn" onclick="toggleYear(this)">
+        {{ year.name }}
+      </button>
+
+      <div class="months">
+
+        {% assign posts_by_month = year.items | group_by_exp:"post", "post.date | date: '%m'" %}
+
+        {% for month in posts_by_month %}
+        <div class="month-block">
+
+        <button class="month-btn" onclick="toggleMonth(this)">
+        {{ month.name }}월
+        </button>
+
+        <div class="post-list" style="display:none;">
+
+        {% for post in month.items %}
+
+        <div>
+        {{ post.content | strip_html | strip_newlines }}
+
+        <time class="post-date">
+          {{ post.date | date: "%Y.%m.%d. %H:%M:%S" }}
+        </time>
+        </div>
+
+        {% endfor %}
+
+        </div>
+
+        </div>
+        {% endfor %}
+
+      </div>
+    </div>
   {% endfor %}
+
 </div>
+
+<script>
+let openMonth = null;
+let openYear = null;
+
+function toggleYear(btn) {
+  const block = btn.nextElementSibling;
+
+  // 다른 year 닫기
+  document.querySelectorAll('.months').forEach(el => {
+    if (el !== block) el.style.display = "none";
+  });
+
+  block.style.display = (block.style.display === "block") ? "none" : "block";
+}
+
+function toggleMonth(btn) {
+  const wrapper = btn.nextElementSibling;
+
+  // 이미 열린 거 클릭하면 닫기
+  if (wrapper.style.display === "block") {
+    wrapper.style.display = "none";
+    openMonth = null;
+    return;
+  }
+
+  // 다른 month 전부 닫기 (핵심)
+  document.querySelectorAll('.post-wrapper').forEach(el => {
+    el.style.display = "none";
+  });
+
+  // 현재만 열기
+  wrapper.style.display = "block";
+}
+</script>
