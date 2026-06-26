@@ -24,3 +24,40 @@ layout: default
     </a>
   {% endfor %}
 </div>
+
+
+
+
+
+<div class="home-notes-wall">
+  {% for note in site.notes limit: 50 %}
+    <div class="post-it home-sticky" 
+         data-color-index="{{ forloop.index0 | modulo: 5 }}"
+         style="display:none; width: 150px; height: 150px; position: absolute;">
+      <div class="content-body">{{ note.content | strip_html | truncate: 50 }}</div>
+      <div class="date">{{ note.date | date: "%y.%m.%d" }}</div>
+    </div>
+  {% endfor %}
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const allNotes = Array.from(document.querySelectorAll('.home-sticky'));
+  const colors = ['#fff6a5', '#ffd6c9', '#d9f7c9', '#cfefff', '#f3d7ff'];
+  
+  // 2. 랜덤하게 3~4개 선택
+  const randomCount = Math.floor(Math.random() * 2) + 3;
+  const selected = allNotes.sort(() => 0.5 - Math.random()).slice(0, randomCount);
+
+  selected.forEach((note, index) => {
+    note.style.display = 'flex'; // 보이게 설정
+    
+    // 3. 랜덤 위치 (메뉴 오른쪽 빈 공간 좌표계에 맞게 조절 필요)
+    // 예: 상단 헤더 옆 오른쪽 구역으로 배치
+    note.style.top = (10 + (index * 40)) + 'px'; 
+    note.style.right = (50 + (index * 20)) + 'px';
+    note.style.transform = `rotate(${(Math.random() - 0.5) * 20}deg)`;
+    note.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+  });
+});
+</script>
