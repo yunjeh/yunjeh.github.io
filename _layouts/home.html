@@ -40,7 +40,7 @@ layout: default
   {% endfor %}
 </div>
 
-<script>
+<style>
   /* home.html에만 적용할 CSS (헤더와 포스트잇 배치용) */
 .home-notes-wall {
   position: absolute;
@@ -70,24 +70,26 @@ layout: default
   display: -webkit-box;
   -webkit-box-orient: vertical;
 }
-  
+</style>
+<script>
 document.addEventListener('DOMContentLoaded', () => {
-  const allNotes = Array.from(document.querySelectorAll('.home-sticky'));
-  const colors = ['#fff6a5', '#ffd6c9', '#d9f7c9', '#cfefff', '#f3d7ff'];
-  
-  // 2. 랜덤하게 3~4개 선택
-  const randomCount = Math.floor(Math.random() * 2) + 3;
-  const selected = allNotes.sort(() => 0.5 - Math.random()).slice(0, randomCount);
-
-  selected.forEach((note, index) => {
-    note.style.display = 'flex'; // 보이게 설정
+  const notes = document.querySelectorAll('.home-sticky');
+  notes.forEach(note => {
+    // 1. 랜덤 각도 및 색상 적용
+    const rotate = (Math.random() - 10) + 'deg';
+    const colors = ['#fff6a5', '#ffd6c9', '#d9f7c9', '#cfefff', '#f3d7ff'];
     
-    // 3. 랜덤 위치 (메뉴 오른쪽 빈 공간 좌표계에 맞게 조절 필요)
-    // 예: 상단 헤더 옆 오른쪽 구역으로 배치
-    note.style.top = (10 + (index * 40)) + 'px'; 
-    note.style.right = (50 + (index * 20)) + 'px';
-    note.style.transform = `rotate(${(Math.random() - 0.5) * 20}deg)`;
+    note.style.transform = `rotate(${rotate})`;
     note.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-  });
-});
+    
+    // 2. 가독성을 위해 테두리 둥글게 (notes.html 스타일 유지)
+    note.style.borderRadius = '2px'; 
+  });  });
+
 </script>
+
+
+
+
+
+    
