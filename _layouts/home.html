@@ -6,7 +6,6 @@ layout: default
   {%- if site.theme_config.show_description -%}
     <p>{{ site.description }}</p>
   {%- endif -%}
-  <link rel="stylesheet" href="/assets/css/home-sticky.css">
 </header>
 
 {%- include menu_item.html collection=site.data.menu.entries -%}
@@ -14,14 +13,44 @@ layout: default
 <main class="content-area">
   {{ content }}
 
-  <div class="home-notes-wall">
+  <div class="home-notes-wall" style="position:relative; width:100%; height:300px;">
     {% for note in site.notes limit: 50 %}
-      <div class="sticky-notes home-sticky" >
-        <div class="content-body">{{ note.content | strip_html | truncate: 50 }}</div>
-        <div class="date">{{ note.date | date: "%y.%m.%d" }}</div>
+      <div class="home-sticky" style="display:none; position:absolute; width:150px; height:150px; padding:20px; box-shadow:3px 3px 8px rgba(0,0,0,0.2); cursor:pointer; z-index:10; border-radius:0;">
+        <div class="content-body" style="font-family:sans-serif; font-size:1rem; color:#333;">{{ note.content | strip_html | truncate: 50 }}</div>
+        <div class="date" style="font-size:0.7rem; color:#666; margin-top:10px;">{{ note.date | date: "%y.%m.%d" }}</div>
       </div>
     {% endfor %}
   </div>
 </main>
 
-<script src="/assets/js/home-sticky.js"></script>
+<style>
+  @media screen and (max-width: 768px) { .home-notes-wall { display: none !important; } }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const notes = Array.from(document.querySelectorAll('.home-sticky'));
+  const colors = ['#FFEB3B', '#FFCC80', '#C8E6C9', '#B3E5FC', '#E1BEE7'];
+  
+  const selected = notes.sort(() => 0.5 - Math.random()).slice(0, 4);
+
+  selected.forEach((note) => {
+    note.style.display = 'flex';
+    note.style.flexDirection = 'column';
+    note.style.justifyContent = 'center';
+    note.style.alignItems = 'center';
+    
+    // 강제 배경색 적용
+    note.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+    
+    // 완전 랜덤 좌표 및 각도
+    const rotate = (Math.random() * 40 - 20);
+    const top = Math.random() * 100;
+    const right = Math.random() * 300;
+    
+    note.style.transform = `rotate(${rotate}deg)`;
+    note.style.top = top + 'px';
+    note.style.right = right + 'px';
+  });
+});
+</script>
