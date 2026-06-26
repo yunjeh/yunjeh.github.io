@@ -34,25 +34,22 @@ layout: default
             box-sizing: border-box;
         }
 
-        .sticky-notes {
-            position: absolute;
-            width: 200px;
-            height: 200px;
-            padding: 16px; /* 🎯 글씨를 더 채우기 위해 내부 여백을 24px -> 16px로 살짝 줄였습니다 */
-            box-sizing: border-box;
-            box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.08), 
-                        0px 8px 16px rgba(0, 0, 0, 0.04);
-            pointer-events: auto;
-            cursor: default;
-            
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden;
-            
-            transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.25s ease, z-index 0.1s step-end;
-        }
+
+.sticky-notes {
+        position: absolute;
+        width: 200px;
+        min-height: 200px;
+        padding: 16px;
+        box-sizing: border-box;
+        box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.08);
+        pointer-events: auto;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+        transition: transform 0.25s ease;
+    }
 
         .sticky-notes:hover {
             transform: scale(1.12) rotate(0deg) !important;
