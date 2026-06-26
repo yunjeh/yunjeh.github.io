@@ -281,6 +281,16 @@ img {
 /* ===================================================
    HIGHLIGHT
 =================================================== */
-*:target {
+*:target > div{
   background: #fff6a9;
 }
+
+/*
+.post-list > div {
+  position: relative;
+  background: #dfe9ed;
+  padding: 8px 10px;
+  margin-bottom: 10px;
+  border-radius: 12px;
+  border: 1px solid #ddd;
+}*/
