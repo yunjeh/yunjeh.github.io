@@ -1,3 +1,18 @@
+#wall {
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
+    padding: 50px;
+    box-sizing: border-box;
+    /* 중요: 이 부분이 없으면 내부 요소들이 튀어나와 겹칩니다 */
+    display: block; 
+}
+
+.sticky-notes {
+    /* 기존 스타일 유지 */
+    margin: 0 !important; /* 마진 초기화 */
+    box-sizing: border-box;
+}
 /* 화면 너비가 768px 이하(모바일, 태블릿)일 때 숨김 */
 @media screen and (max-width: 768px) {
   .home-notes-wall {
