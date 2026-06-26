@@ -1,4 +1,9 @@
-
+/* 화면 너비가 768px 이하(모바일, 태블릿)일 때 숨김 */
+@media screen and (max-width: 768px) {
+  .home-notes-wall {
+    display: none !important;
+  }
+}
     const colors = [
       '#fff6a5', // 노랑 (조금 부드럽게)
       '#ffd6c9', // 피치
