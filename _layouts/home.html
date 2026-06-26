@@ -25,6 +25,15 @@ layout: default
 </main>
 
 <style>
+  /* 텍스트 5줄 제한 및 줄 간격 조정 */
+  .content-body {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 5;
+    line-height: 1.4;
+    word-break: break-all;
+  }
   @media screen and (max-width: 768px) { .home-notes-wall { display: none !important; } }
 </style>
 
