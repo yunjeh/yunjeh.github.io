@@ -10,8 +10,8 @@ layout: default
 
   <div class="home-notes-wall" style="position:absolute; top:0; right:0; width:40%; height:200px; pointer-events:none;">
     {% for note in site.notes limit: 50 %}
-      <div class="home-sticky" style="display:none; position:absolute; width:180px; height:180px; padding:20px; box-shadow:3px 3px 8px rgba(0,0,0,0.2); cursor:pointer; z-index:10; border-radius:0;">
-        <div class="content-body" style="font-family:sans-serif; font-size:1rem; color:#333;">{{ note.content | strip_html | truncate: 50 }}</div>
+      <div class="home-sticky" style="display:none; position:absolute; width:180px; height:180px; padding:10px; box-shadow:3px 3px 8px rgba(0,0,0,0.2); cursor:pointer; z-index:10; border-radius:0;">
+        <div class="content-body" style="font-size:1rem; color:#333;">{{ note.content | strip_html | truncate: 50 }}</div>
         <div class="date" style="font-size:0.7rem; color:#666; margin-top:10px;">{{ note.date | date: "%y.%m.%d" }}</div>
       </div>
     {% endfor %}
