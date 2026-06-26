@@ -27,33 +27,42 @@ layout: default
   @media screen and (max-width: 768px) { .home-notes-wall { display: none !important; } }
 </style>
 
-
 <script>
 document.addEventListener('DOMContentLoaded', () => {
   const notes = Array.from(document.querySelectorAll('.home-sticky'));
   const colors = ['#FFF9C4', '#FFD1DC', '#C8E6C9', '#B3E5FC', '#E1BEE7'];
   
-  // 4개 선택 (개수를 늘리고 싶다면 이 숫자를 수정하세요)
+  // 귀여운 손글씨 느낌의 폰트 리스트
+  const fonts = [
+    "'Gaegu', cursive",
+    "'Gamja Flower', cursive",
+    "'Nanum Pen Script', cursive",
+    "'Gowun Dodum', sans-serif"
+  ];
+  
   const selected = notes.sort(() => 0.5 - Math.random()).slice(0, 4);
 
-  selected.forEach((note, index) => {
+  selected.forEach((note) => {
     note.style.display = 'flex';
     note.style.flexDirection = 'column';
     note.style.justifyContent = 'center';
     note.style.alignItems = 'center';
     note.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
     
-    // 배치 조정: 겹침 방지를 위해 index를 활용해 간격 확보
-    const rotate = (Math.random() * 30 - 15); // -15~15도 회전
+    // 폰트 랜덤 적용
+    const content = note.querySelector('.content-body');
+    if (content) {
+      content.style.fontFamily = fonts[Math.floor(Math.random() * fonts.length)];
+    }
     
-    // index * 160을 사용하여 각 포스트잇이 가로로 일정 간격을 유지하며 시작하게 합니다.
-    const baseRight = (index * 160); 
-    const randomTop = Math.random() * 30;    // 위아래로만 살짝 랜덤성 추가
-    const randomRight = baseRight + (Math.random() * 20); 
+    const rotate = (Math.random() * 30 - 15);
+    const top = Math.random() * 30;
+    const right = (notes.indexOf(note) * 160) + (Math.random() * 20); // 간격 유지
     
     note.style.transform = `rotate(${rotate}deg)`;
-    note.style.top = randomTop + 'px';
-    note.style.right = randomRight + 'px';
+    note.style.top = top + 'px';
+    note.style.right = right + 'px';
   });
 });
 </script>
+
