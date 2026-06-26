@@ -1,9 +1,8 @@
 ---
 layout: default
 ---
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Gaegu&family=Gowun+Dodum&family=Gamja+Flower&family=Nanum+Pen+Script&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/home-sticky.css">
+
 <header>
   <h1>{{ site.title }}</h1>
   {%- if site.theme_config.show_description -%}
@@ -13,112 +12,17 @@ layout: default
 
 {%- include menu_item.html collection=site.data.menu.entries -%}
 
+<main class="content-area">
+  {{ content }}
 
-  <main class="content-area">
-    {{ content }}
+  <div class="home-notes-wall">
+    {% for note in site.notes limit: 50 %}
+      <div class="sticky-notes home-sticky" style="display:none;">
+        <div class="content-body">{{ note.content | strip_html | truncate: 50 }}</div>
+        <div class="date">{{ note.date | date: "%y.%m.%d" }}</div>
+      </div>
+    {% endfor %}
+  </div>
+</main>
 
-    <!-- 💡 Tags -->
-  {% assign tags = site.tags | sort %}
-<div class="tags-cloud" style="margin-bottom: 30px;">
-  {% for tag in tags %}
-    <a href="{{ '/tags' | relative_url }}#{{ tag[0] }}" style="margin-right: 15px; font-weight: bold; text-decoration: none; color: #007bff;">
-      #{{ tag[0] }} <span style="font-weight: normal; color: #666;">({{ tag[1].size }})</span>
-    </a>
-  {% endfor %}
-</div>
-
-
-
-
-
-<div class="home-notes-wall">
-  {% for note in site.notes limit: 50 %}
-    <div class="sticky-notes home-sticky" 
-         data-color-index="{{ forloop.index0 | modulo: 5 }}"
-         style="display:none; width: 150px; height: 150px; position: absolute;">
-      <div class="content-body">{{ note.content | strip_html | truncate: 50 }}</div>
-      <div class="date">{{ note.date | date: "%y.%m.%d" }}</div>
-    </div>
-  {% endfor %}
-</div>
-
-<style>
-  /* home.html에만 적용할 CSS (헤더와 포스트잇 배치용) */
-.home-notes-wall {
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: 40%;        /* 헤더 오른쪽 40% 영역 차지 */
-  height: 200px;     /* 헤더 높이만큼 설정 */
-  pointer-events: none; /* 헤더 메뉴 클릭 방해 방지 */
-}
-
-.home-sticky {
-  pointer-events: auto; /* 포스트잇만 클릭 가능하게 */
-  /* notes.html의 스타일과 일치시키기 위한 최소 세팅 */
-  display: flex !important;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  overflow: hidden;
-  box-shadow: 2px 4px 8px rgba(0,0,0,0.1);
-  padding: 10px;
-}
-
-.home-sticky .content-body {
-  font-size: 0.9rem;
-  -webkit-line-clamp: 4; /* 포스트잇 크기에 맞춰 조절 */
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-}
-</style>
-    <script>
-document.addEventListener('DOMContentLoaded', () => {
-  const allNotes = Array.from(document.querySelectorAll('.home-sticky'));
-  
-  // 1. 4개만 랜덤으로 뽑기 (데이터가 충분할 때)
-  const shuffled = allNotes.sort(() => 0.5 - Math.random());
-  const selected = shuffled.slice(0, 4); // 4개만 선택
-
-  selected.forEach((note, index) => {
-    note.style.display = 'flex'; // 숨겨진 것을 보이게 함
-    note.style.position = 'absolute';
-    note.style.zIndex = '10';
-    
-    // 2. 위치를 랜덤하게 (헤더 오른쪽 구역에 흩뿌리기)
-    // right: 0~30%, top: 0~100px 사이로 배치
-    note.style.top = (Math.random() * 50) + 'px';
-    note.style.right = (50 + (index * 130)) + 'px'; // 겹치지 않게 간격 조절
-    
-    // 3. 폰트 강제 적용
-    const contentBody = note.querySelector('.content-body');
-    if(contentBody) {
-        contentBody.style.fontFamily = "'Gowun Dodum', sans-serif";
-        contentBody.style.fontSize = '0.9rem';
-    }
-  });
-});
-</script>
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-  const notes = document.querySelectorAll('.home-sticky');
-  notes.forEach(note => {
-    // 1. 랜덤 각도 및 색상 적용
-    const rotate = (Math.random() - 10) + 'deg';
-    const colors = ['#fff6a5', '#ffd6c9', '#d9f7c9', '#cfefff', '#f3d7ff'];
-    
-    note.style.transform = `rotate(${rotate})`;
-    note.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-    
-    // 2. 가독성을 위해 테두리 둥글게 (notes.html 스타일 유지)
-    note.style.borderRadius = '2px'; 
-  });  });
-
-</script>
-
-
-
-
-
-    
+<script src="/assets/js/home-sticky.js"></script>
