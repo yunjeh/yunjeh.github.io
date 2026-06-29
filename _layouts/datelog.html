@@ -23,7 +23,7 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 
 
   // 2. JSON 데이터 불러오기
-  fetch('/assets/js/places_data.json')
+  fetch('/assets/js/datelog_data.json')
     .then(response => {
       if (!response.ok) throw new Error('파일을 찾을 수 없습니다.');
       return response.json();
