@@ -2,7 +2,17 @@
 layout: default
 ---
 {%-include back_link.html-%}
-
+<style>
+  /* 빨간색의 작고 예쁜 마커 스타일 */
+  .custom-pin {
+    background-color: #ee1111;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    border: 2px solid white; /* 테두리를 흰색으로 주어 더 깔끔하게 */
+    box-shadow: 0 0 3px rgba(0,0,0,0.3);
+  }
+</style>
 <h1>{{ page.title }}</h1>
 
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
@@ -36,15 +46,24 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         if (!spot.coords || !spot.imgUrl) return;
 
         //const marker = L.marker(spot.coords).addTo(map);
+const smallRedPin = L.divIcon({
+  className: 'custom-pin', // CSS 클래스 연결
+  iconSize: [14, 14],      // 아이콘 전체 크기
+  iconAnchor: [7, 7]       // 좌표 중심이 원의 가운데가 되도록 설정
+});
 
-        const marker = L.marker(spot.coords, {
-          radius: 3,
-          fillColor: "#ee1111",
-          color: "#ffffff",
-          weight: 1,
-          opacity: 1,
-          fillOpacity: 0.8
-        }).addTo(map);
+// 데이터 처리 루프 내부 (마커 생성 부분)
+const marker = L.marker(spot.coords, { 
+  icon: smallRedPin 
+}).addTo(map);
+  //       const marker = L.marker(spot.coords, {
+  //         radius: 3,
+  //         fillColor: "#ee1111",
+  //        color: "#ffffff",
+  //        weight: 1,
+  //        opacity: 1,
+  //        fillOpacity: 0.8
+  //      }).addTo(map);
 
         const tooltipContent = `
         <div style="text-align: center; font-family: sans-serif; padding: 5px;">
