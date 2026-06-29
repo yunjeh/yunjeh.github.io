@@ -8,13 +8,13 @@ layout: default
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
-<div id="map" style="width: 100%; height: 500px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);"></div>
+<div id="map" style="width: 50%; height: 500px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);"></div>
 
 <script>
   
 // 1. 지도 초기화
 // [위도, 경도], 확대 수준(값이 클수록 확대됨)
-const map = L.map('map').setView([37.5665, 126.9780], 7); 
+const map = L.map('map').setView([37.5665, 126.9780], 5); 
 
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
   attribution: '© OpenStreetMap'
