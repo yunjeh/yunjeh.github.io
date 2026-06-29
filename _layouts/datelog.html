@@ -6,10 +6,10 @@ layout: default
   /* 빨간색의 작고 예쁜 마커 스타일 */
   .custom-pin {
     background-color: #ee1111;
-    width: 14px;
-    height: 14px;
-    border-radius: 50%;
-    border: 2px solid white; /* 테두리를 흰색으로 주어 더 깔끔하게 */
+    width: 8px;
+    height: 8px;
+    border-radius: 20%;
+    border: 1px solid white; /* 테두리를 흰색으로 주어 더 깔끔하게 */
     box-shadow: 0 0 3px rgba(0,0,0,0.3);
   }
 </style>
@@ -48,8 +48,8 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         //const marker = L.marker(spot.coords).addTo(map);
 const smallRedPin = L.divIcon({
   className: 'custom-pin', // CSS 클래스 연결
-  iconSize: [14, 14],      // 아이콘 전체 크기
-  iconAnchor: [7, 7]       // 좌표 중심이 원의 가운데가 되도록 설정
+  iconSize: [8, 8],      // 아이콘 전체 크기
+  iconAnchor: [4, 4]       // 좌표 중심이 원의 가운데가 되도록 설정
 });
 
 // 데이터 처리 루프 내부 (마커 생성 부분)
@@ -68,7 +68,7 @@ const marker = L.marker(spot.coords, {
         const tooltipContent = `
         <div style="text-align: center; font-family: sans-serif; padding: 5px;">
           <strong style="display: block; font-size: 12px;">${spot.name}</strong>
-          <img src="${spot.imgUrl}" style="max-width: 150px; border-radius: 4px; display: block; margin: 5px auto;" />
+          <img src="${spot.imgUrl}" style="max-width: 180px; max-height: 180px; border-radius: 4px; display: block; margin: 5px auto;" />
           <div style="text-align: left; font-size: 12px;">
             <p style="margin: 2px 0;">📍 ${spot.address || '-'}</p>
             ${spot.comment ? `<p style="margin: 2px 0;">💬 ${spot.comment}</p>` : ''}
