@@ -46,14 +46,16 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
           fillOpacity: 0.8
         }).addTo(map);
 
-        
         const tooltipContent = `
-          <div style="text-align: center; font-family: sans-serif; padding: 4px;">
-            <strong style="display: block; margin-bottom: 6px; font-size: 13px;">${spot.name}</strong>
-            <img src="${spot.imgUrl}" alt="${spot.name}" 
-                 style="max-width: 200px; max-height: 200px; border-radius: 4px; display: block; margin: 0 auto;" />
+        <div style="text-align: center; font-family: sans-serif; padding: 5px;">
+          <strong style="display: block; font-size: 12px;">${spot.name}</strong>
+          <img src="${spot.imgUrl}" style="max-width: 150px; border-radius: 4px; display: block; margin: 5px auto;" />
+          <div style="text-align: left; font-size: 12px;">
+            <p style="margin: 2px 0;">📍 ${spot.address || '-'}</p>
+            <p style="margin: 2px 0;">💬 ${spot.comment || ''}</p>
           </div>
-        `;
+        </div>
+      `;
         
         marker.bindTooltip(tooltipContent, { direction: 'auto', sticky: true, opacity: 0.95 });
       });
