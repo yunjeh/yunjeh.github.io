@@ -14,7 +14,7 @@ layout: default
   
 // 1. 지도 초기화
 // [위도, 경도], 확대 수준(값이 클수록 확대됨)
-const map = L.map('map').setView([37.5665, 126.9780], 5); 
+const map = L.map('map').setView([37.5665, 126.9780], 6); 
 
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
   attribution: '© OpenStreetMap'
@@ -60,6 +60,6 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     })
     .catch(err => {
       console.error("데이터 로드 실패:", err);
-      alert("데이터를 불러올 수 없습니다. 'Live Server'를 사용하여 서버 환경에서 실행 중인지 확인하세요.");
+      alert("데이터를 불러올 수 없습니다.");
     });
 </script>
