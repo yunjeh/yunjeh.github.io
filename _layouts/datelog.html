@@ -37,7 +37,7 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 
         //const marker = L.marker(spot.coords).addTo(map);
 
-        const marker = L.Marker(spot.coords, {
+        const marker = L.marker(spot.coords, {
           radius: 3,
           fillColor: "#ee1111",
           color: "#ffffff",
@@ -52,7 +52,7 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
           <img src="${spot.imgUrl}" style="max-width: 150px; border-radius: 4px; display: block; margin: 5px auto;" />
           <div style="text-align: left; font-size: 12px;">
             <p style="margin: 2px 0;">📍 ${spot.address || '-'}</p>
-            <p style="margin: 2px 0;">💬 ${spot.comment || ''}</p>
+            ${spot.comment ? `<p style="margin: 2px 0;">💬 ${spot.comment}</p>` : ''}
           </div>
         </div>
       `;
