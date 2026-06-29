@@ -181,14 +181,14 @@
 {"name":"2026.05.","coords":[35.239226,129.007631],"imgUrl": "/_images/datelog/20260509_131055.jpg","address":"부산광역시 북구 화명3동","comment": ""},
 {"name":"2026.05.","coords":[35.157696,129.120921],"imgUrl": "/_images/datelog/20260523_213018.jpg","address":"부산광역시 수영구","comment": ""},
 {"name":"2026.05.","coords":[34.833527,128.718998],"imgUrl": "/_images/datelog/20260524_162249.jpg","address":"경상남도 거제시 일운면","comment": ""},
-{"name":"2026.05.","coords":[35.179846,128.109605],"imgUrl": "/_images/datelog/20260530_185230.jpg경상남도 진주시","comment": ""},
-{"name":"2026.06.","coords":[36.620106,128.152678],"imgUrl": "/_images/datelog/20260627_114455.jpg경상북도 문경시 견탄리","comment": ""},
-{"name":"2026.06.","coords":[37.520937,126.927082],"imgUrl": "/_images/datelog/20260627_160547.jpg서울특별시 영등포구 여의동","comment": ""},
-{"name":"2026.06.","coords":[37.509861,126.965559],"imgUrl": "/_images/datelog/20260627_202725.jpg서울특별시 동작구 신길1동","comment": ""},
-{"name":"2026.06.","coords":[37.488621,127.014495],"imgUrl": "/_images/datelog/20260627_212954.jpg서울특별시 서초구 서초3동","comment": ""},
-{"name":"2026.06.","coords":[37.524199,126.919511],"imgUrl": "/_images/datelog/20260628_082734.jpg서울특별시 영등포구 여의동","comment": ""},
-{"name":"2026.06.","coords":[37.524609,126.920019],"imgUrl": "/_images/datelog/20260628_101232.jpg서울특별시 영등포구 여의동","comment": ""},
-{"name":"2026.06.","coords":[37.57751,126.971902],"imgUrl": "/_images/datelog/20260628_122115.jpg서울특별시 종로구 사직동","comment": ""},
-{"name":"2026.06.","coords":[37.5785,126.97098],"imgUrl": "/_images/datelog/20260628_133234.jpg서울특별시 종로구 사직동","comment": ""}
+{"name":"2026.05.","coords":[35.179846,128.109605],"imgUrl": "/_images/datelog/20260530_185230.jpg","address":"경상남도 진주시","comment": ""},
+{"name":"2026.06.","coords":[36.620106,128.152678],"imgUrl": "/_images/datelog/20260627_114455.jpg","address":"경상북도 문경시 견탄리","comment": ""},
+{"name":"2026.06.","coords":[37.520937,126.927082],"imgUrl": "/_images/datelog/20260627_160547.jpg","address":"서울특별시 영등포구 여의동","comment": ""},
+{"name":"2026.06.","coords":[37.509861,126.965559],"imgUrl": "/_images/datelog/20260627_202725.jpg","address":"서울특별시 동작구 신길1동","comment": ""},
+{"name":"2026.06.","coords":[37.488621,127.014495],"imgUrl": "/_images/datelog/20260627_212954.jpg","address":"서울특별시 서초구 서초3동","comment": ""},
+{"name":"2026.06.","coords":[37.524199,126.919511],"imgUrl": "/_images/datelog/20260628_082734.jpg","address":"서울특별시 영등포구 여의동","comment": ""},
+{"name":"2026.06.","coords":[37.524609,126.920019],"imgUrl": "/_images/datelog/20260628_101232.jpg","address":"서울특별시 영등포구 여의동","comment": ""},
+{"name":"2026.06.","coords":[37.57751,126.971902],"imgUrl": "/_images/datelog/20260628_122115.jpg","address":"서울특별시 종로구 사직동","comment": ""},
+{"name":"2026.06.","coords":[37.5785,126.97098],"imgUrl": "/_images/datelog/20260628_133234.jpg","address":"서울특별시 종로구 사직동","comment": ""}
 
 ]
