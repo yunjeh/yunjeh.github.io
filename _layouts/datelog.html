@@ -1,76 +1,65 @@
 ---
 layout: default
 ---
-
-<!DOCTYPE html>
-
 {%-include back_link.html-%}
 
 <h1>{{ page.title }}</h1>
 
-<html>
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <style>
-        #map { width: 100%; height: 600px; background-color: #e0e0e0; }
-        @media (max-width: 768px) { #map { height: 80vh; } }
-        .leaflet-popup-close-button { display: none !important; }
-    </style>
-</head>
-<body>
-
-<div id="map"></div>
-
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        var map = L.map('map').setView([35.15, 128.60], 12);
+<div id="map" style="width: 100%; height: 500px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);"></div>
 
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; OpenStreetMap'
+<script>
+  
+// 1. 지도 초기화
+// [위도, 경도], 확대 수준(값이 클수록 확대됨)
+const map = L.map('map').setView([37.5665, 126.9780], 7); 
+
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  attribution: '© OpenStreetMap'
+}).addTo(map);    
+    
+
+
+  // 2. JSON 데이터 불러오기
+  fetch('/assets/js/places_data.json')
+    .then(response => {
+      if (!response.ok) throw new Error('파일을 찾을 수 없습니다.');
+      return response.json();
+    })
+    .then(data => {
+      // 데이터 확인용 로그
+      console.log("불러온 데이터:", data);
+      
+      data.forEach(spot => {
+        if (!spot.coords || !spot.imgUrl) return;
+
+        //const marker = L.marker(spot.coords).addTo(map);
+
+        const marker = L.circleMarker(spot.coords, {
+          radius: 3,
+          fillColor: "#3333CC",
+          color: "#3333CC",
+          weight: 1,
+          opacity: 1,
+          fillOpacity: 0.8
         }).addTo(map);
 
-        fetch('/assets/places.json')
-            .then(function(res) { return res.json(); })
-            .then(function(data) {
-                data.forEach(function(item) {
-                    var lat = parseFloat(item.lat);
-                    var lng = parseFloat(item.lng);
-                    
-                    if(!isNaN(lat) && !isNaN(lng)) {
-                        var dateStr = String(item.img).substring(0, 8);
-                        var dateDisplay = dateStr.substring(0, 4) + "." + dateStr.substring(4, 6) + ".";
-                        var title = item.place || item.address;
-
-                        //var marker = L.marker([lat, lng]).addTo(map);
-                        var marker = L.circleMarker([lat, lng], {
-    radius: 5,              // 점의 크기 (숫자가 클수록 커집니다)
-    fillColor: "#881111",   // 색 채우기
-    color: "#ffffff",       // 점의 테두리 색 (흰색)
-    weight: 1,              // 테두리 두께
-    opacity: 1,             // 테두리 투명도
-    fillOpacity: 0.8        // 채우기 투명도
-}).addTo(map);
-marker.bindPopup(
-    '<div style="text-align:center; min-width:200px;">' +
-    '<div style="font-weight:bold; font-size:12px; color:#666;">' + dateDisplay + '</div>' +
-    '<img src="/_images/datelog/' + item.img + '" style="width:200px; height:200px; object-fit:contain; margin:10px 0; border-radius:4px; background:#f9f9f9;" onerror="this.style.display=\'none\'">' +
-    '<div style="font-size:12px;">' + title + '</div>' +
-    '</div>', 
-    {
-        autoPan: true,
-        autoPanPadding: [20, 20],
-        closeButton: false
-    }
-);
-                    }
-                });
-            })
-            .catch(function(err) { console.error("데이터 로드 에러:", err); });
+        
+        const tooltipContent = `
+          <div style="text-align: center; font-family: sans-serif; padding: 4px;">
+            <strong style="display: block; margin-bottom: 6px; font-size: 13px;">${spot.name}</strong>
+            <img src="${spot.imgUrl}" alt="${spot.name}" 
+                 style="max-width: 200px; max-height: 200px; border-radius: 4px; display: block; margin: 0 auto;" />
+          </div>
+        `;
+        
+        marker.bindTooltip(tooltipContent, { direction: 'auto', sticky: true, opacity: 0.95 });
+      });
+    })
+    .catch(err => {
+      console.error("데이터 로드 실패:", err);
+      alert("데이터를 불러올 수 없습니다. 'Live Server'를 사용하여 서버 환경에서 실행 중인지 확인하세요.");
     });
 </script>
-</body>
-</html>
