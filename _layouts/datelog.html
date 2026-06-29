@@ -2,14 +2,28 @@
 layout: default
 ---
 {%-include back_link.html-%}
+<style>
+  #map {
+    width: 50%; /* 기본값: PC */
+    height: 500px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  }
 
+  /* 화면 너비가 768px 이하(태블릿/모바일)일 때 */
+  @media (max-width: 768px) {
+    #map {
+      width: 100% !important;
+    }
+  }
+</style>
 <h1>{{ page.title }}</h1>
 
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
-<div id="map" style="width: 50%; height: 500px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);"></div>
-
+<div id="map" style="height: 500px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);"></div>
+<!--width: 50%; -->
 <script>
   
 // 1. 지도 초기화
@@ -37,10 +51,10 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 
         //const marker = L.marker(spot.coords).addTo(map);
 
-        const marker = L.circleMarker(spot.coords, {
+        const marker = L.Marker(spot.coords, {
           radius: 3,
-          fillColor: "#3333CC",
-          color: "#3333CC",
+          fillColor: "#ee1111",
+          color: "#ffffff",
           weight: 1,
           opacity: 1,
           fillOpacity: 0.8
