@@ -9,25 +9,21 @@ layout: default
 {% assign posts = site.categories[page.which_category] | default: site.posts %}
 {% assign posts_by_year = posts | group_by_exp:"post", "post.date | date: '%Y'" %}
 
-<!-- 스크롤바 밀림 방지 및 아카이브 스타일 정의 -->
+<!-- 스크롤바 밀림 방지 및 아카이브 전용 스타일 강제 일치 -->
 <style>
   html {
-    /* 글이 길어지든 짧아지든 우측 스크롤바 영역을 항상 고정하여 
-       화면이 좌우로 흔들리는 현상을 원천 차단합니다. */
-    overflow-y: scroll; 
+    /* 우측 스크롤바 영역을 항상 고정하여 화면 흔들림 원천 차단 */
+    overflow-y: scroll !important; 
   }
 
-  /* 접고 펼칠 때 자연스러운 정렬을 위한 최소한의 여백 스타일 */
-  .year-block { margin-bottom: 15px; }
-  .year-btn { cursor: pointer; }
-  .months { display: none; margin-left: 15px; margin-top: 5px; }
-  
-  .month-block { margin-bottom: 8px; }
-  .month-btn { cursor: pointer; }
-  .post-list { display: none; margin-left: 20px; margin-top: 5px; }
-  
-  .post-item { margin-bottom: 12px; }
-  .post-date { font-size: 0.85em; color: #666; margin-left: 8px; }
+  /* main.scss의 .post-list와 충돌하지 않도록 아카이브 전용 클래스 정의 */
+  .archive-post-list { 
+    display: none; 
+    margin-left: 15px; /* main.scss의 .post-wrapper 마진 적용 */
+    margin-top: 5px;
+    list-style: none;
+    padding: 0;
+  }
 </style>
 
 <div class="archive">
@@ -50,12 +46,11 @@ layout: default
             {{ month.name }}월
           </button>
 
-          <!-- 초기 상태 숨김(display:none) 유지 및 오타 수정용 타겟 클래스 지정 -->
-          <div class="post-list">
+          <!-- main.scss의 회색 박스 고유 스타일(.post-list > div)을 적용받기 위해 구조 유지 -->
+          <div class="archive-post-list post-list">
 
             {% for post in month.items %}
-            <div class="post-item">
-              <!-- 요청하신 대로 원래의 본문 추출 방식을 그대로 유지했습니다 -->
+            <div>
               {{ post.content | strip_html | strip_newlines }}
 
               <time class="post-date">
@@ -91,10 +86,9 @@ function toggleYear(btn) {
 function toggleMonth(btn) {
   const wrapper = btn.nextElementSibling;
 
-  //.post-list를 정확히 찾아 닫음
-  //현재 클릭한 연도(year-block) 내부에 있는 월별 글 목록만 닫음
+  // 다른 월의 글 목록을 정확하게 추적해서 닫음 (충돌 방지)
   const parentYear = btn.closest('.year-block');
-  parentYear.querySelectorAll('.post-list').forEach(el => {
+  parentYear.querySelectorAll('.archive-post-list').forEach(el => {
     if (el !== wrapper) el.style.display = "none";
   });
 
