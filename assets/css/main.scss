@@ -39,13 +39,13 @@ span, a, li, ul, ol, input, textarea, button {
    PAGE BACKGROUND
 =================================================== */
 html {
-  background: #f5f5f3;
+  background: #e5e5e3;
   scroll-behavior: smooth;
 }
 
 body {
   min-height: 100vh;
-  background-color: #f5f5f3;
+  background-color: #e5e5e3;
   background-image: radial-gradient(#dbdbd7 1.2px, transparent 0);
   background-size: 28px 28px;
 
@@ -116,7 +116,7 @@ p {
 
 .post-list > div {
   position: relative;
-  background: #dfe9ed;
+  background: #efefef; /* #dfe9ed; */
   padding: 8px 10px;
   margin-bottom: 10px;
   border-radius: 12px;
