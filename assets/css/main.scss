@@ -195,7 +195,7 @@ p {
   width: 100%;
   text-align: left;
   padding: 10px;
-  background: #a5a5a5;
+  background: transparent !important; /* 불투명한 회색 제거 ➔ 투명하게 변경 */
   border: none;
   cursor: pointer;
   margin-top: 6px;
