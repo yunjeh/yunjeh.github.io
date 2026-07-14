@@ -6,9 +6,29 @@ layout: default
 
 <h1>{{ page.title }}</h1>
 
-
 {% assign posts = site.categories[page.which_category] | default: site.posts %}
 {% assign posts_by_year = posts | group_by_exp:"post", "post.date | date: '%Y'" %}
+
+<!-- 스크롤바 밀림 방지 및 아카이브 스타일 정의 -->
+<style>
+  html {
+    /* 글이 길어지든 짧아지든 우측 스크롤바 영역을 항상 고정하여 
+       화면이 좌우로 흔들리는 현상을 원천 차단합니다. */
+    overflow-y: scroll; 
+  }
+
+  /* 접고 펼칠 때 자연스러운 정렬을 위한 최소한의 여백 스타일 */
+  .year-block { margin-bottom: 15px; }
+  .year-btn { cursor: pointer; }
+  .months { display: none; margin-left: 15px; margin-top: 5px; }
+  
+  .month-block { margin-bottom: 8px; }
+  .month-btn { cursor: pointer; }
+  .post-list { display: none; margin-left: 20px; margin-top: 5px; }
+  
+  .post-item { margin-bottom: 12px; }
+  .post-date { font-size: 0.85em; color: #666; margin-left: 8px; }
+</style>
 
 <div class="archive">
 
@@ -26,25 +46,25 @@ layout: default
         {% for month in posts_by_month %}
         <div class="month-block">
 
-        <button class="month-btn" onclick="toggleMonth(this)">
-        {{ month.name }}월
-        </button>
+          <button class="month-btn" onclick="toggleMonth(this)">
+            {{ month.name }}월
+          </button>
 
-        <div class="post-list" style="display:none;">
+          <!-- 초기 상태 숨김(display:none) 유지 및 오타 수정용 타겟 클래스 지정 -->
+          <div class="post-list">
 
-        {% for post in month.items %}
+            {% for post in month.items %}
+            <div class="post-item">
+              <!-- 요청하신 대로 원래의 본문 추출 방식을 그대로 유지했습니다 -->
+              {{ post.content | strip_html | strip_newlines }}
 
-        <div>
-        {{ post.content | strip_html | strip_newlines }}
+              <time class="post-date">
+                {{ post.date | date: "%Y.%m.%d. %H:%M:%S" }}
+              </time>
+            </div>
+            {% endfor %}
 
-        <time class="post-date">
-          {{ post.date | date: "%Y.%m.%d. %H:%M:%S" }}
-        </time>
-        </div>
-
-        {% endfor %}
-
-        </div>
+          </div>
 
         </div>
         {% endfor %}
@@ -56,36 +76,33 @@ layout: default
 </div>
 
 <script>
-let openMonth = null;
-let openYear = null;
-
 function toggleYear(btn) {
   const block = btn.nextElementSibling;
 
-  // 다른 year 닫기
+  // 다른 year 블록 전부 닫기
   document.querySelectorAll('.months').forEach(el => {
     if (el !== block) el.style.display = "none";
   });
 
+  // 현재 누른 year 토글
   block.style.display = (block.style.display === "block") ? "none" : "block";
 }
 
 function toggleMonth(btn) {
   const wrapper = btn.nextElementSibling;
 
-  // 이미 열린 거 클릭하면 닫기
-  if (wrapper.style.display === "block") {
-    wrapper.style.display = "none";
-    openMonth = null;
-    return;
-  }
-
-  // 다른 month 전부 닫기 (핵심)
-  document.querySelectorAll('.post-wrapper').forEach(el => {
-    el.style.display = "none";
+  //.post-list를 정확히 찾아 닫음
+  //현재 클릭한 연도(year-block) 내부에 있는 월별 글 목록만 닫음
+  const parentYear = btn.closest('.year-block');
+  parentYear.querySelectorAll('.post-list').forEach(el => {
+    if (el !== wrapper) el.style.display = "none";
   });
 
-  // 현재만 열기
-  wrapper.style.display = "block";
+  // 현재 누른 month 토글
+  if (wrapper.style.display === "none" || wrapper.style.display === "") {
+    wrapper.style.display = "block";
+  } else {
+    wrapper.style.display = "none";
+  }
 }
 </script>
