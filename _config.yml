@@ -31,7 +31,9 @@ plugins:
   - jekyll-remote-theme
   - jektex
 
-
+kramdown:
+  hard_wrap: true
+  
 jektex:
   cache_dir: ".jektex-cache"
   ignore: ["*.xml"]
@@ -41,7 +43,7 @@ jektex:
     - ["\\C", "\\mathbb{C}"]
 include:
   - _images
-  - _overall
+
 collections:
   notes:
     output: true
