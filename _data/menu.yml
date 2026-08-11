@@ -9,11 +9,11 @@ entries:
   #      url: https://github.com/riggraz/no-style-please
   #    - title: "used by <a href='https://riggraz.dev'>riggraz.dev</a> and <a href='https://github.com/riggraz/no-style-please/network/dependents'>many others</a>"
 
-  - title: Recent posts
+  - title: 최근 글 #Recent posts
     post_list:
       limit: 5
       show_more: true
-      show_more_text: See archive...
+      show_more_text: 아카이브.. #See archive...
       show_more_url: archive.html
   - title: "&nbsp;"
   - title: "&nbsp;"
@@ -35,9 +35,9 @@ entries:
   #        - title: example page
   #          url: about
   - title: 
-  - title: "The Quote Journal"
+  - title: "노트"
     url: notes.html
-  - title: "Places I've been" #Progress
+  - title: "장소들" #Progress
     url: places.html #progress
   # title: Rating
   # url: rating
