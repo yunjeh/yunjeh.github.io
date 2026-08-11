@@ -10,46 +10,59 @@ layout: default
     /* 넷플릭스 스타일 그리드 레이아웃 */
     .display-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-        gap: 20px;
+        grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+        gap: 15px;
         padding: 20px 0;
-        max-width: 900px;
+        max-width: 800px;
         margin: 0 auto;
     }
 
     /* 포스터 카드 스타일 */
     .display-card {
         background: #141414;
-        border-radius: 6px;
+        border-radius: 4px;
         overflow: hidden;
         cursor: pointer;
         transition: transform 0.3s ease, box-shadow 0.3s ease;
         position: relative;
+        aspect-ratio: 2 / 3;
     }
 
     .display-card:hover {
-        transform: scale(1.05);
-        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
+        transform: scale(1.08);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
         z-index: 10;
     }
 
     .display-poster {
         width: 100%;
-        aspect-ratio: 2 / 3;
+        height: 100%;
         object-fit: cover;
         display: block;
     }
 
-    /* 랜덤 박스 스타일 */
+    /* 랜덤 박스 (커버 없을 때) 스타일 */
     .random-box {
         display: flex !important;
         align-items: center;
         justify-content: center;
-        padding: 10px;
+        padding: 6px;
         text-align: center;
         color: #fff;
-        font-weight: bold;
-        word-break: keep-all;
+        font-weight: 900;
+        word-break: break-all; /* 영문 제목이 길 경우 잘리지 않고 줄바꿈되도록 설정 */
+        overflow: hidden;
+    }
+
+    .random-text {
+        display: block;
+        width: 100%;
+        line-height: 1.1;
+        transition: transform 0.3s;
+    }
+    
+    .display-card:hover .random-text {
+        transform: scale(1.05);
     }
 
     /* 팝업(모달) 스타일 */
@@ -117,30 +130,49 @@ layout: default
         {% if post.cover %}
             <img src="{{ post.cover | relative_url }}" alt="{{ post.title }}" class="display-poster">
         {% else %}
+            <!-- 프론트매터의 title 값이 텍스트로 들어갑니다 -->
             <div class="display-poster random-box" id="random-box-{{ forloop.index }}">
-                <span class="random-text">{{ post.title }}</span>
+                <span class="random-text" id="random-text-{{ forloop.index }}">{{ post.title }}</span>
             </div>
             <script>
                 (function() {
-                    const colors = ['#FF5733', '#33FF57', '#3357FF', '#FF33A1', '#A133FF', '#33FFF5', '#F5FF33', '#FF8C33', '#5D4037', '#607D8B'];
-                    const fonts = ['"Courier New", Courier, monospace', '"Gowun Dodum", sans-serif', '"Georgia", serif', '"Impact", sans-serif', '"Trebuchet MS", sans-serif'];
+                    const colors = ['#b71c1c', '#880e4f', '#4a148c', '#311b92', '#0d47a1', '#01579b', '#006064', '#1b5e20', '#33691e', '#bf360c', '#3e2723', '#263238'];
+                    const fonts = [
+                        '"Impact", fantasy',
+                        '"Arial Black", Gadget, sans-serif',
+                        '"Georgia", serif',
+                        '"Trebuchet MS", Helvetica, sans-serif',
+                        'system-ui'
+                    ];
                     
                     const box = document.getElementById('random-box-{{ forloop.index }}');
-                    const text = box.querySelector('.random-text');
+                    const text = document.getElementById('random-text-{{ forloop.index }}');
                     
                     box.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
                     text.style.fontFamily = fonts[Math.floor(Math.random() * fonts.length)];
-                    text.style.fontSize = (Math.floor(Math.random() * (22 - 14 + 1)) + 14) + 'px';
+                    
+                    // 글자 길이에 맞춰 폰트 크기 동적 조절 (테두리에 꽉 차도록)
+                    const titleLength = text.innerText.length;
+                    let randomSize;
+                    if (titleLength <= 5) {
+                        randomSize = '2.2em';
+                    } else if (titleLength <= 10) {
+                        randomSize = '1.6em';
+                    } else {
+                        randomSize = '1.2em';
+                        text.style.letterSpacing = '-1px';
+                    }
+                    text.style.fontSize = randomSize;
                 })();
             </script>
         {% endif %}
     </div>
 
-    <!-- 팝업 창 -->
+    <!-- 팝업 창 (마크다운의 title이 제목으로 출력됨) -->
     <div id="modal-{{ forloop.index }}" class="modal-overlay" onclick="outsideClose(event, 'modal-{{ forloop.index }}')">
         <div class="modal-content">
             <button class="modal-close" onclick="closeModal('modal-{{ forloop.index }}')">&times;</button>
-            <span class="modal-date">{{ post.date | date: "%Y-%m-%d" }}</span>
+            <span class="modal-date">{{ post.date | date: "%Y-%m-%d %H:%M" }}</span>
             <h2 style="margin-top: 10px; color: #fff;">{{ post.title }}</h2>
             <div class="modal-body">
                 {{ post.content }}
