@@ -8,7 +8,7 @@ layout: default
 
 <style>
     /* 넷플릭스 스타일 그리드 레이아웃 */
-    .netflix-grid {
+    .display-grid {
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
         gap: 20px;
@@ -18,7 +18,7 @@ layout: default
     }
 
     /* 포스터 카드 스타일 */
-    .netflix-card {
+    .display-card {
         background: #141414;
         border-radius: 6px;
         overflow: hidden;
@@ -27,13 +27,13 @@ layout: default
         position: relative;
     }
 
-    .netflix-card:hover {
+    .display-card:hover {
         transform: scale(1.05);
         box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
         z-index: 10;
     }
 
-    .netflix-poster {
+    .display-poster {
         width: 100%;
         aspect-ratio: 2 / 3;
         object-fit: cover;
@@ -111,13 +111,13 @@ layout: default
     }
 </style>
 
-<div class="netflix-grid">
+<div class="display-grid">
     {% for post in site.notes %}
-    <div class="netflix-card" onclick="openModal('modal-{{ forloop.index }}')">
+    <div class="display-card" onclick="openModal('modal-{{ forloop.index }}')">
         {% if post.cover %}
-            <img src="{{ post.cover | relative_url }}" alt="{{ post.title }}" class="netflix-poster">
+            <img src="{{ post.cover | relative_url }}" alt="{{ post.title }}" class="display-poster">
         {% else %}
-            <div class="netflix-poster random-box" id="random-box-{{ forloop.index }}">
+            <div class="display-poster random-box" id="random-box-{{ forloop.index }}">
                 <span class="random-text">{{ post.title }}</span>
             </div>
             <script>
