@@ -8,11 +8,10 @@ layout: default
     <p>{{ site.description }}</p>
   {%- endif -%}
 
-  <div class="home-notes-wall" style="position:absolute; top:0; right:0; width:40%; height:200px; pointer-events:none;">
+  <div class="home-notes-wall" style="position:absolute; top:0; right:0; width:50%; height:200px; pointer-events:none;">
     {% for note in site.notes limit: 50 %}
-      <div class="home-sticky" style="display:none; position:absolute; width:220px; height:180px; padding:15px; box-shadow:3px 3px 8px rgba(0,0,0,0.2); cursor:pointer; z-index:10; border-radius:0;">
+      <div class="home-sticky" style="display:none; position:absolute; width:210px; height:170px; padding:15px; box-shadow:3px 3px 8px rgba(0,0,0,0.15); cursor:pointer; z-index:10; border-radius:0;">
         <div class="content-body" style="font-size:1rem; color:#333;">{{ note.content | strip_html | truncate: 150 }}</div>
-        <!--div class="date" style="font-size:0.7rem; color:#666; margin-top:10px;">{{ note.date | date: "%y.%m.%d" }}</div-->
       </div>
     {% endfor %}
   </div>
@@ -25,16 +24,16 @@ layout: default
 </main>
 
 <style>
-
   @media screen and (max-width: 768px) { .home-notes-wall { display: none !important; } }
 </style>
 
 <script>
 document.addEventListener('DOMContentLoaded', () => {
   const notes = Array.from(document.querySelectorAll('.home-sticky'));
+  if (notes.length === 0) return;
+
   const colors = ['#FFF9C4', '#FFD1DC', '#C8E6C9', '#B3E5FC', '#E1BEE7'];
   
-  // 귀여운 손글씨 느낌의 폰트 리스트
   const fonts = [
     "'Gaegu', cursive",
     "'Gamja Flower', cursive",
@@ -42,24 +41,29 @@ document.addEventListener('DOMContentLoaded', () => {
     "'Gowun Dodum', sans-serif"
   ];
   
-  const selected = notes.sort(() => 0.5 - Math.random()).slice(0, 4);
+  // 🎯 1. 무작위 3개 추출
+  const selected = notes.sort(() => 0.5 - Math.random()).slice(0, 3);
 
-  selected.forEach((note) => {
+  selected.forEach((note, idx) => {
     note.style.display = 'flex';
     note.style.flexDirection = 'column';
     note.style.justifyContent = 'center';
     note.style.alignItems = 'center';
     note.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
     
-    // 폰트 랜덤 적용
     const content = note.querySelector('.content-body');
     if (content) {
       content.style.fontFamily = fonts[Math.floor(Math.random() * fonts.length)];
     }
     
-    const rotate = (Math.random() * 20 - 15);
-    const top = Math.random() * 20;
-    const right = (notes.indexOf(note) * 160) + (Math.random() * 20); // 간격 유지
+    // 🎯 2. 회전 각도를 완화하여 겹침 방지 (-6deg ~ 6deg)
+    const rotate = (Math.random() * 12 - 6);
+    
+    // 🎯 3. 상하 미세 위치 오프셋
+    const top = Math.random() * 10;
+    
+    // 🎯 4. 노트 간격 확대 (idx * 220px)로 겹침 최소화
+    const right = (idx * 220) + (Math.random() * 10);
     
     note.style.transform = `rotate(${rotate}deg)`;
     note.style.top = top + 'px';
@@ -67,4 +71,3 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 </script>
-
