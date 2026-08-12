@@ -183,10 +183,16 @@ layout: default
     </div>
 
     <!-- 팝업 창 (마크다운의 title이 제목으로 출력됨) -->
+    <!-- 팝업 창 -->
     <div id="modal-{{ forloop.index }}" class="modal-overlay" onclick="outsideClose(event, 'modal-{{ forloop.index }}')">
         <div class="modal-content">
             <button class="modal-close" onclick="closeModal('modal-{{ forloop.index }}')">&times;</button>
-            <span class="modal-date">{{ post.date | date: "%Y-%m-%d %H:%M" }}</span>
+        
+            <!-- YYYY. MM. 카테고리. 포맷으로 출력 -->
+            <span class="modal-date">
+                {{ post.date | date: "%Y. %m." }}{% if post.category %} {{ post.category }}.{% elsif post.categories %} {{ post.categories | join: ", " }}.{% endif %}
+            </span>
+        
             <h2 style="margin-top: 10px; color: #fff;">{{ post.title }}</h2>
             <div class="modal-body">
                 {{ post.content }}
