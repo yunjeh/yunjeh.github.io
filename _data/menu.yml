@@ -14,9 +14,10 @@ entries:
       limit: 5
       show_more: true
       show_more_text: 아카이브.. #See archive...
-      show_more_url: archive.html
+      show_more_url: archive
   - title: "&nbsp;"
-  - title: "&nbsp;"
+  - title: "태그"
+    url: tags
   #- title: posts by category
   #  post_list:
   #    category: example2
@@ -36,9 +37,9 @@ entries:
   #          url: about
   - title: 
   - title: "노트"
-    url: notes.html
-  - title: "장소들" #Progress
-    url: places.html #progress
+    url: notes
+  - title: "장소들"
+    url: places
   # title: Rating
   # url: rating
   #  entries:
