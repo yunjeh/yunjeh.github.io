@@ -11,27 +11,36 @@ layout: default
 <div id="map" style="width: 100%; height: 500px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);"></div>
 
 <script>
-  // 1. 지도 초기화
-  const map = L.map('map').setView([20, 0], 2);
+  // 1. 지도 이동 범위를 세계 지도 1회 크기로 제한 (-90~90 위도, -180~180 경도)
+  const southWest = L.latLng(-89.98155760646617, -180);
+  const northEast = L.latLng(89.99346179532475, 180);
+  const bounds = L.latLngBounds(southWest, northEast);
 
+  const map = L.map('map', {
+    maxBounds: bounds,             // 지도 이동 제한 영역 설정
+    maxBoundsViscosity: 1.0,       // 제한 영역 경계 밖으로 튕겨 나가지 않고 딱 고정됨 (1.0 = 완전히 튕겨나가지 않음)
+    minZoom: 2                     // 화면이 너무 작아져서 빈 영역이 남지 않도록 최소 줌 지정
+  }).setView([10, 20], 2);
+
+  // 2. 타일 레이어에 noWrap: true 설정 (동/서 반복 타일 생성 방지)
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '© OpenStreetMap'
+    attribution: '© OpenStreetMap',
+    noWrap: true,                  // 동, 서쪽 무한 반복 방지 핵심 옵션
+    minZoom: 2,
+    maxZoom: 18
   }).addTo(map);
 
-  // 2. JSON 데이터 불러오기
+  // 3. JSON 데이터 불러오기
   fetch('/assets/js/places_data.json')
     .then(response => {
       if (!response.ok) throw new Error('파일을 찾을 수 없습니다.');
       return response.json();
     })
     .then(data => {
-      // 데이터 확인용 로그
       console.log("불러온 데이터:", data);
       
       data.forEach(spot => {
         if (!spot.coords || !spot.imgUrl) return;
-
-        //const marker = L.marker(spot.coords).addTo(map);
 
         const marker = L.circleMarker(spot.coords, {
           radius: 3,
@@ -42,7 +51,6 @@ layout: default
           fillOpacity: 0.8
         }).addTo(map);
 
-        
         const tooltipContent = `
           <div style="text-align: center; font-family: sans-serif; padding: 4px;">
             <strong style="display: block; margin-bottom: 6px; font-size: 13px;">${spot.name}</strong>
