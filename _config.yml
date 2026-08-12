@@ -48,4 +48,6 @@ include:
 collections:
   quotes:
     output: true
-    permalink: /quotes/:path/
+    #permalink: /quotes/:path/
+  notes:
+    output: true
