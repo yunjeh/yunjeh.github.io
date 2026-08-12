@@ -46,8 +46,14 @@ include:
   - _images
 
 collections:
+  archive:
+    permalink: /archive/:path/
   quotes:
     output: true
-    #permalink: /quotes/:path/
+    permalink: /quotes/:path/
   notes:
     output: true
+    permalink: /notes/:path/
+  places:
+    permalink: /places/:path/
+  
