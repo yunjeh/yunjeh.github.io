@@ -1,4 +1,4 @@
 ---
 layout: places
-title: Places I've Been
+title: 장소들
 ---
