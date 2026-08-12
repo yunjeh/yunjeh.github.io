@@ -46,6 +46,6 @@ include:
   - _images
 
 collections:
-  notes:
+  quotes:
     output: true
-    permalink: /notes/:path/
+    permalink: /quotes/:path/
