@@ -10,10 +10,11 @@ layout: default
 
   <!-- 🎯 컨테이너 너비를 760px로 명시하여 공간 확보 -->
   <div class="home-notes-wall" style="position:absolute; top:0; right:0; width:760px; max-width:100%; height:200px; pointer-events:none;">
-    {% for note in site.notes limit: 50 %}
+    <!-- 🎯 site.notes 대신 site.quotes 사용 -->
+    {% for quote in site.quotes limit: 50 %}
       <!-- 🎯 노트 너비를 190px로 조정 -->
       <div class="home-sticky" style="display:none; position:absolute; width:190px; height:160px; padding:12px; box-shadow:3px 3px 8px rgba(0,0,0,0.15); cursor:pointer; z-index:10; border-radius:0; pointer-events:auto;">
-        <div class="content-body" style="font-size:0.95rem; color:#333; overflow:hidden;">{{ note.content | strip_html | truncate: 120 }}</div>
+        <div class="content-body" style="font-size:0.95rem; color:#333; overflow:hidden;">{{ quote.content | strip_html | truncate: 120 }}</div>
       </div>
     {% endfor %}
   </div>
@@ -43,6 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
     "'Gowun Dodum', sans-serif"
   ];
   
+  // 🎯 불러온 quotes 중 클라이언트에서 랜덤 3개 선택 (새로고침할 때마다 변경)
   const selected = notes.sort(() => 0.5 - Math.random()).slice(0, 3);
 
   selected.forEach((note, idx) => {
