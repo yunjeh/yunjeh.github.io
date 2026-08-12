@@ -1,4 +1,4 @@
 ---
 layout: notes
-title: The Quote Journal
+title: 노트
 ---
