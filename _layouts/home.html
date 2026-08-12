@@ -12,7 +12,7 @@ layout: default
   <div class="home-notes-wall" style="position:absolute; top:0; right:0; width:760px; max-width:100%; height:200px; pointer-events:none;">
     {% for quote in site.quotes limit: 50 %}
       <div class="home-sticky" style="display:none; position:absolute; width:190px; height:160px; padding:12px; box-shadow:3px 3px 8px rgba(0,0,0,0.15); cursor:pointer; z-index:10; border-radius:0; pointer-events:auto;">
-        <div class="content-body" style="font-size:0.95rem; color:#333; overflow:hidden;">{{ quote.content | strip_html | truncate: 120 }}</div>
+        <div class="content-body" style="color:#333; overflow:hidden; text-align:center; word-break:keep-all;">{{ quote.content | strip_html | truncate: 120 }}</div>
       </div>
     {% endfor %}
   </div>
@@ -50,13 +50,33 @@ document.addEventListener('DOMContentLoaded', () => {
     note.style.justifyContent = 'center';
     note.style.alignItems = 'center';
     note.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-    
-    // 🎯 겹칠 때 앞뒤 순서가 자연스럽도록 z-index 부여
     note.style.zIndex = 10 + idx;
     
     const content = note.querySelector('.content-body');
     if (content) {
       content.style.fontFamily = fonts[Math.floor(Math.random() * fonts.length)];
+
+      // 🎯 글자 수에 따른 유동적 폰트 크기 계산
+      const textLength = content.textContent.trim().length;
+      let fontSize = '0.95rem';
+      let lineHeight = '1.3';
+
+      if (textLength <= 25) {
+        fontSize = '1.3rem';      // 매우 짧은 글 (시원하게 큼)
+        lineHeight = '1.4';
+      } else if (textLength <= 55) {
+        fontSize = '1.12rem';     // 중간 길이
+        lineHeight = '1.35';
+      } else if (textLength <= 85) {
+        fontSize = '1.0rem';      // 약간 긴 글
+        lineHeight = '1.3';
+      } else {
+        fontSize = '0.9rem';      // 긴 글 (틀을 넘지 않게 아담하게)
+        lineHeight = '1.25';
+      }
+
+      content.style.fontSize = fontSize;
+      content.style.lineHeight = lineHeight;
     }
     
     // 회전 각도 (-5deg ~ 5deg)
@@ -65,9 +85,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // 위아래 높이차
     const top = Math.random() * 15;
     
-    // 🎯 배치 간격을 150px로 줄여(노트 폭 190px) 40px 정도 살짝 겹치게 변경
-    // 🎯 기준 위치를 -20px로 설정하여 전체를 오른쪽으로 이동
-    const right = (idx * 150) - 20 + (Math.random() * 10);
+    // 🎯 간격을 172px로 변경 (노트 너비 190px 기준 약 18px만 살짝 겹치도록 수정)
+    const right = (idx * 172) - 20 + (Math.random() * 8);
     
     note.style.transform = `rotate(${rotate}deg)`;
     note.style.top = top + 'px';
