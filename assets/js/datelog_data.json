@@ -188,6 +188,23 @@
 {"name":"2026.06.","coords":[37.524199,126.919511],"imgUrl": "/_images/datelog/20260628_082734.jpg","address":"서울특별시 영등포구 여의동","comment": ""},
 {"name":"2026.06.","coords":[37.524609,126.920019],"imgUrl": "/_images/datelog/20260628_101232.jpg","address":"서울특별시 영등포구 여의동","comment": ""},
 {"name":"2026.06.","coords":[37.57751,126.971902],"imgUrl": "/_images/datelog/20260628_122115.jpg","address":"서울특별시 종로구 사직동","comment": ""},
-{"name":"2026.06.","coords":[37.5785,126.97098],"imgUrl": "/_images/datelog/20260628_133234.jpg","address":"서울특별시 종로구 사직동","comment": ""}
+{"name":"2026.06.","coords":[37.5785,126.97098],"imgUrl": "/_images/datelog/20260628_133234.jpg","address":"서울특별시 종로구 사직동","comment": ""},
+  {"name":"2026.07.","coords":[34.751972,127.982803],"imgUrl":"/_images/datelog/20260717_13505509.jpg","address":"경상남도 남해군 상주면","comment":""},
+{"name":"2026.07.","coords":[34.708481,128.022003],"imgUrl":"/_images/datelog/20260717_15535510.jpg","address":"경상남도 남해군 미조리","comment":""},
+{"name":"2026.07.","coords":[34.799089,128.039825],"imgUrl":"/_images/datelog/20260717_16540611.jpg","address":"경상남도 남해군 삼동면","comment":""},
+{"name":"2026.08.","coords":[35.774844,127.466697],"imgUrl":"/_images/datelog/20260806_14270112.jpg","address":"전북특별자치도 진안군 물곡리","comment":""},
+{"name":"2026.08.","coords":[36.322844,126.507981],"imgUrl":"/_images/datelog/20260806_17514113.jpg","address":"충청남도 보령시","comment":""},
+{"name":"2026.08.","coords":[36.626003,126.378364],"imgUrl":"/_images/datelog/20260806_19222514.jpg","address":"충청남도 서산시 창리","comment":""},
+{"name":"2026.08.","coords":[36.604703,126.413794],"imgUrl":"/_images/datelog/20260806_19355615.jpg","address":"충청남도 서산시 간월도리","comment":""},
+{"name":"2026.08.","coords":[36.312942,126.512811],"imgUrl":"/_images/datelog/20260806_21063916.jpg","address":"충청남도 보령시","comment":""},
+{"name":"2026.08.","coords":[36.090964,126.631936],"imgUrl":"/_images/datelog/20260807_15014817.jpg","address":"충청남도 서천군 당정리","comment":""},
+{"name":"2026.08.","coords":[36.313522,126.515992],"imgUrl":"/_images/datelog/20260807_19364501.jpg","address":"충청남도 보령시","comment":""},
+{"name":"2026.08.","coords":[36.451575,127.120575],"imgUrl":"/_images/datelog/20260808_11565702.jpg","address":"충청남도 공주시","comment":""},
+{"name":"2026.08.","coords":[36.463864,127.124778],"imgUrl":"/_images/datelog/20260808_13480603.jpg","address":"충청남도 공주시 신웅리","comment":""},
+{"name":"2026.08.","coords":[36.464692,127.126656],"imgUrl":"/_images/datelog/20260808_14054904.jpg","address":"충청남도 공주시 신웅리","comment":""},
+{"name":"2026.08.","coords":[36.491178,127.135147],"imgUrl":"/_images/datelog/20260808_16330905.jpg","address":"충청남도 공주시 수촌리","comment":""},
+{"name":"2026.08.","coords":[35.130786,128.965989],"imgUrl":"/_images/datelog/20260815_08412106.jpg","address":"부산광역시 사상구","comment":""},
+{"name":"2026.08.","coords":[35.250917,128.892853],"imgUrl":"/_images/datelog/20260823_20155107.jpg","address":"경상남도 김해시 주촌면","comment":""},
+{"name":"2026.09.","coords":[35.190569,128.083633],"imgUrl":"/_images/datelog/20260905_20033908.jpg","address":"경상남도 진주시","comment":""}
 
 ]
