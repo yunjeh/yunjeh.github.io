@@ -28,7 +28,7 @@
 { "name": "2025-02-03", "coords": [60.171862, 24.951962], "imgUrl": "/_images/places/20250203_085827.jpeg", "address": "핀란드 헬싱키 원로원 광장(Senaatintori)" },
 { "name": "2026-01-30", "coords": [37.923092, 29.125250], "imgUrl": "/_images/places/20260130_164140.jpeg", "address": "튀르키예 데니즐리 파묵칼레(Pamukkale)" },
 { "name": "2026-01-31", "coords": [37.947270, 27.371945], "imgUrl": "/_images/places/20260131_140735.jpeg", "address": "튀르키예 아이든 쿠샤다스(Kuşadası) 인근 에페소스(Ephesus)" },
-{ "name": "2026-02-01", "coords": [41.019206, 28.970645], "imgUrl": "/_images/places/20260201_091910.jpeg", "address": "튀르키예 이스탄불 술탄아흐메트(Sultanahmet)" }
+{ "name": "2026-02-01", "coords": [41.019206, 28.970645], "imgUrl": "/_images/places/20260201_091910.jpeg", "address": "튀르키예 이스탄불 술탄아흐메트(Sultanahmet)" },
 
 { "name": "2004-06-30", "coords": [51.501364, -0.141890], "imgUrl": "/_images/places/20040630_19265301.jpg", "address": "영국 잉글랜드 런던 버킹엄 궁전(Buckingham Palace) 앞 Victoria Memorial" },
 { "name": "2004-07-02", "coords": [51.505456, -0.075356], "imgUrl": "/_images/places/20040702_01303402.jpg", "address": "영국 잉글랜드 런던 Tower Bridge 북서측 보행로 인근" },
