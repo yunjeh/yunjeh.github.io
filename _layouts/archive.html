@@ -2,8 +2,6 @@
 
 
 <html lang="{{ page.lang | default: "en" }}">
-  {% include back_link.html %}
-  {%- include head.html -%}
   <body a="{{ site.theme_config.appearance | default: "auto" }}" style="margin: 0;">
     <style>
         .site-wrapper {
@@ -159,6 +157,10 @@
     </style>
 
     <div class="site-wrapper">
+      <!-- 🎯 테마 기본 back_link 인클루드 적용 -->
+            <div class="back-link-wrapper">
+                {% include back_link.html %}
+            </div>
         <!-- 좌측 사이드바 (캘린더 + 태그 클라우드) -->
         <aside class="calendar-sidebar">
             <div class="cal-header" id="cal-month-title">로딩 중...</div>
