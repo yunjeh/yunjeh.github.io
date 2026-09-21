@@ -1,102 +1,276 @@
----
-layout: default
----
+<!DOCTYPE html>
+<html lang="{{ page.lang | default: "en" }}">
+  {%- include head.html -%}
+  <body a="{{ site.theme_config.appearance | default: "auto" }}">
+    <style>
+        .site-wrapper {
+            display: flex;
+            gap: 24px;
+            width: 100%;
+            max-width: 880px;
+            margin: 30px auto;
+            align-items: flex-start;
+            padding: 0 16px;
+            box-sizing: border-box;
+        }
+        /* 사이드바 캘린더 스타일 */
+        .calendar-sidebar {
+            width: 200px;
+            background: #ffffff;
+            padding: 12px;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            flex-shrink: 0;
+            box-sizing: border-box;
+        }
+        .cal-header {
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+            color: #1e293b;
+            padding: 0 2px;
+        }
+        .cal-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 1px;
+            text-align: center;
+            font-size: 0.75rem;
+        }
+        .cal-day-name {
+            color: #94a3b8;
+            font-weight: 500;
+            padding-bottom: 4px;
+        }
+        .cal-cell {
+            padding: 2px 0;
+            border-radius: 4px;
+            color: #475569;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            aspect-ratio: 1;
+            font-size: 0.8rem;
+            background: transparent;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .cal-cell:hover {
+            background: #f1f5f9;
+            color: #1e293b;
+        }
+        .cal-cell.today {
+            background: #e0f2fe;
+            color: #1e293b;
+            font-weight: 700;
+        }
+        .cal-cell.selected {
+            border: 2px solid #0284c7 !important;
+            color: #1e293b;
+            font-weight: 700;
+        }
 
-{%-include back_link.html-%}
+        /* 캘린더 아래 태그 클라우드 */
+        .sidebar-tags {
+            margin-top: 20px;
+            padding-top: 14px;
+            border-top: 1px solid #f1f5f9;
+        }
+        .sidebar-tags-title {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #64748b;
+            margin-bottom: 8px;
+        }
+        .tag-cloud-box {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+        }
+        .sidebar-tag-badge {
+            font-size: 0.75rem;
+            background: #f1f5f9;
+            color: #475569;
+            padding: 2px 6px;
+            border-radius: 4px;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .sidebar-tag-badge:hover {
+            background: #e2e8f0;
+            color: #1e293b;
+        }
 
-<h1>{{ page.title }}</h1>
+        /* 우측 본문 영역 */
+        .diary-container {
+            flex-grow: 1;
+            max-width: 600px;
+            min-width: 0;
+            width: 100%;
+        }
+        .diary-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #ffffff;
+            padding: 16px 20px;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+        }
+        .current-date {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin: 0;
+            color: #1e293b;
+        }
+        .nav-btn {
+            background: none;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            padding: 6px 12px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            color: #475569;
+            text-decoration: none;
+            transition: background 0.2s;
+        }
+        .nav-btn:hover {
+            background: #f1f5f9;
+        }
 
-{% assign posts = site.categories[page.which_category] | default: site.posts %}
-{% assign posts_by_year = posts | group_by_exp:"post", "post.date | date: '%Y'" %}
+        @media (max-width: 768px) {
+            .site-wrapper {
+                flex-direction: column-reverse;
+                align-items: stretch;
+            }
+            .diary-container {
+                max-width: 100%;
+                width: 100%;
+            }
+            .calendar-sidebar {
+                width: 100%;
+                margin-top: 30px;
+            }
+        }
+    </style>
 
-<!-- 스크롤바 밀림 방지 및 아카이브 전용 스타일 강제 일치 -->
-<style>
-  html {
-    /* 우측 스크롤바 영역을 항상 고정하여 화면 흔들림 원천 차단 */
-    overflow-y: scroll !important; 
-  }
-
-  /* main.scss의 .post-list와 충돌하지 않도록 아카이브 전용 클래스 정의 */
-  .archive-post-list { 
-    display: none; 
-    margin-left: 15px; /* main.scss의 .post-wrapper 마진 적용 */
-    margin-top: 5px;
-    list-style: none;
-    padding: 0;
-  }
-</style>
-
-<div class="archive">
-
-  {% for year in posts_by_year %}
-    <div class="year-block">
-
-      <button class="year-btn" onclick="toggleYear(this)">
-        {{ year.name }}
-      </button>
-
-      <div class="months">
-
-        {% assign posts_by_month = year.items | group_by_exp:"post", "post.date | date: '%m'" %}
-
-        {% for month in posts_by_month %}
-        <div class="month-block">
-
-          <button class="month-btn" onclick="toggleMonth(this)">
-            {{ month.name }}월
-          </button>
-
-          <!-- main.scss의 회색 박스 고유 스타일(.post-list > div)을 적용받기 위해 구조 유지 -->
-          <div class="archive-post-list post-list">
-
-            {% for post in month.items %}
-            <div>
-              {{ post.content | strip_html | strip_newlines }}
-
-              <time class="post-date">
-                {{ post.date | date: "%Y.%m.%d. %H:%M:%S" }}
-              </time>
+    <div class="site-wrapper">
+        <!-- 좌측 사이드바 (캘린더 + 태그 클라우드) -->
+        <aside class="calendar-sidebar">
+            <div class="cal-header">
+                <span id="cal-month-title">로딩 중...</span>
             </div>
-            {% endfor %}
+            <div class="cal-grid">
+                <div class="cal-day-name">일</div>
+                <div class="cal-day-name">월</div>
+                <div class="cal-day-name">화</div>
+                <div class="cal-day-name">수</div>
+                <div class="cal-day-name">목</div>
+                <div class="cal-day-name">금</div>
+                <div class="cal-day-name">토</div>
+            </div>
+            <div id="cal-days-grid" class="cal-grid" style="margin-top: 2px;"></div>
 
-          </div>
+            <div class="sidebar-tags">
+                <div class="sidebar-tags-title">Tags</div>
+                <div class="tag-cloud-box">
+                    {% assign all_tags = site.posts | map: "tags" | join: "," | split: "," | uniq | sort %}
+                    {% for tag in all_tags %}
+                        {% assign trimmed_tag = tag | strip %}
+                        {% if trimmed_tag != "" %}
+                            <a href="/tags?tag={{ trimmed_tag }}" class="sidebar-tag-badge">#{{ trimmed_tag }}</a>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </aside>
 
+        <!-- 우측 본문 영역 -->
+        <div class="diary-container">
+            <header class="diary-header">
+                <a href="#" id="prev-btn" class="nav-btn">◀ 전날</a>
+                <h1 class="current-date" id="header-date-text">로딩 중...</h1>
+                <a href="#" id="next-btn" class="nav-btn">다음날 ▶</a>
+            </header>
+
+            <main class="diary-main">
+                {{ content }}
+            </main>
         </div>
-        {% endfor %}
-
-      </div>
     </div>
-  {% endfor %}
 
-</div>
+    {%- if site.goat_counter and jekyll.environment == "production" -%}
+      {%-include goat_counter.html-%}
+    {%-endif-%}
 
-<script>
-function toggleYear(btn) {
-  const block = btn.nextElementSibling;
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            let mmddStr = urlParams.get('date');
+            
+            const currentYear = new Date().getFullYear();
+            const todayObj = new Date();
+            const todayMMDD = String(todayObj.getMonth() + 1).padStart(2, '0') + '-' + String(todayObj.getDate()).padStart(2, '0');
 
-  // 다른 year 블록 전부 닫기
-  document.querySelectorAll('.months').forEach(el => {
-    if (el !== block) el.style.display = "none";
-  });
+            if (!mmddStr || !/^\d{2}-\d{2}$/.test(mmddStr)) {
+                mmddStr = todayMMDD;
+            }
 
-  // 현재 누른 year 토글
-  block.style.display = (block.style.display === "block") ? "none" : "block";
-}
+            const currentDate = new Date(`${currentYear}-${mmddStr}T00:00:00`);
+            const targetMonth = currentDate.getMonth(); 
 
-function toggleMonth(btn) {
-  const wrapper = btn.nextElementSibling;
+            document.getElementById('header-date-text').innerText = currentDate.toLocaleDateString('ko-KR', { month: 'long', day: 'numeric' });
 
-  // 다른 월의 글 목록을 정확하게 추적해서 닫음 (충돌 방지)
-  const parentYear = btn.closest('.year-block');
-  parentYear.querySelectorAll('.archive-post-list').forEach(el => {
-    if (el !== wrapper) el.style.display = "none";
-  });
+            let prevDate = new Date(currentDate);
+            prevDate.setDate(currentDate.getDate() - 1);
+            let nextDate = new Date(currentDate);
+            nextDate.setDate(currentDate.getDate() + 1);
 
-  // 현재 누른 month 토글
-  if (wrapper.style.display === "none" || wrapper.style.display === "") {
-    wrapper.style.display = "block";
-  } else {
-    wrapper.style.display = "none";
-  }
-}
-</script>
+            function formatMMDD(d) {
+                return String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+            }
+            document.getElementById('prev-btn').href = `/archive?date=${formatMMDD(prevDate)}`;
+            document.getElementById('next-btn').href = `/archive?date=${formatMMDD(nextDate)}`;
+
+            const monthNames = ["1월", "2월", "3월", "4월", "5월", "6월", "7월", "8월", "9월", "10월", "11월", "12월"];
+            document.getElementById('cal-month-title').innerText = `${currentYear}년 ${monthNames[targetMonth]}`;
+
+            const firstDayIndex = new Date(currentYear, targetMonth, 1).getDay();
+            const totalDays = new Date(currentYear, targetMonth + 1, 0).getDate();
+
+            const daysGrid = document.getElementById('cal-days-grid');
+            daysGrid.innerHTML = '';
+
+            for (let i = 0; i < firstDayIndex; i++) {
+                const emptyCell = document.createElement('div');
+                emptyCell.className = 'cal-cell';
+                daysGrid.appendChild(emptyCell);
+            }
+
+            for (let day = 1; day <= totalDays; day++) {
+                const dayStr = String(day).padStart(2, '0');
+                const cellMMDD = `${String(targetMonth + 1).padStart(2, '0')}-${dayStr}`;
+
+                const cell = document.createElement('div');
+                cell.className = 'cal-cell';
+                cell.innerText = day;
+
+                cell.onclick = function() {
+                    window.location.href = `/archive?date=${cellMMDD}`;
+                };
+
+                if (cellMMDD === todayMMDD && currentYear === todayObj.getFullYear()) {
+                    cell.classList.add('today');
+                }
+                if (cellMMDD === mmddStr) {
+                    cell.classList.add('selected');
+                }
+
+                daysGrid.appendChild(cell);
+            }
+        });
+    </script>
+</body>
+</html>
