@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="{{ page.lang | default: "en" }}">
   {%- include head.html -%}
-  <body a="{{ site.theme_config.appearance | default: "auto" }}">
+  <body a="{{ site.theme_config.appearance | default: "auto" }}" style="margin: 0;">
     <style>
         .site-wrapper {
             display: flex;
@@ -15,9 +15,9 @@
         }
         /* 사이드바 캘린더 스타일 */
         .calendar-sidebar {
-            width: 200px;
+            width: 210px;
             background: #ffffff;
-            padding: 12px;
+            padding: 14px;
             border-radius: 12px;
             box-shadow: 0 1px 3px rgba(0,0,0,0.05);
             flex-shrink: 0;
@@ -26,35 +26,35 @@
         .cal-header {
             font-weight: 600;
             font-size: 0.9rem;
-            margin-bottom: 8px;
+            margin-bottom: 10px;
             color: #1e293b;
-            padding: 0 2px;
+            text-align: center;
         }
+        /* 요일과 날짜 그리드를 완전히 일치시키는 설정 */
         .cal-grid {
             display: grid;
             grid-template-columns: repeat(7, 1fr);
-            gap: 1px;
+            width: 100%;
             text-align: center;
-            font-size: 0.75rem;
         }
         .cal-day-name {
             color: #94a3b8;
-            font-weight: 500;
-            padding-bottom: 4px;
+            font-weight: 600;
+            font-size: 0.75rem;
+            padding-bottom: 6px;
         }
         .cal-cell {
-            padding: 2px 0;
-            border-radius: 4px;
-            color: #475569;
-            font-weight: 500;
+            aspect-ratio: 1;
             display: flex;
             align-items: center;
             justify-content: center;
-            aspect-ratio: 1;
             font-size: 0.8rem;
-            background: transparent;
+            color: #475569;
+            font-weight: 500;
+            border-radius: 4px;
             cursor: pointer;
             transition: background 0.2s;
+            margin: 1px; /* 미세한 간격 확보 */
         }
         .cal-cell:hover {
             background: #f1f5f9;
@@ -73,8 +73,8 @@
 
         /* 캘린더 아래 태그 클라우드 */
         .sidebar-tags {
-            margin-top: 20px;
-            padding-top: 14px;
+            margin-top: 16px;
+            padding-top: 12px;
             border-top: 1px solid #f1f5f9;
         }
         .sidebar-tags-title {
@@ -159,9 +159,7 @@
     <div class="site-wrapper">
         <!-- 좌측 사이드바 (캘린더 + 태그 클라우드) -->
         <aside class="calendar-sidebar">
-            <div class="cal-header">
-                <span id="cal-month-title">로딩 중...</span>
-            </div>
+            <div class="cal-header" id="cal-month-title">로딩 중...</div>
             <div class="cal-grid">
                 <div class="cal-day-name">일</div>
                 <div class="cal-day-name">월</div>
@@ -171,7 +169,7 @@
                 <div class="cal-day-name">금</div>
                 <div class="cal-day-name">토</div>
             </div>
-            <div id="cal-days-grid" class="cal-grid" style="margin-top: 2px;"></div>
+            <div id="cal-days-grid" class="cal-grid"></div>
 
             <div class="sidebar-tags">
                 <div class="sidebar-tags-title">Tags</div>
