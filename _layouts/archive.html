@@ -226,7 +226,7 @@ layout: default
                       
                       <!-- 하단 태그 뱃지 (구분선 제거됨) -->
                       {% if post.tags and post.tags.size > 0 %}
-                        <div style="margin-top: 16px; font-size: 0.8rem;">
+                        <div style="margin-top: 16px; font-size: 0.75rem;">
                           🏷️ 
                           {% for tag in post.tags %}
                             <a href="/tags?tag={{ tag | strip }}" style="background: #f1f5f9; color: #475569; padding: 3px 8px; border-radius: 4px; margin-right: 6px; text-decoration: none; display: inline-block;">#{{ tag | strip }}</a>
