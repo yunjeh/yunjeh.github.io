@@ -9,6 +9,16 @@
 @import "sticky_notes.css";
 
 /* ===================================================
+   GLOBAL VARIABLES (모서리 둥글기 및 간격 시스템 통일)
+=================================================== */
+:root {
+  --radius-sm: 4px;
+  --radius-md: 6px;  /* 덜 둥글고 깔끔한 느낌을 위한 기준 값 */
+  --radius-lg: 8px;
+  --content-spacing: 1.25rem; /* 요소 간 하단 간격 통일 기준 */
+}
+
+/* ===================================================
    RESET (테마 + 브라우저 완전 초기화)
 =================================================== */
 *, *::before, *::after {
@@ -115,9 +125,9 @@ p {
 .post-list > div {
   position: relative;
   background: #e5e5e5;
-  padding: 8px 10px;
-  margin-bottom: 10px;
-  border-radius: 12px;
+  padding: 10px 12px;
+  margin-bottom: var(--content-spacing);
+  border-radius: var(--radius-md); /* 덜 둥글게 통일 */
   border: 1px solid #ddd;
 }
 
@@ -147,7 +157,7 @@ p {
 
 
 /* ===================================================
-   ARCHIVE
+   ARCHIVE & COMMON CONTAINER COMPONENTS
 =================================================== */
 .post-wrapper {
   margin-left: 15px;
@@ -175,6 +185,15 @@ p {
   padding: 6px 10px;
 }
 
+/* 캘린더 사이드바 및 다이어리 컨테이너 내부 요소들의 모서리/간격 통일 */
+.calendar-sidebar,
+.diary-header,
+.diary-entry,
+#no-posts-msg {
+  border-radius: var(--radius-md) !important; /* 덜 둥글게 통일 (6px) */
+  margin-bottom: var(--content-spacing) !important; /* 요소 간 간격 통일 */
+}
+
 
 /* ===================================================
    LINKS
@@ -200,7 +219,7 @@ code {
   background: #000;
   color: #fff;
   padding: 0.1rem 0.3rem;
-  border-radius: 3px;
+  border-radius: var(--radius-sm);
 }
 
 pre {
@@ -218,6 +237,7 @@ blockquote {
   border-left: 4px solid #999;
   background: rgba(255, 255, 255, 0.5);
   font-style: italic;
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
 }
 
 
@@ -242,6 +262,7 @@ img {
   max-width: 100%;
   display: block;
   margin: 0 auto;
+  border-radius: var(--radius-sm);
 }
 
 
@@ -251,8 +272,8 @@ img {
 .tag-section:target .post-list > div {
   background: #fff6a9 !important;
   position: relative;
-  padding: 8px 10px;
-  margin-bottom: 10px;
-  border-radius: 12px;
+  padding: 10px 12px;
+  margin-bottom: var(--content-spacing);
+  border-radius: var(--radius-md);
   border: 1px solid #ddd;
 }
