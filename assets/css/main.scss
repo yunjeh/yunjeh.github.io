@@ -222,7 +222,7 @@ layout: default
 
 
 
-    /* 🎯 15단계 초록색 히트맵 밀도 (글자색은 모두 어두운 색 유지) */
+    /* 🎯 15단계 은은한 초록색 히트맵 밀도 (글자색은 모두 어두운 색 유지로 가독성 보장) */
 
     .cal-cell.level-1  { background-color: #f0f7f2; color: #1e293b; }
 
@@ -331,10 +331,7 @@ layout: default
 
 
     @media (max-width: 768px) {
-        body {
-            padding-left: 10px;
-            padding-right: 10px;
-              }
+
         .site-wrapper {
 
             flex-direction: column-reverse;
@@ -355,7 +352,7 @@ layout: default
 
             width: 100%;
 
-            margin-top: 12px;
+            margin-top: 20px;
 
         }
 
