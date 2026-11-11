@@ -8,7 +8,7 @@ title: Archive
 <h1>{{ page.title }}</h1>
 
 <style>
-    /* 🎯 상단 연도 태그 클라우드 (태그 페이지와 규격 통일: 6px 둥글기, 0.85rem 폰트) */
+    /* 🎯 상단 연도 태그 클라우드 (6px 둥글기 및 0.85rem 규격 통일) */
     .year-cloud {
         display: flex;
         flex-wrap: wrap;
@@ -67,6 +67,19 @@ title: Archive
         border-radius: var(--radius-subtle, 6px);
         padding: 14px 18px;
         transition: background 0.2s ease;
+        /* 무한 스크롤 시 부드럽게 나타나는 애니메이션 효과 */
+        animation: fadeInUp 0.3s ease forwards;
+    }
+
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
     }
 
     .timeline-item:hover {
@@ -108,16 +121,17 @@ title: Archive
         margin: 0;
     }
 
-    /* 무한 스크롤 로딩 표시 */
+    /* 무한 스크롤 로딩 표시 영역 */
     .loading-trigger {
         text-align: center;
-        padding: 20px;
+        padding: 30px 20px;
         font-size: 0.85rem;
-        color: #777;
+        color: #888;
+        font-family: 'Courier New', Courier, monospace;
     }
 </style>
 
-<!-- 1. 포스트가 존재하는 연도들을 Jekyll로 자동 추출하여 태그 클라우드 형태로 나열 -->
+<!-- 1. 포스트가 존재하는 연도들을 Jekyll로 자동 추출 -->
 {% assign posts_by_year = site.posts | sort: 'date' | reverse | group_by_exp: "post", "post.date | date: '%Y'" %}
 
 <div class="year-cloud">
@@ -133,8 +147,8 @@ title: Archive
 <div id="section-{{ year_group.name }}" class="year-section {% if forloop.first %}active{% endif %}">
     <div class="timeline-container" id="timeline-{{ year_group.name }}">
         {% for post in year_group.items %}
-        <!-- 초기에는 각 연도별로 상위 10개만 보이고 나머지는 숨김 처리 -->
-        <div class="timeline-item post-node-{{ year_group.name }}" style="{% if forloop.index > 10 %}display: none;{% endif %}">
+        <!-- 🎯 처음에는 딱 4개만 보여주고, 나머지는 숨김 처리하여 스크롤 유도 -->
+        <div class="timeline-item post-node-{{ year_group.name }}" style="{% if forloop.index > 4 %}display: none;{% endif %}">
             <div class="timeline-meta">
                 <span>{{ post.date | date: "%Y.%m.%d" }}</span>
                 {% if post.category %}
@@ -155,9 +169,9 @@ title: Archive
         {% endfor %}
     </div>
     
-    <!-- 해당 연도의 글이 10개가 넘을 때 작동하는 무한 스크롤 감지 트리거 -->
-    {% if year_group.items | size > 10 %}
-    <div class="loading-trigger" id.="loader-{{ year_group.name }}">스크롤을 내려 과거 기록 더 보기</div>
+    <!-- 해당 연도의 글이 4개가 넘을 때 작동하는 무한 스크롤 감지 트리거 -->
+    {% if year_group.items | size > 4 %}
+    <div class="loading-trigger" id="loader-{{ year_group.name }}">↓ 스크롤하여 더 보기</div>
     {% endif %}
 </div>
 {% endfor %}
@@ -167,27 +181,22 @@ title: Archive
     function switchYear(year, event) {
         event.preventDefault();
         
-        // 버튼 활성 상태 변경
         document.querySelectorAll('.year-btn').forEach(btn => btn.classList.remove('active'));
         event.currentTarget.classList.add('active');
 
-        // 연도 섹션 전환
         document.querySelectorAll('.year-section').forEach(section => section.classList.remove('active'));
         document.getElementById('section-' + year).classList.add('active');
 
-        // URL 해시 업데이트 (선택 사항)
         history.pushState(null, null, '#' + year);
     }
 
     // 페이지 로드 시 무한 스크롤 및 해시 초기화 처리
     document.addEventListener("DOMContentLoaded", function() {
-        // 만약 URL에 특정 연도 해시(#2025 등)가 있다면 해당 연도로 바로 켜주기
         const hash = window.location.hash.substring(1);
         if (hash && document.getElementById('section-' + hash)) {
             document.querySelectorAll('.year-btn').forEach(btn => btn.classList.remove('active'));
             document.querySelectorAll('.year-section').forEach(sec => sec.classList.remove('active'));
             
-            // 일치하는 버튼과 섹션 활성화
             const targetBtn = Array.from(document.querySelectorAll('.year-btn')).find(b => b.getAttribute('href') === '#' + hash);
             if (targetBtn) targetBtn.classList.add('active');
             document.getElementById('section-' + hash).classList.add('active');
@@ -200,27 +209,30 @@ title: Archive
             const posts = section.querySelectorAll('.post-node-' + yearId);
             const loader = section.querySelector('.loading-trigger');
             
-            if (!loader) return; // 10개 이하라서 로더가 없으면 패스
+            if (!loader) return;
 
-            let currentIndex = 10;
-            const step = 10;
+            let currentIndex = 4; // 처음 보여주는 개수와 일치시킴
+            const step = 5;       // 스크롤 내릴 때마다 추가로 띄워줄 개수
 
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
-                        const nextLimit = Math.min(currentIndex + step, posts.length);
-                        for (let i = currentIndex; i < nextLimit; i++) {
-                            posts[i].style.display = 'block';
-                        }
-                        currentIndex = nextLimit;
+                        // 살짝 딜레이를 주어 로딩하는 듯한 자연스러운 피드백 제공
+                        setTimeout(() => {
+                            const nextLimit = Math.min(currentIndex + step, posts.length);
+                            for (let i = currentIndex; i < nextLimit; i++) {
+                                posts[i].style.display = 'block';
+                            }
+                            currentIndex = nextLimit;
 
-                        if (currentIndex >= posts.length) {
-                            loader.innerText = "이 해의 모든 기록을 불러왔습니다.";
-                            observer.unobserve(entry.target);
-                        }
+                            if (currentIndex >= posts.length) {
+                                loader.innerText = "— 이 해의 모든 기록을 불러왔습니다 —";
+                                observer.unobserve(entry.target);
+                            }
+                        }, 200);
                     }
                 });
-            }, { rootMargin: '200px' });
+            }, { rootMargin: '100px' });
 
             observer.observe(loader);
         });
