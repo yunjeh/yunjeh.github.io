@@ -30,7 +30,7 @@ layout: default
         }
     }
 
-    /* 포스터 카드 스타일 (26.11.11 버전: 6px 둥글기) */
+    /* 포스터 카드 스타일 (가는 검은선 테두리 적용) */
     .display-card {
         background: #141414;
         border-radius: var(--radius-subtle, 6px);
@@ -39,18 +39,21 @@ layout: default
         transition: transform 0.3s ease, box-shadow 0.3s ease;
         position: relative;
         aspect-ratio: 2 / 3;
-        border: 1px solid #ddd;
+        border: 1px solid #000; /* 가는 검은선 */
     }
 
     .display-card:hover {
-        transform: scale(1.05);
-        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+        transform: scale(1.08);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.25);
         z-index: 10;
     }
 
-    /* 선택된 카드 강조 테두리 */
+    /* 🎯 클릭해서 열린(활성) 상태일 때 호버된 크기(1.08) 유지 */
     .display-card.active {
-        outline: 3px solid #222;
+        transform: scale(1.08);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.25);
+        z-index: 10;
+        border-color: #555;
     }
 
     .display-poster {
@@ -79,53 +82,55 @@ layout: default
         line-height: 1.1;
     }
 
-    /* 🎯 확장 패널 (아코디언 스타일) */
+    /* 🎯 확장 패널 (검은 바탕, 흰 글자, 대폭 줄인 여백/패딩) */
     .expand-panel {
         display: none; /* 기본 숨김 */
         grid-column: 1 / -1; /* 그리드 전체 너비를 가득 채움 */
-        background: #fdfdfd; /* 밝은 메모장 느낌의 배경 */
-        border: 1px solid #ddd;
+        background: #141414; /* 검은 바탕 */
+        color: #fff; /* 흰 글자 */
+        border: 1px solid #333;
         border-radius: var(--radius-subtle, 6px);
-        padding: 30px;
-        margin: 10px 0;
+        padding: 16px 20px; /* 패딩을 대폭 줄여 여백 축소 */
+        margin: 8px 0;
         position: relative;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        box-shadow: 0 6px 16px rgba(0,0,0,0.4);
         box-sizing: border-box;
-        animation: fadeIn 0.3s ease;
+        animation: fadeIn 0.25s ease;
     }
 
     @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(-5px); }
+        from { opacity: 0; transform: translateY(-4px); }
         to { opacity: 1; transform: translateY(0); }
     }
 
     .expand-close {
         position: absolute;
-        top: 15px;
-        right: 20px;
+        top: 12px;
+        right: 15px;
         background: none;
         border: none;
-        color: #888;
-        font-size: 1.8rem;
+        color: #aaa;
+        font-size: 1.5rem;
         cursor: pointer;
     }
 
     .expand-close:hover {
-        color: #000;
+        color: #fff;
     }
 
     .expand-date {
         display: block;
         font-family: 'Courier New', Courier, monospace;
-        font-size: 0.85rem;
+        font-size: 0.8rem;
         color: #888;
-        margin-bottom: 10px;
+        margin-bottom: 6px;
     }
 
     .expand-body {
-        font-size: 0.95rem;
-        line-height: 1.7;
-        color: #333;
+        font-size: 0.9rem;
+        line-height: 1.6;
+        color: #ddd;
+        margin-top: 8px;
     }
 </style>
 
@@ -167,14 +172,14 @@ layout: default
         {% endif %}
     </div>
 
-    <!-- 확장 패널 (각 카드를 누르면 그 아래에 삽입되도록 스크립트에서 제어) -->
+    <!-- 확장 패널 -->
     <div id="panel-{{ index }}" class="expand-panel">
         <button class="expand-close" onclick="closeExpand({{ index }})">&times;</button>
         <span class="expand-date">
             {{ post.date | date: "%Y. %m." }}{% if post.category %} {{ post.category }}.{% elsif post.categories %} {{ post.categories | join: ", " }}.{% endif %}
         </span>
-        <h2 style="margin-top: 10px; color: #222; font-size: 1.4rem;">{{ post.title }}</h2>
-        <div class="expand-body" style="margin-top: 15px;">
+        <h3 style="margin: 0; color: #fff; font-size: 1.2rem;">{{ post.title }}</h3>
+        <div class="expand-body">
             {{ post.content }}
         </div>
     </div>
@@ -187,9 +192,7 @@ layout: default
     function toggleExpand(index) {
         const panel = document.getElementById('panel-' + index);
         const card = document.getElementById('card-' + index);
-        const grid = document.querySelector('.display-grid');
 
-        // 만약 이미 열려 있는 걸 또 누르면 닫기
         if (activeIndex === index) {
             panel.style.display = 'none';
             card.classList.remove('active');
@@ -197,21 +200,17 @@ layout: default
             return;
         }
 
-        // 다른 열려 있는 패널이 있다면 먼저 닫기
         if (activeIndex !== null) {
             document.getElementById('panel-' + activeIndex).style.display = 'none';
             document.getElementById('card-' + activeIndex).classList.remove('active');
         }
 
-        // 넷플릭스 아코디언 핵심: 클릭한 카드가 속한 줄의 '맨 마지막 카드' 바로 뒤에 패널을 위치시킴
-        // (CSS Grid의 grid-column 전체를 쓰기 때문에 어느 위치에 들어가든 줄 바꿈 후 전체 폭으로 펼쳐집니다)
         insertPanelAtRightRow(index);
 
         panel.style.display = 'block';
         card.classList.add('active');
         activeIndex = index;
 
-        // 부드럽게 패널 위치로 스크롤 이동
         setTimeout(() => {
             panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         }, 100);
@@ -227,28 +226,23 @@ layout: default
         }
     }
 
-    // 클릭한 카드 위치를 기준으로 해당 줄의 마지막 카드 뒤에 패널 DOM을 이동시키는 스마트 알고리즘
     function insertPanelAtRightRow(index) {
         const grid = document.querySelector('.display-grid');
         const card = document.getElementById('card-' + index);
         const panel = document.getElementById('panel-' + index);
 
-        // 현재 그리드에 한 줄당 몇 개가 들어가고 있는지 계산
         const gridComputedStyle = window.getComputedStyle(grid);
         const columnsCount = gridComputedStyle.getPropertyValue('grid-template-columns').split(' ').length;
 
-        // 모든 카드들의 목록
         const cards = Array.from(grid.querySelectorAll('.display-card'));
         const cardIndex = cards.indexOf(card);
 
-        // 현재 카드가 속한 줄의 맨 마지막 카드(또는 다음 줄의 시작 직전 카드)를 찾음
         const targetRowEndIndex = Math.min(cardIndex + (columnsCount - (cardIndex % columnsCount)), cards.length);
 
         if (targetRowEndIndex < cards.length) {
             const nextCard = cards[targetRowEndIndex];
             grid.insertBefore(panel, nextCard);
         } else {
-            // 만약 마지막 줄이라면 그리드의 맨 끝에 붙임
             grid.appendChild(panel);
         }
     }
