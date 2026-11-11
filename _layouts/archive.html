@@ -69,7 +69,7 @@ title: Archive
     }
     {% endfor %}
 
-    /* 🎯 홈페이지 메인과 동일한 타임라인 컨테이너 및 박스 규격 적용 */
+    /* 타임라인 컨테이너 */
     .timeline-container {
         width: 100%;
         max-width: 650px;
@@ -78,12 +78,11 @@ title: Archive
         flex-direction: column;
     }
 
-    /* 홈페이지의 .post-list > div 규격을 아카이브 아이템에 그대로 반영 */
+    /* 🎯 개별 포스트 박스 (좌우 마진과 상하 간격이 동적으로 변주됨) */
     .timeline-item {
         position: relative;
         background: var(--box-bg, #e5e5e5);
         padding: var(--box-padding, 16px);
-        margin-bottom: var(--box-margin-bottom, 16px);
         border-radius: var(--radius-subtle, 6px);
         border: 1px solid #ddd;
         transition: filter 0.2s ease;
@@ -108,7 +107,7 @@ title: Archive
         margin-bottom: 0;
     }
 
-    /* 작성 일시 규격 (홈페이지 .post-date 완벽 일치) */
+    /* 작성 일시 규격 */
     .post-date {
         font-size: 12px;
         font-weight: 400;
@@ -138,8 +137,9 @@ title: Archive
     <div class="timeline-container">
         {% for post in year_group.items %}
         
-        {% comment %} 🎯 10% 확률로 알록달록한 파스텔톤 컬러 부여 (나머지 90%는 메인과 동일한 --box-bg 유지) {% endcomment %}
+        {% comment %} 🎯 1. 10% 확률로 알록달록한 파스텔톤 컬러 지정 {% endcomment %}
         {% assign sec_val = post.date | date: '%S' | plus: 0 %}
+        {% assign min_val = post.date | date: '%M' | plus: 0 %}
         {% assign prob_check = sec_val | modulo: 10 %}
 
         {% if prob_check == 0 %}
@@ -157,8 +157,23 @@ title: Archive
             {% assign border_color = '#ddd' %}
         {% endif %}
 
-        <!-- 홈페이지 메인과 똑같은 박스 규격 적용 -->
-        <div class="timeline-item" style="background-color: {{ pastel_bg }}; color: {{ text_color }}; border-color: {{ border_color }};">
+        {% comment %} 🎯 2. 좌우 마진 변주 계산 (초 단위 값을 활용해 좌측 또는 우측으로 미세하게 밀어냄) {% endcomment %}
+        {% assign margin_type = sec_val | modulo: 4 %}
+        {% if margin_type == 0 %}
+            {% assign ml = "0px" %}{% assign mr = "35px" %}
+        {% elsif margin_type == 1 %}
+            {% assign ml = "25px" %}{% assign mr = "10px" %}
+        {% elsif margin_type == 2 %}
+            {% assign ml = "10px" %}{% assign mr = "30px" %}
+        {% else %}
+            {% assign ml = "35px" %}{% assign mr = "0px" %}
+        {% endif %}
+
+        {% comment %} 🎯 3. 작성 일시(분/초)에 비례한 상하 간격(margin-bottom) 계산 (대략 16px ~ 48px 사이로 변주) {% endcomment %}
+        {% assign dynamic_space = sec_val | plus: min_val | modulo: 4 | times: 10 | plus: 16 %}
+
+        <!-- 타임라인 아이템 (인라인 스타일로 동적 마진 주입) -->
+        <div class="timeline-item" style="background-color: {{ pastel_bg }}; color: {{ text_color }}; border-color: {{ border_color }}; margin-left: {{ ml }}; margin-right: {{ mr }}; margin-bottom: {{ dynamic_space }}px;">
             
             <div class="timeline-content">
                 {{ post.content | strip_newlines }}
