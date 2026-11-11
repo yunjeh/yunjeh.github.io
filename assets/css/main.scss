@@ -256,3 +256,23 @@ img {
   border-radius: 12px;
   border: 1px solid #ddd;
 }
+/* 태그 클라우드 및 본문 태그 공통 스타일 예시 */
+.tags-cloud a, 
+.tag-section .post-list a {
+  background: #ffffff !important;
+  color: #333333 !important;
+  border: 1px solid #d1d1d1;
+  padding: 3px 8px;
+  border-radius: var(--radius-sharp, 2px);
+  text-decoration: none;
+  font-size: 0.85rem;
+  transition: all 0.2s ease;
+}
+
+/* 마우스 올렸을 때 소소한 포인트 */
+.tags-cloud a:hover, 
+.tag-section .post-list a:hover {
+  background: #222222 !important;
+  color: #ffffff !important;
+  border-color: #222222;
+}
