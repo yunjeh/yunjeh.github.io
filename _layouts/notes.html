@@ -7,44 +7,47 @@ layout: default
 <h1>{{ page.title }}</h1>
 
 <style>
-    /* 넷플릭스 스타일 그리드 레이아웃 (PC 기본) */
+    /* 🎯 다른 페이지(w 클래스 및 메인 레이아웃)와 동일한 최대 폭(900px) 및 대칭 맞춤 */
     .display-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
-        gap: 15px;
+        /* 한 줄에 7개가 들어가도록 최소 크기(minmax)와 간격 최적화 */
+        grid-template-columns: repeat(auto-fill, minmax(95px, 1fr));
+        gap: 12px;
         padding: 20px 0;
-        max-width: 800px;
+        max-width: 900px;
         margin: 0 auto;
+        box-sizing: border-box;
     }
 
     /* 🎯 모바일 화면 대응 (화면 너비 600px 이하일 때 한 열에 3개씩) */
     @media screen and (max-width: 600px) {
         .display-grid {
             grid-template-columns: repeat(3, 1fr); /* 정확히 3열 고정 */
-            gap: 8px; /* 모바일 단말기에 맞게 간격을 살짝 축소 */
+            gap: 8px; /* 모바일 단말기에 맞게 간격 축소 */
             padding: 10px 0;
         }
 
-        /* 모바일에서는 텍스트 박스 내부 여백 및 폰트 크기 조정 */
+        /* 모바일에서는 텍스트 박스 내부 여백 조정 */
         .random-box {
             padding: 4px;
         }
     }
 
-    /* 포스터 카드 스타일 */
+    /* 포스터 카드 스타일 (26.11.11 버전 디자인 시스템 적용: 6px 둥글기) */
     .display-card {
         background: #141414;
-        border-radius: 4px;
+        border-radius: var(--radius-subtle, 6px);
         overflow: hidden;
         cursor: pointer;
         transition: transform 0.3s ease, box-shadow 0.3s ease;
         position: relative;
         aspect-ratio: 2 / 3;
+        border: 1px solid #ddd;
     }
 
     .display-card:hover {
         transform: scale(1.08);
-        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
         z-index: 10;
     }
 
@@ -79,7 +82,7 @@ layout: default
         transform: scale(1.05);
     }
 
-    /* 팝업(모달) 스타일 */
+    /* 팝업(모달) 스타일 (26.11.11 버전 밝은 회색 메모장 톤앤매너) */
     .modal-overlay {
         display: none;
         position: fixed;
@@ -87,7 +90,7 @@ layout: default
         left: 0;
         width: 100%;
         height: 100%;
-        background: rgba(0, 0, 0, 0.85);
+        background: rgba(0, 0, 0, 0.7);
         z-index: 1000;
         justify-content: center;
         align-items: center;
@@ -95,16 +98,17 @@ layout: default
     }
 
     .modal-content {
-        background: #181818;
-        color: #fff;
+        background: #fdfdfd; /* 밝은 메모장 느낌의 배경 */
+        color: #222;
         width: 100%;
         max-width: 600px;
         max-height: 85vh;
-        border-radius: 8px;
+        border-radius: var(--radius-subtle, 6px); /* 6px 일괄 적용 */
         padding: 30px;
         overflow-y: auto;
         position: relative;
-        box-shadow: 0 15px 30px rgba(0,0,0,0.5);
+        box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+        border: 1px solid #ddd;
     }
 
     .modal-close {
@@ -113,28 +117,27 @@ layout: default
         right: 20px;
         background: none;
         border: none;
-        color: #aaa;
+        color: #888;
         font-size: 1.8rem;
         cursor: pointer;
     }
 
     .modal-close:hover {
-        color: #fff;
+        color: #000;
     }
 
     .modal-date {
         display: block;
         font-family: 'Courier New', Courier, monospace;
         font-size: 0.85rem;
-        color: #aaa;
+        color: #888;
         margin-bottom: 10px;
     }
 
     .modal-body {
-        font-family: 'Gowun Dodum', sans-serif;
-        font-size: 1.0rem;
-        line-height: 1.6;
-        color: #ddd;
+        font-size: 0.95rem;
+        line-height: 1.7;
+        color: #333;
     }
 </style>
 
@@ -182,7 +185,6 @@ layout: default
         {% endif %}
     </div>
 
-    <!-- 팝업 창 (마크다운의 title이 제목으로 출력됨) -->
     <!-- 팝업 창 -->
     <div id="modal-{{ forloop.index }}" class="modal-overlay" onclick="outsideClose(event, 'modal-{{ forloop.index }}')">
         <div class="modal-content">
@@ -193,8 +195,8 @@ layout: default
                 {{ post.date | date: "%Y. %m." }}{% if post.category %} {{ post.category }}.{% elsif post.categories %} {{ post.categories | join: ", " }}.{% endif %}
             </span>
         
-            <h2 style="margin-top: 10px; color: #fff;">{{ post.title }}</h2>
-            <div class="modal-body">
+            <h2 style="margin-top: 10px; color: #222; font-size: 1.4rem;">{{ post.title }}</h2>
+            <div class="modal-body" style="margin-top: 15px;">
                 {{ post.content }}
             </div>
         </div>
