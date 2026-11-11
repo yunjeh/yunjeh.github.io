@@ -9,6 +9,14 @@
 @import "sticky_notes.css";
 
 /* ===================================================
+   DESIGN TOKENS (전역 둥글기 변수 통일: 6px로 일괄 적용)
+=================================================== */
+:root {
+  --radius-subtle: 6px;
+  --radius-sharp: 6px; /* 불일치를 없애기 위해 둥글기를 6px로 통일 */
+}
+
+/* ===================================================
    RESET (테마 + 브라우저 완전 초기화)
 =================================================== */
 *, *::before, *::after {
@@ -117,7 +125,7 @@ p {
   background: #e5e5e5;
   padding: 8px 10px;
   margin-bottom: 10px;
-  border-radius: 6px;
+  border-radius: var(--radius-subtle); /* 변수 적용으로 6px 통일 */
   border: 1px solid #ddd;
 }
 
@@ -246,30 +254,32 @@ img {
 
 
 /* ===================================================
-   HIGHLIGHT
+   HIGHLIGHT & TAGS (둥글기 변수 적용으로 통일)
 =================================================== */
 .tag-section:target .post-list > div {
   background: #fff6a9 !important;
   position: relative;
   padding: 8px 10px;
   margin-bottom: 10px;
-  border-radius: 6px;
+  border-radius: var(--radius-subtle); /* 6px 통일 */
   border: 1px solid #ddd;
 }
-/* 태그 클라우드 및 본문 태그 공통 스타일 예시 */
+
+/* 페이퍼 메모 스타일 태그 배지 */
 .tags-cloud a, 
 .tag-section .post-list a {
   background: #ffffff !important;
   color: #333333 !important;
   border: 1px solid #d1d1d1;
   padding: 3px 8px;
-  border-radius: var(--radius-sharp, 2px);
+  border-radius: var(--radius-subtle); /* 기존 2px에서 6px로 통일감 부여 */
   text-decoration: none;
   font-size: 0.85rem;
   transition: all 0.2s ease;
+  display: inline-block;
 }
 
-/* 마우스 올렸을 때 소소한 포인트 */
+/* 마우스 올렸을 때 */
 .tags-cloud a:hover, 
 .tag-section .post-list a:hover {
   background: #222222 !important;
