@@ -3,7 +3,7 @@ layout: default
 title: "Tags"
 permalink: /tags
 ---
-{%-include back_link.html-%}
+{%- include back_link.html -%}
 
 <h1>{{ page.title }}</h1>
 {% assign tags = site.tags | sort %}
@@ -11,13 +11,16 @@ permalink: /tags
 <!-- 상단 태그 클라우드 (색인) -->
 <div class="tags-cloud" style="margin-bottom: 30px;">
   {% for tag in tags %}
-    <a href="#{{ tag[0] }}" style="margin-right: 15px; font-weight: bold; text-decoration: none; color: #007bff;">
+    <a href="#{{ tag[0] }}" style="margin-right: 15px; font-weight: bold; text-decoration: none; color: #007bff; display: inline-block; margin-bottom: 8px;">
       #{{ tag[0] }} <span style="font-weight: normal; color: #666;">({{ tag[1].size }})</span>
     </a>
   {% endfor %}
 </div>
 
-<!--<hr style="margin: 40px 0;">-->
+<!-- 안내 문구 -->
+<div id="tag-guide-msg" style="color: #666; font-size: 0.9rem; margin-bottom: 30px; padding: 12px; background: #f8fafc; border-radius: 4px;">
+  👆 위 태그를 클릭하면 해당 기록 목록이 아래에 표시됩니다.
+</div>
 
 <!-- 태그별 포스트 리스트 영역 -->
 {% for tag in tags %}
@@ -36,19 +39,26 @@ permalink: /tags
       </div>
       {% endfor %}
     </div>
-    
-    <!--<a href="#" style="font-size: 0.8em; color: #bbb;">↑ 위로 가기</a>-->
   </div>
 {% endfor %}
-
-
-
 
 <style>
   html {
     scroll-behavior: smooth;
   }
-  .tag-section:target h2 {
-    color: #007bff /* 클릭해서 이동했을 때 제목 강조 */;
+
+  /* 1. 처음에는 모든 태그 섹션을 숨김 */
+  .tag-section {
+    display: none;
+  }
+
+  /* 2. 주소창의 해시(#태그명)와 일치하는 아이디를 가진 섹션만 화면에 표시 */
+  .tag-section:target {
+    display: block !important;
+  }
+
+  /* 3. 태그를 클릭해서 해시가 생기면 안내 문구를 숨김 (CSS 하위 선택자 활용) */
+  body:has(:target) #tag-guide-msg {
+    display: none;
   }
 </style>
