@@ -11,8 +11,8 @@ permalink: /tags
 <!-- 상단 태그 클라우드 (색인) -->
 <div class="tags-cloud" style="margin-bottom: 30px;">
   {% for tag in tags %}
-    <a href="#{{ tag[0] }}" style="margin-right: 15px; font-weight: bold; text-decoration: none; color: #007bff; display: inline-block; margin-bottom: 8px;">
-      #{{ tag[0] }} <span style="font-weight: normal; color: #666;">({{ tag[1].size }})</span>
+    <a href="#{{ tag[0] }}" style="margin-right: 15px; display: inline-block; margin-bottom: 8px;">
+      #{{ tag[0] }} <span>({{ tag[1].size }})</span>
     </a>
   {% endfor %}
 </div>
