@@ -8,7 +8,7 @@ title: Archive
 <h1>{{ page.title }}</h1>
 
 <style>
-    /* 🎯 상단 연도 태그 클라우드 (태그 페이지 및 노트 탭과 규격 통일: 6px 둥글기, 0.85rem 폰트) */
+    /* 🎯 상단 연도 태그 클라우드 규격 */
     .year-cloud {
         display: flex;
         flex-wrap: wrap;
@@ -36,7 +36,7 @@ title: Archive
         border-color: #222222;
     }
 
-    /* 💡 JS 없이 CSS 해시(:target)를 이용해 선택된 연도 버튼만 강조 */
+    /* CSS 해시(:target)를 이용해 선택된 연도 버튼 강조 */
     body:has(#year-2026:target) a[href="#year-2026"],
     body:has(#year-2025:target) a[href="#year-2025"],
     body:has(#year-2024:target) a[href="#year-2024"],
@@ -53,17 +53,15 @@ title: Archive
         margin-left: 2px;
     }
 
-    /* 💡 CSS 기반 연도 섹션 전환 (:target 활용) */
+    /* 연도 섹션 전환 */
     .year-section {
         display: none;
     }
     
-    /* 해시가 지정되지 않았을 때는 가장 최신 연도 섹션을 기본으로 표시 */
     body:not(:has([id^="year-"]:target)) #year-{{ site.posts.first.date | date: '%Y' }} {
         display: block;
     }
 
-    /* 주소창 해시(#year-YYYY)와 일치하는 섹션만 표시 */
     {% assign posts_by_year_css = site.posts | sort: 'date' | reverse | group_by_exp: "post", "post.date | date: '%Y'" %}
     {% for yg in posts_by_year_css %}
     body:has(#year-{{ yg.name }}:target) #year-{{ yg.name }} {
@@ -81,7 +79,7 @@ title: Archive
         gap: 12px;
     }
 
-    /* 트위터 피드 스타일의 개별 포스트 박스 (26.11.11 버전 디자인 시스템) */
+    /* 트위터 피드 스타일의 개별 포스트 박스 */
     .timeline-item {
         border: 1px solid #ddd;
         border-radius: var(--radius-subtle, 6px);
@@ -93,7 +91,6 @@ title: Archive
         filter: brightness(0.97);
     }
 
-    /* 포스트 메타 정보 (날짜 및 카테고리) */
     .timeline-meta {
         font-family: 'Courier New', Courier, monospace;
         font-size: 0.8rem;
@@ -104,7 +101,6 @@ title: Archive
         align-items: center;
     }
 
-    /* 포스트 제목 및 링크 */
     .timeline-title {
         font-size: 1.1rem;
         font-weight: 700;
@@ -120,7 +116,6 @@ title: Archive
         text-decoration: underline;
     }
 
-    /* 본문 요약 미리보기 */
     .timeline-excerpt {
         font-size: 0.9rem;
         opacity: 0.9;
@@ -129,7 +124,7 @@ title: Archive
     }
 </style>
 
-<!-- 1. 포스트가 존재하는 연도들을 Jekyll로 자동 추출하여 태그 클라우드 생성 -->
+<!-- 1. 포스트가 존재하는 연도 자동 추출 -->
 {% assign posts_by_year = site.posts | sort: 'date' | reverse | group_by_exp: "post", "post.date | date: '%Y'" %}
 
 <div class="year-cloud">
@@ -140,29 +135,34 @@ title: Archive
     {% endfor %}
 </div>
 
-<!-- 2. 연도별 타임라인 섹션 목록 (CSS `:target` 조우를 위한 앵커 포인트 겸용) -->
+<!-- 2. 연도별 타임라인 섹션 목록 -->
 {% for year_group in posts_by_year %}
 <div id="year-{{ year_group.name }}" class="year-section">
     <div class="timeline-container">
         {% for post in year_group.items %}
         
-        {% comment %} 🎯 제목에 '!'가 포함되어 있는지 체크하여 파스텔톤 배경색 지정 {% endcomment %}
         {% assign has_exclamation = post.title | include: "!" %}
         {% if has_exclamation %}
-            {% assign color_index = forloop.index0 | modulo: 6 %}
-            {% if color_index == 0 %}{% assign pastel_bg = '#ffebee' %}{% assign text_color = '#b71c1c' %}
-            {% elsif color_index == 1 %}{% assign pastel_bg = '#fce4ec' %}{% assign text_color = '#880e4f' %}
-            {% elsif color_index == 2 %}{% assign pastel_bg = '#f3e5f5' %}{% assign text_color = '#4a148c' %}
-            {% elsif color_index == 3 %}{% assign pastel_bg = '#e3f2fd' %}{% assign text_color = '#0d47a1' %}
-            {% elsif color_index == 4 %}{% assign pastel_bg = '#e8f5e9' %}{% assign text_color = '#1b5e20' %}
+            {% comment %} 🎯 반복되는 패턴을 없애기 위해 '날짜의 초(second)'와 '제목 글자수'를 조합하여 불규칙한 인덱스 생성 {% endcomment %}
+            {% assign sec_num = post.date | date: '%S' | plus: 0 %}
+            {% assign title_len = post.title | size %}
+            {% assign random_seed = sec_num | plus: title_len | modulo: 6 %}
+
+            {% if random_seed == 0 %}{% assign pastel_bg = '#ffebee' %}{% assign text_color = '#b71c1c' %}
+            {% elsif random_seed == 1 %}{% assign pastel_bg = '#fce4ec' %}{% assign text_color = '#880e4f' %}
+            {% elsif random_seed == 2 %}{% assign pastel_bg = '#f3e5f5' %}{% assign text_color = '#4a148c' %}
+            {% elsif random_seed == 3 %}{% assign pastel_bg = '#e3f2fd' %}{% assign text_color = '#0d47a1' %}
+            {% elsif random_seed == 4 %}{% assign pastel_bg = '#e8f5e9' %}{% assign text_color = '#1b5e20' %}
             {% else %}{% assign pastel_bg = '#fffde7' %}{% assign text_color = '#f57f17' %}
             {% endif %}
+            {% assign border_color = '#d1d1d1' %}
         {% else %}
             {% assign pastel_bg = '#e5e5e5' %}
             {% assign text_color = '#222222' %}
+            {% assign border_color = '#ddd' %}
         {% endif %}
 
-        <div class="timeline-item" style="background-color: {{ pastel_bg }}; color: {{ text_color }};">
+        <div class="timeline-item" style="background-color: {{ pastel_bg }}; color: {{ text_color }}; border-color: {{ border_color }};">
             <div class="timeline-meta">
                 <span>{{ post.date | date: "%Y.%m.%d. %H:%M" }}</span>
                 {% if post.category %}
