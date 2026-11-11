@@ -159,13 +159,13 @@ title: Archive
         {% comment %} 🎯 좌우 마진 변주 계산 {% endcomment %}
         {% assign margin_type = sec_val | modulo: 4 %}
         {% if margin_type == 0 %}
-            {% assign ml = "0px" %}{% assign mr = "25px" %}
+            {% assign ml = "0px" %}{% assign mr = "15px" %}
         {% elsif margin_type == 1 %}
-            {% assign ml = "15px" %}{% assign mr = "5px" %}
+            {% assign ml = "10px" %}{% assign mr = "5px" %}
         {% elsif margin_type == 2 %}
-            {% assign ml = "5px" %}{% assign mr = "20px" %}
+            {% assign ml = "3px" %}{% assign mr = "12px" %}
         {% else %}
-            {% assign ml = "25px" %}{% assign mr = "0px" %}
+            {% assign ml = "12px" %}{% assign mr = "3px" %}
         {% endif %}
 
         {% comment %} 🎯 상하 간격 전반적으로 압축하되 시간차에 비례해 변주 (최소 4px ~ 최대 24px 상한선 적용) {% endcomment %}
