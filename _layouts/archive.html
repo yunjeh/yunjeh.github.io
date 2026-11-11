@@ -70,30 +70,29 @@ title: Archive
     {% endfor %}
 
     /* 🎯 홈페이지 메인과 동일한 .post-list 규격 재탕 */
-    .post-list {
-        max-width: 400px !important;
-        padding: 0 !important;
-        margin: 0 !important;
-        list-style: none !important;
-        font-size: 14px;
-        display: flex;
-        flex-direction: column;
-    }
+.post-list {
+  max-width: 400px !important;
+  padding: 0 !important;
+  margin: var(--box-margin-bottom) 0 !important;
+  list-style: none !important;
+  font-size: 14px;
+}
 
-    .post-list > div {
-        position: relative;
-        background: var(--box-bg, #e5e5e5);
-        padding: var(--box-padding, 16px);
-        border-radius: var(--radius-subtle, 6px);
-        border: 1px solid #ddd;
-        transition: filter 0.2s ease;
-    }
+.post-list > div {
+  position: relative;
+  background: var(--box-bg);
+  padding: var(--box-padding);
+  margin-bottom: var(--box-margin-bottom);
+  border-radius: var(--radius-subtle);
+  border: 1px solid #ddd;
+}
+
 
     .post-list > div:hover {
         filter: brightness(0.97);
     }
 
-    /* 본문 간격 미세 조정 */
+    /* 본문 간격 미세 조정 
     .post-list > div > div:first-child {
         margin-bottom: 4px;
     }
@@ -104,7 +103,7 @@ title: Archive
 
     .post-list > div > div:first-child p:last-child {
         margin-bottom: 0;
-    }
+    }*/
 
     /* 날짜 규격 */
     .post-date {
