@@ -1,22 +1,25 @@
 ---
 layout: default
+title: Archive
 ---
 
 {% include back_link.html %}
 
 <h1>{{ page.title }}</h1>
 
-<!-- 🎯 상단 탭 메뉴 (CSS 기반 `:target` 전환으로 자바스크립트 없음) -->
-<div class="note-tabs" style="margin: 20px 0 15px 0; display: flex; gap: 8px; align-items: center;">
-    <a href="#latest" class="tab-btn active" id="btn-latest">📅 최신순</a>
-    <a href="#genre" class="tab-btn" id="btn-genre">🏷️ 장르별 보기</a>
-</div>
-
 <style>
-    /* 태그 클라우드와 동일한 공통 버튼 규격 */
-    .tab-btn {
-        background: #ffffff !important;
-        color: #333333 !important;
+    /* 🎯 상단 연도 태그 클라우드 (태그 페이지 및 노트 탭과 규격 통일: 6px 둥글기, 0.85rem 폰트) */
+    .year-cloud {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin: 20px 0 25px 0;
+        align-items: center;
+    }
+
+    .year-btn {
+        background: #ffffff;
+        color: #333333;
         border: 1px solid #d1d1d1;
         padding: 4px 10px;
         border-radius: var(--radius-subtle, 6px);
@@ -25,169 +28,126 @@ layout: default
         font-size: 0.85rem;
         font-weight: 500;
         transition: all 0.2s ease;
-        display: inline-block;
     }
 
-    .tab-btn:hover {
-        background: #222222 !important;
-        color: #ffffff !important;
+    .year-btn:hover {
+        background: #222222;
+        color: #ffffff;
         border-color: #222222;
     }
 
-    body:not(:has(#genre:target)) #btn-latest,
-    body:has(#genre:target) #btn-genre {
-        background: #222222 !important;
-        color: #ffffff !important;
+    /* 💡 JS 없이 CSS 해시(:target)를 이용해 선택된 연도 버튼만 강조 */
+    body:has(#year-2026:target) a[href="#year-2026"],
+    body:has(#year-2025:target) a[href="#year-2025"],
+    body:has(#year-2024:target) a[href="#year-2024"],
+    body:has(#year-2023:target) a[href="#year-2023"],
+    body:not(:has([id^="year-"]:target)) a[href="#year-{{ site.posts.first.date | date: '%Y' }}"] {
+        background: #222222;
+        color: #ffffff;
         border-color: #222222;
     }
 
-    /* 뷰 전환 (CSS `:target` 활용으로 JS 제어 제거) */
-    .note-view { display: none; }
-    .note-view#latest-view { display: block; }
-    body:has(#genre:target) #latest-view { display: none; }
-    body:has(#genre:target) #genre-view { display: block; }
-
-    /* 넷플릭스 스타일 그리드 레이아웃 (왼쪽 정렬) */
-    .display-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(95px, 1fr));
-        gap: 12px;
-        padding: 10px 0 20px 0;
-        width: 100%;
-        margin: 0;
-        box-sizing: border-box;
-    }
-
-    @media screen and (max-width: 600px) {
-        .display-grid {
-            grid-template-columns: repeat(3, 1fr);
-            gap: 8px;
-            padding: 10px 0;
-        }
-        .random-box { padding: 4px; }
-    }
-
-    /* 포스터 카드 스타일 (가는 검은선 테두리) */
-    .display-card {
-        background: #141414;
-        border-radius: var(--radius-subtle, 6px);
-        overflow: hidden;
-        cursor: pointer;
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-        position: relative;
-        aspect-ratio: 2 / 3;
-        border: 1px solid #000;
-    }
-
-    .display-card:hover {
-        transform: scale(1.08);
-        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.25);
-        z-index: 10;
-        border-color: #555;
-    }
-
-    .display-poster {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        display: block;
-    }
-
-    /* 커버 없을 때 제목 표시 박스 (여기서도 Liquid로 색상 분기 가능) */
-    .random-box {
-        display: flex !important;
-        align-items: center;
-        justify-content: center;
-        padding: 6px;
-        text-align: center;
-        color: #fff;
-        font-weight: 900;
-        word-break: break-all;
-        overflow: hidden;
-    }
-
-    .random-text {
-        display: block;
-        width: 100%;
-        line-height: 1.1;
-    }
-
-    /* 🎯 확장 패널 기본 스타일 (토글은 CSS 체크박스  hack 또는 순수 CSS 디테일 활용 가능하지만, 
-       현재 구조 유지를 위해 최소한의 JS 클릭 토글만 남기거나 완전 순수 앵커 방식으로 갈 수 있습니다.) */
-    
-    /* 💡 [대안] JS 클릭 이벤트를 쓰지 않으려면 각 포스터를 <details> 태그로 감싸는 방법이 있습니다. 
-       아래는 기존 레이아웃 구조를 해치지 않도록 DOM 제어만 남기고 연산 JS는 모두 걷어낸 형태입니다. */
-    .expand-panel {
-        display: none;
-        grid-column: 1 / -1;
-        border-radius: var(--radius-subtle, 6px);
-        padding: 20px 24px;
-        margin: 8px 0;
-        position: relative;
-        box-shadow: 0 6px 16px rgba(0,0,0,0.15);
-        box-sizing: border-box;
-    }
-
-    .expand-close {
-        position: absolute;
-        top: 16px;
-        right: 20px;
-        background: none;
-        border: none;
-        font-size: 1.6rem;
-        cursor: pointer;
+    .year-count {
+        font-size: 0.75rem;
         opacity: 0.7;
+        margin-left: 2px;
     }
 
-    .expand-close:hover { opacity: 1; }
+    /* 💡 CSS 기반 연도 섹션 전환 (:target 활용) */
+    .year-section {
+        display: none;
+    }
+    
+    /* 해시가 지정되지 않았을 때는 가장 최신 연도 섹션을 기본으로 표시 */
+    body:not(:has([id^="year-"]:target)) #year-{{ site.posts.first.date | date: '%Y' }} {
+        display: block;
+    }
 
-    .expand-meta {
+    /* 주소창 해시(#year-YYYY)와 일치하는 섹션만 표시 */
+    {% assign posts_by_year_css = site.posts | sort: 'date' | reverse | group_by_exp: "post", "post.date | date: '%Y'" %}
+    {% for yg in posts_by_year_css %}
+    body:has(#year-{{ yg.name }}:target) #year-{{ yg.name }} {
+        display: block;
+    }
+    {% endfor %}
+
+    /* 트위터식 타임라인 컨테이너 (왼쪽 정렬) */
+    .timeline-container {
+        width: 100%;
+        max-width: 600px;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    /* 트위터 피드 스타일의 개별 포스트 박스 (26.11.11 버전 디자인 시스템) */
+    .timeline-item {
+        border: 1px solid #ddd;
+        border-radius: var(--radius-subtle, 6px);
+        padding: 16px 20px;
+        transition: background 0.2s ease;
+    }
+
+    .timeline-item:hover {
+        filter: brightness(0.97);
+    }
+
+    /* 포스트 메타 정보 (날짜 및 카테고리) */
+    .timeline-meta {
         font-family: 'Courier New', Courier, monospace;
-        font-size: 0.82rem;
+        font-size: 0.8rem;
         opacity: 0.8;
-        margin-bottom: 8px;
+        margin-bottom: 6px;
         display: flex;
         gap: 8px;
         align-items: center;
     }
 
-    .expand-title {
-        margin: 0 0 12px 0;
-        font-size: 1.3rem;
+    /* 포스트 제목 및 링크 */
+    .timeline-title {
+        font-size: 1.1rem;
         font-weight: 700;
+        margin: 0 0 8px 0;
     }
 
-    .expand-body {
-        font-size: 0.95rem;
-        line-height: 1.7;
-        opacity: 0.95;
+    .timeline-title a {
+        color: inherit;
+        text-decoration: none;
+    }
+
+    .timeline-title a:hover {
+        text-decoration: underline;
+    }
+
+    /* 본문 요약 미리보기 */
+    .timeline-excerpt {
+        font-size: 0.9rem;
+        opacity: 0.9;
+        line-height: 1.6;
+        margin: 0;
     }
 </style>
 
-<div id="latest"></div>
-<div id="genre"></div>
+<!-- 1. 포스트가 존재하는 연도들을 Jekyll로 자동 추출하여 태그 클라우드 생성 -->
+{% assign posts_by_year = site.posts | sort: 'date' | reverse | group_by_exp: "post", "post.date | date: '%Y'" %}
 
-<!-- 1. 최신순 뷰 -->
-<div id="latest-view" class="note-view">
-    <div class="display-grid">
-        {% assign sorted_notes = site.notes | sort: 'date' | reverse %}
-        {% for post in sorted_notes %}
-        {% assign index = forloop.index %}
+<div class="year-cloud">
+    {% for year_group in posts_by_year %}
+        <a href="#year-{{ year_group.name }}" class="year-btn">
+            {{ year_group.name }} <span class="year-count">({{ year_group.items | size }})</span>
+        </a>
+    {% endfor %}
+</div>
+
+<!-- 2. 연도별 타임라인 섹션 목록 (CSS `:target` 조우를 위한 앵커 포인트 겸용) -->
+{% for year_group in posts_by_year %}
+<div id="year-{{ year_group.name }}" class="year-section">
+    <div class="timeline-container">
+        {% for post in year_group.items %}
         
-        <div class="display-card" id="card-latest-{{ index }}" onclick="toggleExpand('latest-{{ index }}')">
-            {% if post.cover %}
-                <img src="{{ post.cover | relative_url }}" alt="{{ post.title }}" class="display-poster">
-            {% else %}
-                {% assign title_length = post.title | size %}
-                <div class="display-poster random-box" style="background-color: {% cycle '#b71c1c', '#880e4f', '#4a148c', '#0d47a1', '#01579b', '#1b5e20', '#bf360c' %};">
-                    <span class="random-text" style="font-size: {% if title_length <= 5 %}2.2em{% elsif title_length <= 10 %}1.6em{% else %}1.2em{% endif %};">{{ post.title }}</span>
-                </div>
-            {% endif %}
-        </div>
-
-        {% comment %} 🎯 Jekyll 빌드 타임에 '!' 포함 여부를 확인하여 파스텔톤 색상 중 하나를 고정 할당 {% endcomment %}
+        {% comment %} 🎯 제목에 '!'가 포함되어 있는지 체크하여 파스텔톤 배경색 지정 {% endcomment %}
         {% assign has_exclamation = post.title | include: "!" %}
-        
         {% if has_exclamation %}
             {% assign color_index = forloop.index0 | modulo: 6 %}
             {% if color_index == 0 %}{% assign pastel_bg = '#ffebee' %}{% assign text_color = '#b71c1c' %}
@@ -198,105 +158,27 @@ layout: default
             {% else %}{% assign pastel_bg = '#fffde7' %}{% assign text_color = '#f57f17' %}
             {% endif %}
         {% else %}
-            {% assign pastel_bg = '#141414' %}
-            {% assign text_color = '#ffffff' %}
+            {% assign pastel_bg = '#e5e5e5' %}
+            {% assign text_color = '#222222' %}
         {% endif %}
 
-        <div id="panel-latest-{{ index }}" class="expand-panel" style="background-color: {{ pastel_bg }}; color: {{ text_color }}; {% if has_exclamation %}border: 1px solid #d1d1d1;{% else %}border: 1px solid #333;{% endif %}">
-            <button class="expand-close" onclick="closeExpand('latest-{{ index }}')" style="color: {{ text_color }};">&times;</button>
-            <div class="expand-meta">
-                <span>{{ post.date | date: "%Y.%m.%d" }}</span>
+        <div class="timeline-item" style="background-color: {{ pastel_bg }}; color: {{ text_color }};">
+            <div class="timeline-meta">
+                <span>{{ post.date | date: "%Y.%m.%d. %H:%M" }}</span>
                 {% if post.category %}
                     <span>{{ post.category }}</span>
                 {% elsif post.categories %}
                     <span>{{ post.categories | first }}</span>
                 {% endif %}
             </div>
-            <h3 class="expand-title">{{ post.title }}</h3>
-            <div class="expand-body">
-                {{ post.content }}
-            </div>
+            <h2 class="timeline-title">
+                <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
+            </h2>
+            {% if post.excerpt %}
+                <p class="timeline-excerpt">{{ post.excerpt | strip_html | truncate: 130 }}</p>
+            {% endif %}
         </div>
         {% endfor %}
     </div>
 </div>
-
-<!-- 2. 장르별 보기 뷰 -->
-<div id="genre-view" class="note-view">
-    <div class="display-grid">
-        {% assign sorted_notes_genre = site.notes | sort: 'category' %}
-        {% for post in sorted_notes_genre %}
-        {% assign index = forloop.index %}
-        
-        <div class="display-card" id="card-genre-{{ index }}" onclick="toggleExpand('genre-{{ index }}')">
-            {% if post.cover %}
-                <img src="{{ post.cover | relative_url }}" alt="{{ post.title }}" class="display-poster">
-            {% else %}
-                {% assign title_length = post.title | size %}
-                <div class="display-poster random-box" style="background-color: {% cycle '#b71c1c', '#880e4f', '#4a148c', '#0d47a1', '#01579b', '#1b5e20', '#bf360c' %};">
-                    <span class="random-text" style="font-size: {% if title_length <= 5 %}2.2em{% elsif title_length <= 10 %}1.6em{% else %}1.2em{% endif %};">{{ post.title }}</span>
-                </div>
-            {% endif %}
-        </div>
-
-        {% assign has_exclamation_genre = post.title | include: "!" %}
-        {% if has_exclamation_genre %}
-            {% assign color_index = forloop.index0 | modulo: 6 %}
-            {% if color_index == 0 %}{% assign pastel_bg_g = '#ffebee' %}{% assign text_color_g = '#b71c1c' %}
-            {% elsif color_index == 1 %}{% assign pastel_bg_g = '#fce4ec' %}{% assign text_color_g = '#880e4f' %}
-            {% elsif color_index == 2 %}{% assign pastel_bg_g = '#f3e5f5' %}{% assign text_color_g = '#4a148c' %}
-            {% elsif color_index == 3 %}{% assign pastel_bg_g = '#e3f2fd' %}{% assign text_color_g = '#0d47a1' %}
-            {% elsif color_index == 4 %}{% assign pastel_bg_g = '#e8f5e9' %}{% assign text_color_g = '#1b5e20' %}
-            {% else %}{% assign pastel_bg_g = '#fffde7' %}{% assign text_color_g = '#f57f17' %}
-            {% endif %}
-        {% else %}
-            {% assign pastel_bg_g = '#141414' %}
-            {% assign text_color_g = '#ffffff' %}
-        {% endif %}
-
-        <div id="panel-genre-{{ index }}" class="expand-panel" style="background-color: {{ pastel_bg_g }}; color: {{ text_color_g }}; {% if has_exclamation_genre %}border: 1px solid #d1d1d1;{% else %}border: 1px solid #333;{% endif %}">
-            <button class="expand-close" onclick="closeExpand('genre-{{ index }}')" style="color: {{ text_color_g }};">&times;</button>
-            <div class="expand-meta">
-                <span>{{ post.date | date: "%Y.%m.%d" }}</span>
-                {% if post.category %}
-                    <span>{{ post.category }}</span>
-                {% elsif post.categories %}
-                    <span>{{ post.categories | first }}</span>
-                {% endif %}
-            </div>
-            <h3 class="expand-title">{{ post.title }}</h3>
-            <div class="expand-body">
-                {{ post.content }}
-            </div>
-        </div>
-        {% endfor %}
-    </div>
-</div>
-
-<script>
-    /* 패널 여닫기 기능 외의 모든 복잡한 연산(랜덤, 정렬 등)은 제거하고 
-       오직 클릭했을 때 해당 패널을 켜고 끄는 최소한의 DOM 토글 기능만 남겼습니다. */
-    let activeKey = null;
-
-    function toggleExpand(key) {
-        const panel = document.getElementById('panel-' + key);
-        if (activeKey === key) {
-            panel.style.display = 'none';
-            activeKey = null;
-            return;
-        }
-        if (activeKey !== null) {
-            document.getElementById('panel-' + activeKey).style.display = 'none';
-        }
-        panel.style.display = 'block';
-        activeKey = key;
-        setTimeout(() => {
-            panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-        }, 100);
-    }
-
-    function closeExpand(key) {
-        document.getElementById('panel-' + key).style.display = 'none';
-        if (activeKey === key) activeKey = null;
-    }
-</script>
+{% endfor %}
