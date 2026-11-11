@@ -41,12 +41,22 @@ layout: default
         margin-bottom: 12px;
         padding: 0 4px;
     }
+    /* 🎯 연도/월 타이틀 클릭 가능하도록 스타일 추가 */
     .cal-header {
         font-weight: 600;
         font-size: 0.9rem;
         color: #1e293b;
         margin: 0;
+        cursor: pointer;
+        padding: 2px 6px;
+        border-radius: var(--radius-sharp, 2px);
+        transition: background 0.2s, color 0.2s;
     }
+    .cal-header:hover {
+        background: #f1f5f9;
+        color: #0284c7;
+    }
+
     .cal-month-btn {
         background: none;
         border: 1px solid #e2e8f0;
@@ -84,7 +94,7 @@ layout: default
         align-items: center;
         justify-content: center;
         font-size: 0.8rem;
-        color: #475569;
+        color: #1e293b;
         font-weight: 500;
         border-radius: var(--radius-sharp, 2px);
         cursor: pointer;
@@ -110,29 +120,22 @@ layout: default
         border: none;
     }
 
-    /* 🎯 게시물 개수에 따른 5단계 초록색 배경 밀도 (숫자 가독성을 위해 글자색은 자동 조정) */
-    .cal-cell.level-1 {
-        background-color: #eaf3ed; 
-        color: #2d4a35;
-    }
-    .cal-cell.level-2 {
-        background-color: #cce4d0; 
-        color: #1f3624;
-    }
-    .cal-cell.level-3 {
-        background-color: #9cd1a6; 
-        color: #142417;
-    }
-    .cal-cell.level-4 {
-        background-color: #68b877; 
-        color: #ffffff;
-        font-weight: 600;
-    }
-    .cal-cell.level-5 {
-        background-color: #3b944b; 
-        color: #ffffff;
-        font-weight: 600;
-    }
+    /* 15단계 은은한 초록색 히트맵 밀도 */
+    .cal-cell.level-1  { background-color: #f0f7f2; color: #1e293b; }
+    .cal-cell.level-2  { background-color: #e5f2e8; color: #1e293b; }
+    .cal-cell.level-3  { background-color: #daeede; color: #1e293b; }
+    .cal-cell.level-4  { background-color: #cfead4; color: #1e293b; }
+    .cal-cell.level-5  { background-color: #c4e5ca; color: #1e293b; }
+    .cal-cell.level-6  { background-color: #b9e0c0; color: #1e293b; }
+    .cal-cell.level-7  { background-color: #aedbb6; color: #1e293b; }
+    .cal-cell.level-8  { background-color: #a3d6ab; color: #1e293b; }
+    .cal-cell.level-9  { background-color: #98d1a1; color: #1e293b; }
+    .cal-cell.level-10 { background-color: #8dc997; color: #1e293b; }
+    .cal-cell.level-11 { background-color: #82c28d; color: #1e293b; }
+    .cal-cell.level-12 { background-color: #77ba83; color: #1e293b; }
+    .cal-cell.level-13 { background-color: #6cb379; color: #1e293b; }
+    .cal-cell.level-14 { background-color: #61ab6f; color: #1e293b; }
+    .cal-cell.level-15 { background-color: #56a465; color: #1e293b; font-weight: 600; }
 
     .sidebar-tags {
         margin-top: 16px;
@@ -197,7 +200,8 @@ layout: default
         <aside class="calendar-sidebar">
             <div class="cal-header-wrapper">
                 <button id="prev-month-btn" class="cal-month-btn" type="button">◀</button>
-                <div class="cal-header" id="cal-month-title">캘린더</div>
+                <!-- 🎯 타이틀에 id를 부여하여 오늘로 이동하는 기능 연결 -->
+                <div class="cal-header" id="cal-month-title" title="오늘 날짜로 이동">캘린더</div>
                 <button id="next-month-btn" class="cal-month-btn" type="button">▶</button>
             </div>
             <div class="cal-grid">
@@ -288,7 +292,10 @@ layout: default
 <script>
 (function() {
     try {
-        const currentRealYear = new Date().getFullYear().toString();
+        const todayObj = new Date();
+        const currentRealYear = todayObj.getFullYear().toString();
+        const todayMMDD = String(todayObj.getMonth() + 1).padStart(2, '0') + '-' + String(todayObj.getDate()).padStart(2, '0');
+        const todayFullDate = `${currentRealYear}-${todayMMDD}`;
 
         const metaElements = document.querySelectorAll('.entry-meta');
         metaElements.forEach(el => {
@@ -311,11 +318,9 @@ layout: default
         let dateParam = urlParams.get('date');
         
         let targetYear = currentRealYear;
-        let targetMonth = new Date().getMonth(); 
-        let targetDay = new Date().getDate();
+        let targetMonth = todayObj.getMonth(); 
+        let targetDay = todayObj.getDate();
 
-        const todayObj = new Date();
-        const todayMMDD = String(todayObj.getMonth() + 1).padStart(2, '0') + '-' + String(todayObj.getDate()).padStart(2, '0');
         let currentMMDD = todayMMDD;
         let isToday = !dateParam;
 
@@ -326,127 +331,4 @@ layout: default
                 targetMonth = parseInt(parts[1], 10) - 1;
                 targetDay = parseInt(parts[2], 10);
                 currentMMDD = `${parts[1]}-${parts[2]}`;
-            } else if (/^\d{2}-\d{2}$/.test(dateParam)) {
-                currentMMDD = dateParam;
-                const parts = dateParam.split('-');
-                targetMonth = parseInt(parts[0], 10) - 1;
-                targetDay = parseInt(parts[1], 10);
-            }
-            if (currentMMDD === todayMMDD && targetYear === todayObj.getFullYear().toString()) {
-                isToday = true;
-            }
-        }
-
-        const prevMonthDate = new Date(parseInt(targetYear, 10), targetMonth - 1, 1);
-        const nextMonthDate = new Date(parseInt(targetYear, 10), targetMonth + 1, 1);
-
-        function formatMonthParam(d) {
-            const y = d.getFullYear();
-            const m = String(d.getMonth() + 1).padStart(2, '0');
-            return `${y}-${m}-01`;
-        }
-
-        const prevMonthBtn = document.getElementById('prev-month-btn');
-        const nextMonthBtn = document.getElementById('next-month-btn');
-        if (prevMonthBtn) {
-            prevMonthBtn.onclick = function() {
-                window.location.href = `/archive?date=${formatMonthParam(prevMonthDate)}`;
-            };
-        }
-        if (nextMonthBtn) {
-            nextMonthBtn.onclick = function() {
-                window.location.href = `/archive?date=${formatMonthParam(nextMonthDate)}`;
-            };
-        }
-
-        const monthNames = ["1월", "2월", "3월", "4월", "5월", "6월", "7월", "8월", "9월", "10월", "11월", "12월"];
-        const monthTitleElem = document.getElementById('cal-month-title');
-        if (monthTitleElem) {
-            monthTitleElem.innerText = `${targetYear}년 ${monthNames[targetMonth]}`;
-        }
-
-        const firstDayIndex = new Date(targetYear, targetMonth, 1).getDay();
-        const totalDays = new Date(targetYear, targetMonth + 1, 0).getDate();
-
-        const daysGrid = document.getElementById('cal-days-grid');
-        if (daysGrid) {
-            daysGrid.innerHTML = '';
-
-            for (let i = 0; i < firstDayIndex; i++) {
-                const emptyCell = document.createElement('div');
-                emptyCell.className = 'cal-cell empty';
-                daysGrid.appendChild(emptyCell);
-            }
-
-            // 🎯 해당 연도의 날짜별 게시물 개수(count) 집계
-            let recordCounts = {};
-            if (window.allBlogPosts && Array.isArray(window.allBlogPosts)) {
-                window.allBlogPosts.forEach(p => {
-                    if (p.year === targetYear) {
-                        recordCounts[p.mmdd] = (recordCounts[p.mmdd] || 0) + 1;
-                    }
-                });
-            }
-
-            for (let day = 1; day <= totalDays; day++) {
-                const dayStr = String(day).padStart(2, '0');
-                const cellMMDD = `${String(targetMonth + 1).padStart(2, '0')}-${dayStr}`;
-                const cellFullDate = `${targetYear}-${cellMMDD}`;
-
-                const cell = document.createElement('div');
-                cell.className = 'cal-cell';
-                cell.innerText = day;
-
-                cell.onclick = function() {
-                    window.location.href = `/archive?date=${cellFullDate}`;
-                };
-
-                if (cellMMDD === todayMMDD && targetYear === todayObj.getFullYear().toString()) {
-                    cell.classList.add('today');
-                }
-                if (cellMMDD === currentMMDD) {
-                    cell.classList.add('selected');
-                }
-
-                // 🎯 게시물 개수에 따라 1~5단계 클래스 부여 (5개 이상이면 레벨 5로 고정)
-                const count = recordCounts[cellMMDD] || 0;
-                if (count > 0) {
-                    const level = Math.min(count, 5);
-                    cell.classList.add(`level-${level}`);
-                }
-
-                daysGrid.appendChild(cell);
-            }
-        }
-
-        const entries = document.querySelectorAll('.diary-entry');
-        let visibleCount = 0;
-
-        entries.forEach(entry => {
-            const entryMMDD = entry.getAttribute('data-month-day');
-            if (entryMMDD === currentMMDD) {
-                entry.style.display = 'block';
-                visibleCount++;
-            } else {
-                entry.style.display = 'none';
-            }
-        });
-
-        if (visibleCount === 0) {
-            const noPostsMsg = document.getElementById('no-posts-msg');
-            const noPostsText = document.getElementById('no-posts-text');
-            if (noPostsMsg && noPostsText) {
-                if (isToday) {
-                    noPostsText.innerText = "오늘 작성된 기록이 없습니다.";
-                } else {
-                    noPostsText.innerText = "이 날짜에 작성된 기록이 없습니다.";
-                }
-                noPostsMsg.style.display = 'block';
-            }
-        }
-
-    } catch (err) {
-        console.error("Archive script error:", err);
-    }
-})();
-</script>
+            } else if
