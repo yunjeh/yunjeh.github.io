@@ -98,11 +98,11 @@ title: Archive
     }
 
     /* 포스트 제목 및 링크 */
-    .timeline-title {
+    /* .timeline-title {
         font-size: 1.1rem;
         font-weight: 700;
         margin: 0 0 8px 0;
-    }
+    }*/
 
     .timeline-title a {
         color: #222;
@@ -151,13 +151,13 @@ title: Archive
         <div class="timeline-item post-node-{{ year_group.name }}" style="{% if forloop.index > 3 %}display: none;{% endif %}">
             <div class="timeline-meta">
                 <span>{{ post.date | date: "%Y.%m.%d. %H:%M" }}</span>
-                {% if post.category %}
+                <!--{% if post.category %}
                     <span>·</span>
                     <span>{{ post.category }}</span>
                 {% elsif post.categories %}
                     <span>·</span>
                     <span>{{ post.categories | first }}</span>
-                {% endif %}
+                {% endif %}-->
             </div>
             <h2 class="timeline-title">
                 <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
