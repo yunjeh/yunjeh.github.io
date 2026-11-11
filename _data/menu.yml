@@ -35,6 +35,10 @@ entries:
   #        - title: with subsubitems
   #        - title: example page
   #          url: about
+
+  - title: 
+  - title: "yearly"
+    url: yearly
   - title: 
   - title: "노트"
     url: notes
