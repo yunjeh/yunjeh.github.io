@@ -46,14 +46,7 @@ layout: default
         font-size: 0.9rem;
         color: #1e293b;
         margin: 0;
-        cursor: pointer;
         padding: 2px 6px;
-        border-radius: var(--radius-sharp, 2px);
-        transition: background 0.2s, color 0.2s;
-    }
-    .cal-header:hover {
-        background: #f1f5f9;
-        color: #0284c7;
     }
 
     .cal-month-btn {
@@ -199,8 +192,7 @@ layout: default
         <aside class="calendar-sidebar">
             <div class="cal-header-wrapper">
                 <button id="prev-month-btn" class="cal-month-btn" type="button">◀</button>
-                <!-- 🎯 HTML 자체에 onclick을 박아넣어 확실하게 오늘 날짜(/archive)로 이동하도록 보장 -->
-                <div class="cal-header" id="cal-month-title" onclick="window.location.href='/archive'" title="오늘 날짜로 이동">캘린더</div>
+                <div class="cal-header" id="cal-month-title">캘린더</div>
                 <button id="next-month-btn" class="cal-month-btn" type="button">▶</button>
             </div>
             <div class="cal-grid">
@@ -362,9 +354,8 @@ layout: default
             };
         }
 
-        // 🎯 타이틀 텍스트만 동적으로 갱신 (클릭 이동은 HTML의 onclick이 담당)
-        const monthTitleElem = document.getElementById('cal-month-title');
         const monthNames = ["1월", "2월", "3월", "4월", "5월", "6월", "7월", "8월", "9월", "10월", "11월", "12월"];
+        const monthTitleElem = document.getElementById('cal-month-title');
         if (monthTitleElem) {
             monthTitleElem.innerText = `${targetYear}년 ${monthNames[targetMonth]}`;
         }
