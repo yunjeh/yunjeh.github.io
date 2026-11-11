@@ -41,7 +41,6 @@ layout: default
         margin-bottom: 12px;
         padding: 0 4px;
     }
-    /* 🎯 연도/월 타이틀 클릭 가능하도록 스타일 추가 */
     .cal-header {
         font-weight: 600;
         font-size: 0.9rem;
@@ -200,8 +199,8 @@ layout: default
         <aside class="calendar-sidebar">
             <div class="cal-header-wrapper">
                 <button id="prev-month-btn" class="cal-month-btn" type="button">◀</button>
-                <!-- 🎯 타이틀에 id를 부여하여 오늘로 이동하는 기능 연결 -->
-                <div class="cal-header" id="cal-month-title" title="오늘 날짜로 이동">캘린더</div>
+                <!-- 🎯 HTML 자체에 onclick을 박아넣어 확실하게 오늘 날짜(/archive)로 이동하도록 보장 -->
+                <div class="cal-header" id="cal-month-title" onclick="window.location.href='/archive'" title="오늘 날짜로 이동">캘린더</div>
                 <button id="next-month-btn" class="cal-month-btn" type="button">▶</button>
             </div>
             <div class="cal-grid">
@@ -295,7 +294,6 @@ layout: default
         const todayObj = new Date();
         const currentRealYear = todayObj.getFullYear().toString();
         const todayMMDD = String(todayObj.getMonth() + 1).padStart(2, '0') + '-' + String(todayObj.getDate()).padStart(2, '0');
-        const todayFullDate = `${currentRealYear}-${todayMMDD}`;
 
         const metaElements = document.querySelectorAll('.entry-meta');
         metaElements.forEach(el => {
@@ -331,4 +329,126 @@ layout: default
                 targetMonth = parseInt(parts[1], 10) - 1;
                 targetDay = parseInt(parts[2], 10);
                 currentMMDD = `${parts[1]}-${parts[2]}`;
-            } else if
+            } else if (/^\d{2}-\d{2}$/.test(dateParam)) {
+                currentMMDD = dateParam;
+                const parts = dateParam.split('-');
+                targetMonth = parseInt(parts[0], 10) - 1;
+                targetDay = parseInt(parts[1], 10);
+            }
+            if (currentMMDD === todayMMDD && targetYear === todayObj.getFullYear().toString()) {
+                isToday = true;
+            }
+        }
+
+        const prevMonthDate = new Date(parseInt(targetYear, 10), targetMonth - 1, 1);
+        const nextMonthDate = new Date(parseInt(targetYear, 10), targetMonth + 1, 1);
+
+        function formatMonthParam(d) {
+            const y = d.getFullYear();
+            const m = String(d.getMonth() + 1).padStart(2, '0');
+            return `${y}-${m}-01`;
+        }
+
+        const prevMonthBtn = document.getElementById('prev-month-btn');
+        const nextMonthBtn = document.getElementById('next-month-btn');
+        if (prevMonthBtn) {
+            prevMonthBtn.onclick = function() {
+                window.location.href = `/archive?date=${formatMonthParam(prevMonthDate)}`;
+            };
+        }
+        if (nextMonthBtn) {
+            nextMonthBtn.onclick = function() {
+                window.location.href = `/archive?date=${formatMonthParam(nextMonthDate)}`;
+            };
+        }
+
+        // 🎯 타이틀 텍스트만 동적으로 갱신 (클릭 이동은 HTML의 onclick이 담당)
+        const monthTitleElem = document.getElementById('cal-month-title');
+        const monthNames = ["1월", "2월", "3월", "4월", "5월", "6월", "7월", "8월", "9월", "10월", "11월", "12월"];
+        if (monthTitleElem) {
+            monthTitleElem.innerText = `${targetYear}년 ${monthNames[targetMonth]}`;
+        }
+
+        const firstDayIndex = new Date(targetYear, targetMonth, 1).getDay();
+        const totalDays = new Date(targetYear, targetMonth + 1, 0).getDate();
+
+        const daysGrid = document.getElementById('cal-days-grid');
+        if (daysGrid) {
+            daysGrid.innerHTML = '';
+
+            for (let i = 0; i < firstDayIndex; i++) {
+                const emptyCell = document.createElement('div');
+                emptyCell.className = 'cal-cell empty';
+                daysGrid.appendChild(emptyCell);
+            }
+
+            let recordCounts = {};
+            if (window.allBlogPosts && Array.isArray(window.allBlogPosts)) {
+                window.allBlogPosts.forEach(p => {
+                    if (p.year === targetYear) {
+                        recordCounts[p.mmdd] = (recordCounts[p.mmdd] || 0) + 1;
+                    }
+                });
+            }
+
+            for (let day = 1; day <= totalDays; day++) {
+                const dayStr = String(day).padStart(2, '0');
+                const cellMMDD = `${String(targetMonth + 1).padStart(2, '0')}-${dayStr}`;
+                const cellFullDate = `${targetYear}-${cellMMDD}`;
+
+                const cell = document.createElement('div');
+                cell.className = 'cal-cell';
+                cell.innerText = day;
+
+                cell.onclick = function() {
+                    window.location.href = `/archive?date=${cellFullDate}`;
+                };
+
+                if (cellMMDD === todayMMDD && targetYear === todayObj.getFullYear().toString()) {
+                    cell.classList.add('today');
+                }
+                if (cellMMDD === currentMMDD) {
+                    cell.classList.add('selected');
+                }
+
+                const count = recordCounts[cellMMDD] || 0;
+                if (count > 0) {
+                    const level = Math.min(count, 15);
+                    cell.classList.add(`level-${level}`);
+                }
+
+                daysGrid.appendChild(cell);
+            }
+        }
+
+        const entries = document.querySelectorAll('.diary-entry');
+        let visibleCount = 0;
+
+        entries.forEach(entry => {
+            const entryMMDD = entry.getAttribute('data-month-day');
+            if (entryMMDD === currentMMDD) {
+                entry.style.display = 'block';
+                visibleCount++;
+            } else {
+                entry.style.display = 'none';
+            }
+        });
+
+        if (visibleCount === 0) {
+            const noPostsMsg = document.getElementById('no-posts-msg');
+            const noPostsText = document.getElementById('no-posts-text');
+            if (noPostsMsg && noPostsText) {
+                if (isToday) {
+                    noPostsText.innerText = "오늘 작성된 기록이 없습니다.";
+                } else {
+                    noPostsText.innerText = "이 날짜에 작성된 기록이 없습니다.";
+                }
+                noPostsMsg.style.display = 'block';
+            }
+        }
+
+    } catch (err) {
+        console.error("Archive script error:", err);
+    }
+})();
+</script>
