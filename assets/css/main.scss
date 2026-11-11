@@ -331,7 +331,10 @@ layout: default
 
 
     @media (max-width: 768px) {
-
+        body {
+            padding-left: 10px;
+            padding-right: 10px;
+              }
         .site-wrapper {
 
             flex-direction: column-reverse;
@@ -352,7 +355,7 @@ layout: default
 
             width: 100%;
 
-            margin-top: 20px;
+            margin-top: 12px;
 
         }
 
