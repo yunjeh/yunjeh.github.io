@@ -6,52 +6,49 @@ layout: default
 
 <h1>{{ page.title }}</h1>
 
-<!-- 🎯 상단 탭 메뉴 (CSS 기반 전환으로 JS 없음) -->
-<div class="note-tabs" style="margin: 0; display: flex; gap: 10px; font-size: 0.9rem;">
+<!-- 🎯 상단 탭 메뉴 (태그 클라우드와 동일한 폰트 및 박스 규격 적용) -->
+<div class="note-tabs" style="margin: 20px 0 15px 0; display: flex; gap: 8px; align-items: center;">
     <a href="#latest" class="tab-btn active" id="btn-latest">📅 최신순</a>
-    <a href="#genre" class="tab-btn" id="btn-genre">🏷️ 장르별</a>
+    <a href="#genre" class="tab-btn" id="btn-genre">🏷️ 장르별 보기</a>
 </div>
 
 <style>
-    /* 탭 버튼 스타일 */
+    /* 🎯 태그 페이지의 태그 클라우드와 완벽히 동일한 공통 버튼/배지 스타일 규격 */
     .tab-btn {
-        background: #e5e5e5;
-        border: 1px solid #ccc;
-        padding: 6px 12px;
+        background: #ffffff !important;
+        color: #333333 !important;
+        border: 1px solid #d1d1d1;
+        padding: 4px 10px;
         border-radius: var(--radius-subtle, 6px);
         text-decoration: none;
+        font-family: inherit;
+        font-size: 0.85rem;
         font-weight: 500;
-        color: #333;
         transition: all 0.2s ease;
+        display: inline-block;
     }
 
     .tab-btn:hover {
-        background: #d5d5d5;
+        background: #222222 !important;
+        color: #ffffff !important;
+        border-color: #222222;
     }
 
-    /* 탭 상태에 따라 버튼 강조 (주소창 해시에 따른 변화) */
+    /* 탭 상태에 따른 활성화 강조 (주소창 해시에 따른 변화) */
     body:not(:has(#genre:target)) #btn-latest,
     body:has(#genre:target) #btn-genre {
-        background: #222;
-        color: #fff;
-        border-color: #222;
-    }
-    body:not(:has(#genre:target)) #btn-genre,
-    body:has(#genre:target) #btn-latest {
-        background: #e5e5e5;
-        color: #333;
-        border-color: #ccc;
+        background: #222222 !important;
+        color: #ffffff !important;
+        border-color: #222222;
     }
 
     /* 뷰 섹션 기본 숨김 및 해시 타겟에 따른 표시 */
     .note-view {
         display: none;
     }
-    /* 기본값은 최신순 뷰 보이기 */
     .note-view#latest-view {
         display: block;
     }
-    /* #genre가 선택되면 장르별 뷰 보이기 */
     body:has(#genre:target) #latest-view {
         display: none;
     }
@@ -326,7 +323,6 @@ layout: default
     }
 
     function insertPanelAtRightRow(key) {
-        // 현재 활성화된 뷰(최신순 또는 장르별) 안에서 그리드와 카드 탐색
         const activeView = document.body.matches(':has(#genre:target)') ? document.getElementById('genre-view') : document.getElementById('latest-view');
         const grid = activeView.querySelector('.display-grid');
         const card = document.getElementById('card-' + key);
