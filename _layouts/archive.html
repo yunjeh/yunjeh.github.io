@@ -160,14 +160,12 @@ title: Archive
             </div>
 
             <!-- 2. 작성 일시 영역 (요청하신 스타일 테두리 적용) -->
-            <time class="post-date timeline-meta" style="border-top-color: {% if pastel_bg == '#e5e5e5' %}rgba(0,0,0,0.1){% else %}rgba(0,0,0,0.15){% endif %};">
-                {{ post.date | date: "%Y.%m.%d. %H:%M:%S" }}
-                {% if post.category %}
-                    <span>{{ post.category }}</span>
-                {% elsif post.categories %}
-                    <span>{{ post.categories | first }}</span>
-                {% endif %}
+            <time class="post-date">
+
+              {{ post.date | date: "%Y.%m.%d. %H:%M:%S" }}
+
             </time>
+
 
         </div>
         {% endfor %}
