@@ -6,13 +6,65 @@ layout: default
 
 <h1>{{ page.title }}</h1>
 
+<!-- 🎯 상단 탭 메뉴 (CSS 기반 전환으로 JS 없음) -->
+<div class="note-tabs" style="margin: 20px 0 15px 0; display: flex; gap: 10px; font-size: 0.9rem;">
+    <a href="#latest" class="tab-btn active" id="btn-latest">📅 최신순</a>
+    <a href="#genre" class="tab-btn" id="btn-genre">🏷️ 장르별 보기</a>
+</div>
+
 <style>
+    /* 탭 버튼 스타일 */
+    .tab-btn {
+        background: #e5e5e5;
+        border: 1px solid #ccc;
+        padding: 6px 12px;
+        border-radius: var(--radius-subtle, 6px);
+        text-decoration: none;
+        font-weight: 500;
+        color: #333;
+        transition: all 0.2s ease;
+    }
+
+    .tab-btn:hover {
+        background: #d5d5d5;
+    }
+
+    /* 탭 상태에 따라 버튼 강조 (주소창 해시에 따른 변화) */
+    body:not(:has(#genre:target)) #btn-latest,
+    body:has(#genre:target) #btn-genre {
+        background: #222;
+        color: #fff;
+        border-color: #222;
+    }
+    body:not(:has(#genre:target)) #btn-genre,
+    body:has(#genre:target) #btn-latest {
+        background: #e5e5e5;
+        color: #333;
+        border-color: #ccc;
+    }
+
+    /* 뷰 섹션 기본 숨김 및 해시 타겟에 따른 표시 */
+    .note-view {
+        display: none;
+    }
+    /* 기본값은 최신순 뷰 보이기 */
+    .note-view#latest-view {
+        display: block;
+    }
+    /* #genre가 선택되면 장르별 뷰 보이기 */
+    body:has(#genre:target) #latest-view {
+        display: none;
+    }
+    body:has(#genre:target) #genre-view {
+        display: block;
+    }
+
     /* 넷플릭스 스타일 그리드 레이아웃 */
     .display-grid {
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(95px, 1fr));
         gap: 12px;
-        padding: 20px 0;
+        padding: 10px 0 20px 0;
         max-width: 900px;
         margin: 0 auto;
         box-sizing: border-box;
@@ -30,7 +82,7 @@ layout: default
         }
     }
 
-    /* 포스터 카드 스타일 (가는 검은선 테두리 적용) */
+    /* 포스터 카드 스타일 (가는 검은선 테두리) */
     .display-card {
         background: #141414;
         border-radius: var(--radius-subtle, 6px);
@@ -39,7 +91,7 @@ layout: default
         transition: transform 0.3s ease, box-shadow 0.3s ease;
         position: relative;
         aspect-ratio: 2 / 3;
-        border: 1px solid #000; /* 가는 검은선 */
+        border: 1px solid #000;
     }
 
     .display-card:hover {
@@ -48,7 +100,6 @@ layout: default
         z-index: 10;
     }
 
-    /* 🎯 클릭해서 열린(활성) 상태일 때 호버된 크기(1.08) 유지 */
     .display-card.active {
         transform: scale(1.08);
         box-shadow: 0 8px 16px rgba(0, 0, 0, 0.25);
@@ -63,7 +114,7 @@ layout: default
         display: block;
     }
 
-    /* 랜덤 박스 (커버 없을 때) 스타일 */
+    /* 랜덤 박스 스타일 */
     .random-box {
         display: flex !important;
         align-items: center;
@@ -82,15 +133,15 @@ layout: default
         line-height: 1.1;
     }
 
-    /* 🎯 확장 패널 (검은 바탕, 흰 글자, 대폭 줄인 여백/패딩) */
+    /* 확장 패널 */
     .expand-panel {
-        display: none; /* 기본 숨김 */
-        grid-column: 1 / -1; /* 그리드 전체 너비를 가득 채움 */
-        background: #141414; /* 검은 바탕 */
-        color: #fff; /* 흰 글자 */
+        display: none;
+        grid-column: 1 / -1;
+        background: #141414;
+        color: #fff;
         border: 1px solid #333;
         border-radius: var(--radius-subtle, 6px);
-        padding: 16px 20px; /* 패딩을 대폭 줄여 여백 축소 */
+        padding: 16px 20px;
         margin: 8px 0;
         position: relative;
         box-shadow: 0 6px 16px rgba(0,0,0,0.4);
@@ -134,102 +185,152 @@ layout: default
     }
 </style>
 
-<div class="display-grid">
-    {% assign total_notes = site.notes | size %}
-    {% for post in site.notes %}
-    {% assign index = forloop.index %}
-    
-    <!-- 포스터 카드 -->
-    <div class="display-card" id="card-{{ index }}" onclick="toggleExpand({{ index }})">
-        {% if post.cover %}
-            <img src="{{ post.cover | relative_url }}" alt="{{ post.title }}" class="display-poster">
-        {% else %}
-            <div class="display-poster random-box" id="random-box-{{ index }}">
-                <span class="random-text" id="random-text-{{ index }}">{{ post.title }}</span>
-            </div>
-            <script>
-                (function() {
-                    const colors = ['#b71c1c', '#880e4f', '#4a148c', '#311b92', '#0d47a1', '#01579b', '#006064', '#1b5e20', '#33691e', '#bf360c', '#3e2723', '#263238'];
-                    const fonts = ['"Impact", fantasy', '"Arial Black", Gadget, sans-serif', '"Georgia", serif', '"Trebuchet MS", Helvetica, sans-serif', 'system-ui'];
-                    
-                    const box = document.getElementById('random-box-{{ index }}');
-                    const text = document.getElementById('random-text-{{ index }}');
-                    
-                    box.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-                    text.style.fontFamily = fonts[Math.floor(Math.random() * fonts.length)];
-                    
-                    const titleLength = text.innerText.length;
-                    if (titleLength <= 5) {
-                        text.style.fontSize = '2.2em';
-                    } else if (titleLength <= 10) {
-                        text.style.fontSize = '1.6em';
-                    } else {
-                        text.style.fontSize = '1.2em';
-                        text.style.letterSpacing = '-1px';
-                    }
-                })();
-            </script>
-        {% endif %}
-    </div>
+<!-- 가상의 앵커 타겟 포인트 -->
+<div id="latest"></div>
+<div id="genre"></div>
 
-    <!-- 확장 패널 -->
-    <div id="panel-{{ index }}" class="expand-panel">
-        <button class="expand-close" onclick="closeExpand({{ index }})">&times;</button>
-        <span class="expand-date">
-            {{ post.date | date: "%Y. %m." }}{% if post.category %} {{ post.category }}.{% elsif post.categories %} {{ post.categories | join: ", " }}.{% endif %}
-        </span>
-        <h3 style="margin: 0; color: #fff; font-size: 1.2rem;">{{ post.title }}</h3>
-        <div class="expand-body">
-            {{ post.content }}
+<!-- 1. 최신순 뷰 (기본) -->
+<div id="latest-view" class="note-view">
+    <div class="display-grid">
+        {% assign sorted_notes = site.notes | sort: 'date' | reverse %}
+        {% for post in sorted_notes %}
+        {% assign index = forloop.index %}
+        
+        <div class="display-card" id="card-latest-{{ index }}" onclick="toggleExpand('latest-{{ index }}')">
+            {% if post.cover %}
+                <img src="{{ post.cover | relative_url }}" alt="{{ post.title }}" class="display-poster">
+            {% else %}
+                <div class="display-poster random-box" id="random-box-latest-{{ index }}">
+                    <span class="random-text" id="random-text-latest-{{ index }}">{{ post.title }}</span>
+                </div>
+                <script>
+                    (function() {
+                        const colors = ['#b71c1c', '#880e4f', '#4a148c', '#311b92', '#0d47a1', '#01579b', '#006064', '#1b5e20', '#33691e', '#bf360c', '#3e2723', '#263238'];
+                        const fonts = ['"Impact", fantasy', '"Arial Black", Gadget, sans-serif', '"Georgia", serif', '"Trebuchet MS", Helvetica, sans-serif', 'system-ui'];
+                        
+                        const box = document.getElementById('random-box-latest-{{ index }}');
+                        const text = document.getElementById('random-text-latest-{{ index }}');
+                        
+                        box.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                        text.style.fontFamily = fonts[Math.floor(Math.random() * fonts.length)];
+                        
+                        const titleLength = text.innerText.length;
+                        if (titleLength <= 5) text.style.fontSize = '2.2em';
+                        else if (titleLength <= 10) text.style.fontSize = '1.6em';
+                        else { text.style.fontSize = '1.2em'; text.style.letterSpacing = '-1px'; }
+                    })();
+                </script>
+            {% endif %}
         </div>
+
+        <div id="panel-latest-{{ index }}" class="expand-panel">
+            <button class="expand-close" onclick="closeExpand('latest-{{ index }}')">&times;</button>
+            <span class="expand-date">
+                {{ post.date | date: "%Y. %m." }}{% if post.category %} {{ post.category }}.{% elsif post.categories %} {{ post.categories | join: ", " }}.{% endif %}
+            </span>
+            <h3 style="margin: 0; color: #fff; font-size: 1.2rem;">{{ post.title }}</h3>
+            <div class="expand-body">
+                {{ post.content }}
+            </div>
+        </div>
+        {% endfor %}
     </div>
-    {% endfor %}
+</div>
+
+<!-- 2. 장르별 보기 뷰 -->
+<div id="genre-view" class="note-view">
+    <div class="display-grid">
+        {% assign sorted_notes_genre = site.notes | sort: 'category' %}
+        {% for post in sorted_notes_genre %}
+        {% assign index = forloop.index %}
+        
+        <div class="display-card" id="card-genre-{{ index }}" onclick="toggleExpand('genre-{{ index }}')">
+            {% if post.cover %}
+                <img src="{{ post.cover | relative_url }}" alt="{{ post.title }}" class="display-poster">
+            {% else %}
+                <div class="display-poster random-box" id="random-box-genre-{{ index }}">
+                    <span class="random-text" id="random-text-genre-{{ index }}">{{ post.title }}</span>
+                </div>
+                <script>
+                    (function() {
+                        const colors = ['#b71c1c', '#880e4f', '#4a148c', '#311b92', '#0d47a1', '#01579b', '#006064', '#1b5e20', '#33691e', '#bf360c', '#3e2723', '#263238'];
+                        const fonts = ['"Impact", fantasy', '"Arial Black", Gadget, sans-serif', '"Georgia", serif', '"Trebuchet MS", Helvetica, sans-serif', 'system-ui'];
+                        
+                        const box = document.getElementById('random-box-genre-{{ index }}');
+                        const text = document.getElementById('random-text-genre-{{ index }}');
+                        
+                        box.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                        text.style.fontFamily = fonts[Math.floor(Math.random() * fonts.length)];
+                        
+                        const titleLength = text.innerText.length;
+                        if (titleLength <= 5) text.style.fontSize = '2.2em';
+                        else if (titleLength <= 10) text.style.fontSize = '1.6em';
+                        else { text.style.fontSize = '1.2em'; text.style.letterSpacing = '-1px'; }
+                    })();
+                </script>
+            {% endif %}
+        </div>
+
+        <div id="panel-genre-{{ index }}" class="expand-panel">
+            <button class="expand-close" onclick="closeExpand('genre-{{ index }}')">&times;</button>
+            <span class="expand-date">
+                {{ post.date | date: "%Y. %m." }}{% if post.category %} {{ post.category }}.{% elsif post.categories %} {{ post.categories | join: ", " }}.{% endif %}
+            </span>
+            <h3 style="margin: 0; color: #fff; font-size: 1.2rem;">{{ post.title }}</h3>
+            <div class="expand-body">
+                {{ post.content }}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
 </div>
 
 <script>
-    let activeIndex = null;
+    let activeKey = null;
 
-    function toggleExpand(index) {
-        const panel = document.getElementById('panel-' + index);
-        const card = document.getElementById('card-' + index);
+    function toggleExpand(key) {
+        const panel = document.getElementById('panel-' + key);
+        const card = document.getElementById('card-' + key);
 
-        if (activeIndex === index) {
+        if (activeKey === key) {
             panel.style.display = 'none';
             card.classList.remove('active');
-            activeIndex = null;
+            activeKey = null;
             return;
         }
 
-        if (activeIndex !== null) {
-            document.getElementById('panel-' + activeIndex).style.display = 'none';
-            document.getElementById('card-' + activeIndex).classList.remove('active');
+        if (activeKey !== null) {
+            document.getElementById('panel-' + activeKey).style.display = 'none';
+            document.getElementById('card-' + activeKey).classList.remove('active');
         }
 
-        insertPanelAtRightRow(index);
+        insertPanelAtRightRow(key);
 
         panel.style.display = 'block';
         card.classList.add('active');
-        activeIndex = index;
+        activeKey = key;
 
         setTimeout(() => {
             panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         }, 100);
     }
 
-    function closeExpand(index) {
-        const panel = document.getElementById('panel-' + index);
-        const card = document.getElementById('card-' + index);
+    function closeExpand(key) {
+        const panel = document.getElementById('panel-' + key);
+        const card = document.getElementById('card-' + key);
         panel.style.display = 'none';
         card.classList.remove('active');
-        if (activeIndex === index) {
-            activeIndex = null;
+        if (activeKey === key) {
+            activeKey = null;
         }
     }
 
-    function insertPanelAtRightRow(index) {
-        const grid = document.querySelector('.display-grid');
-        const card = document.getElementById('card-' + index);
-        const panel = document.getElementById('panel-' + index);
+    function insertPanelAtRightRow(key) {
+        // 현재 활성화된 뷰(최신순 또는 장르별) 안에서 그리드와 카드 탐색
+        const activeView = document.body.matches(':has(#genre:target)') ? document.getElementById('genre-view') : document.getElementById('latest-view');
+        const grid = activeView.querySelector('.display-grid');
+        const card = document.getElementById('card-' + key);
+        const panel = document.getElementById('panel-' + key);
 
         const gridComputedStyle = window.getComputedStyle(grid);
         const columnsCount = gridComputedStyle.getPropertyValue('grid-template-columns').split(' ').length;
@@ -241,7 +342,7 @@ layout: default
 
         if (targetRowEndIndex < cards.length) {
             const nextCard = cards[targetRowEndIndex];
-            grid.insertBefore(panel, nextCard);
+            grid.insertBefore(panel, nextCard.closest('.display-card') || nextCard);
         } else {
             grid.appendChild(panel);
         }
