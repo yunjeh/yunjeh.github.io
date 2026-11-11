@@ -16,8 +16,7 @@ entries:
       show_more_text: 아카이브.. #See archive...
       show_more_url: archive
   - title: "&nbsp;"
-  - title: "태그"
-    url: tags
+
   #- title: posts by category
   #  post_list:
   #    category: example2
@@ -39,6 +38,9 @@ entries:
   - title: 
   - title: "yearly"
     url: yearly
+  - title: 
+  - title: "태그"
+    url: tags
   - title: 
   - title: "노트"
     url: notes
