@@ -9,11 +9,13 @@
 @import "sticky_notes.css";
 
 /* ===================================================
-   DESIGN TOKENS (전역 둥글기 변수 통일: 6px로 일괄 적용)
+   DESIGN TOKENS (둥글기, 간격, 배경색 통합 변수)
 =================================================== */
 :root {
   --radius-subtle: 6px;
-  --radius-sharp: 6px; /* 불일치를 없애기 위해 둥글기를 6px로 통일 */
+  --box-bg: #e5e5e5;
+  --box-padding: 10px 12px;
+  --box-margin-bottom: 10px;
 }
 
 /* ===================================================
@@ -110,22 +112,22 @@ p {
 
 
 /* ===================================================
-   POST LIST (Recent Posts 전용)
+   POST LIST (통일된 박스 패딩, 마진, 배경색)
 =================================================== */
 .post-list {
   max-width: 400px !important;
-  padding: 0 1px !important;
-  margin: 0.5rem 0 0.5rem 0 !important;
+  padding: 0 !important;
+  margin: var(--box-margin-bottom) 0 !important;
   list-style: none !important;
   font-size: 14px;
 }
 
 .post-list > div {
   position: relative;
-  background: #e5e5e5;
-  padding: 8px 10px;
-  margin-bottom: 10px;
-  border-radius: var(--radius-subtle); /* 변수 적용으로 6px 통일 */
+  background: var(--box-bg);
+  padding: var(--box-padding);
+  margin-bottom: var(--box-margin-bottom);
+  border-radius: var(--radius-subtle);
   border: 1px solid #ddd;
 }
 
@@ -254,14 +256,14 @@ img {
 
 
 /* ===================================================
-   HIGHLIGHT & TAGS (둥글기 변수 적용으로 통일)
+   TAGS & TARGET SECTION (노란 배경 제거, 통일된 회색 박스)
 =================================================== */
 .tag-section:target .post-list > div {
-  background: #fff6a9 !important;
+  background: var(--box-bg) !important;
   position: relative;
-  padding: 8px 10px;
-  margin-bottom: 10px;
-  border-radius: var(--radius-subtle); /* 6px 통일 */
+  padding: var(--box-padding);
+  margin-bottom: var(--box-margin-bottom);
+  border-radius: var(--radius-subtle);
   border: 1px solid #ddd;
 }
 
@@ -271,8 +273,8 @@ img {
   background: #ffffff !important;
   color: #333333 !important;
   border: 1px solid #d1d1d1;
-  padding: 3px 8px;
-  border-radius: var(--radius-subtle); /* 기존 2px에서 6px로 통일감 부여 */
+  padding: 4px 8px;
+  border-radius: var(--radius-subtle);
   text-decoration: none;
   font-size: 0.85rem;
   transition: all 0.2s ease;
