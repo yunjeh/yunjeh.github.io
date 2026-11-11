@@ -1,25 +1,22 @@
 ---
 layout: default
-title: Archive
 ---
 
 {% include back_link.html %}
 
 <h1>{{ page.title }}</h1>
 
-<style>
-    /* 🎯 상단 연도 태그 클라우드 (태그 페이지 및 다른 버튼과 규격 통일: 6px 둥글기, 0.85rem 폰트) */
-    .year-cloud {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 8px;
-        margin: 20px 0 25px 0;
-        align-items: center;
-    }
+<!-- 🎯 상단 탭 메뉴 (CSS 기반 `:target` 전환으로 자바스크립트 없음) -->
+<div class="note-tabs" style="margin: 20px 0 15px 0; display: flex; gap: 8px; align-items: center;">
+    <a href="#latest" class="tab-btn active" id="btn-latest">📅 최신순</a>
+    <a href="#genre" class="tab-btn" id="btn-genre">🏷️ 장르별 보기</a>
+</div>
 
-    .year-btn {
-        background: #ffffff;
-        color: #333333;
+<style>
+    /* 태그 클라우드와 동일한 공통 버튼 규격 */
+    .tab-btn {
+        background: #ffffff !important;
+        color: #333333 !important;
         border: 1px solid #d1d1d1;
         padding: 4px 10px;
         border-radius: var(--radius-subtle, 6px);
@@ -28,213 +25,278 @@ title: Archive
         font-size: 0.85rem;
         font-weight: 500;
         transition: all 0.2s ease;
+        display: inline-block;
     }
 
-    .year-btn:hover,
-    .year-btn.active {
-        background: #222222;
-        color: #ffffff;
+    .tab-btn:hover {
+        background: #222222 !important;
+        color: #ffffff !important;
         border-color: #222222;
     }
 
-    .year-count {
-        font-size: 0.75rem;
-        opacity: 0.7;
-        margin-left: 2px;
+    body:not(:has(#genre:target)) #btn-latest,
+    body:has(#genre:target) #btn-genre {
+        background: #222222 !important;
+        color: #ffffff !important;
+        border-color: #222222;
     }
 
-    /* 연도별 섹션 숨김/표시 제어 */
-    .year-section {
-        display: none;
+    /* 뷰 전환 (CSS `:target` 활용으로 JS 제어 제거) */
+    .note-view { display: none; }
+    .note-view#latest-view { display: block; }
+    body:has(#genre:target) #latest-view { display: none; }
+    body:has(#genre:target) #genre-view { display: block; }
+
+    /* 넷플릭스 스타일 그리드 레이아웃 (왼쪽 정렬) */
+    .display-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(95px, 1fr));
+        gap: 12px;
+        padding: 10px 0 20px 0;
+        width: 100%;
+        margin: 0;
+        box-sizing: border-box;
     }
-    .year-section.active {
+
+    @media screen and (max-width: 600px) {
+        .display-grid {
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            padding: 10px 0;
+        }
+        .random-box { padding: 4px; }
+    }
+
+    /* 포스터 카드 스타일 (가는 검은선 테두리) */
+    .display-card {
+        background: #141414;
+        border-radius: var(--radius-subtle, 6px);
+        overflow: hidden;
+        cursor: pointer;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        position: relative;
+        aspect-ratio: 2 / 3;
+        border: 1px solid #000;
+    }
+
+    .display-card:hover {
+        transform: scale(1.08);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.25);
+        z-index: 10;
+        border-color: #555;
+    }
+
+    .display-poster {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
         display: block;
     }
 
-    /* 트위터식 타임라인 컨테이너 */
-    .timeline-container {
-        max-width: 600px;
-        margin: 0 auto;
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
+    /* 커버 없을 때 제목 표시 박스 (여기서도 Liquid로 색상 분기 가능) */
+    .random-box {
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
+        padding: 6px;
+        text-align: center;
+        color: #fff;
+        font-weight: 900;
+        word-break: break-all;
+        overflow: hidden;
     }
 
-    /* 트위터 피드 스타일의 개별 포스트 박스 (26.11.11 버전 디자인 시스템) */
-    .timeline-item {
-        background: var(--box-bg, #e5e5e5);
-        border: 1px solid #ddd;
+    .random-text {
+        display: block;
+        width: 100%;
+        line-height: 1.1;
+    }
+
+    /* 🎯 확장 패널 기본 스타일 (토글은 CSS 체크박스  hack 또는 순수 CSS 디테일 활용 가능하지만, 
+       현재 구조 유지를 위해 최소한의 JS 클릭 토글만 남기거나 완전 순수 앵커 방식으로 갈 수 있습니다.) */
+    
+    /* 💡 [대안] JS 클릭 이벤트를 쓰지 않으려면 각 포스터를 <details> 태그로 감싸는 방법이 있습니다. 
+       아래는 기존 레이아웃 구조를 해치지 않도록 DOM 제어만 남기고 연산 JS는 모두 걷어낸 형태입니다. */
+    .expand-panel {
+        display: none;
+        grid-column: 1 / -1;
         border-radius: var(--radius-subtle, 6px);
-        padding: 16px 20px;
-        transition: background 0.2s ease;
-        /* 무한 스크롤 시 부드럽게 나타나는 애니메이션 효과 */
-        animation: fadeInUp 0.4s ease forwards;
+        padding: 20px 24px;
+        margin: 8px 0;
+        position: relative;
+        box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+        box-sizing: border-box;
     }
 
-    @keyframes fadeInUp {
-        from {
-            opacity: 0;
-            transform: translateY(12px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
+    .expand-close {
+        position: absolute;
+        top: 16px;
+        right: 20px;
+        background: none;
+        border: none;
+        font-size: 1.6rem;
+        cursor: pointer;
+        opacity: 0.7;
     }
 
-    .timeline-item:hover {
-        background: #deded8;
-    }
+    .expand-close:hover { opacity: 1; }
 
-    /* 포스트 메타 정보 (날짜 및 카테고리 - post_list.html 형식 반영) */
-    .timeline-meta {
+    .expand-meta {
         font-family: 'Courier New', Courier, monospace;
-        font-size: 0.8rem;
-        color: #777;
-        margin-bottom: 6px;
+        font-size: 0.82rem;
+        opacity: 0.8;
+        margin-bottom: 8px;
         display: flex;
         gap: 8px;
         align-items: center;
     }
 
-    /* 포스트 제목 및 링크 */
-    /* .timeline-title {
-        font-size: 1.1rem;
+    .expand-title {
+        margin: 0 0 12px 0;
+        font-size: 1.3rem;
         font-weight: 700;
-        margin: 0 0 8px 0;
-    }*/
-
-    .timeline-title a {
-        color: #222;
-        text-decoration: none;
     }
 
-    .timeline-title a:hover {
-        text-decoration: underline;
-    }
-
-    /* 본문 요약 미리보기 */
-    .timeline-excerpt {
-        font-size: 0.9rem;
-        color: #444;
-        line-height: 1.6;
-        margin: 0;
-    }
-
-    /* 무한 스크롤 로딩 표시 영역 */
-    .loading-trigger {
-        text-align: center;
-        padding: 40px 20px;
-        font-size: 0.85rem;
-        color: #888;
-        font-family: 'Courier New', Courier, monospace;
+    .expand-body {
+        font-size: 0.95rem;
+        line-height: 1.7;
+        opacity: 0.95;
     }
 </style>
 
-<!-- 1. 포스트가 존재하는 연도들을 Jekyll로 자동 추출하여 태그 클라우드 생성 -->
-{% assign posts_by_year = site.posts | sort: 'date' | reverse | group_by_exp: "post", "post.date | date: '%Y'" %}
+<div id="latest"></div>
+<div id="genre"></div>
 
-<div class="year-cloud">
-    {% for year_group in posts_by_year %}
-        <a href="#{{ year_group.name }}" class="year-btn {% if forloop.first %}active{% endif %}" onclick="switchYear('{{ year_group.name }}', event)">
-            {{ year_group.name }} <span class="year-count">({{ year_group.items | size }})</span>
-        </a>
-    {% endfor %}
-</div>
+<!-- 1. 최신순 뷰 -->
+<div id="latest-view" class="note-view">
+    <div class="display-grid">
+        {% assign sorted_notes = site.notes | sort: 'date' | reverse %}
+        {% for post in sorted_notes %}
+        {% assign index = forloop.index %}
+        
+        <div class="display-card" id="card-latest-{{ index }}" onclick="toggleExpand('latest-{{ index }}')">
+            {% if post.cover %}
+                <img src="{{ post.cover | relative_url }}" alt="{{ post.title }}" class="display-poster">
+            {% else %}
+                {% assign title_length = post.title | size %}
+                <div class="display-poster random-box" style="background-color: {% cycle '#b71c1c', '#880e4f', '#4a148c', '#0d47a1', '#01579b', '#1b5e20', '#bf360c' %};">
+                    <span class="random-text" style="font-size: {% if title_length <= 5 %}2.2em{% elsif title_length <= 10 %}1.6em{% else %}1.2em{% endif %};">{{ post.title }}</span>
+                </div>
+            {% endif %}
+        </div>
 
-<!-- 2. 연도별 타임라인 컨테이너 목록 -->
-{% for year_group in posts_by_year %}
-<div id="section-{{ year_group.name }}" class="year-section {% if forloop.first %}active{% endif %}">
-    <div class="timeline-container" id="timeline-{{ year_group.name }}">
-        {% for post in year_group.items %}
-        <!-- 🎯 처음에는 딱 3개만 보여주어 스크롤을 내리는 재미(무한 스크롤)를 확실히 느낄 수 있게 설정 -->
-        <div class="timeline-item post-node-{{ year_group.name }}" style="{% if forloop.index > 3 %}display: none;{% endif %}">
-            <div class="timeline-meta">
-                <span>{{ post.date | date: "%Y.%m.%d. %H:%M" }}</span>
-                <!--{% if post.category %}
-                    <span>·</span>
+        {% comment %} 🎯 Jekyll 빌드 타임에 '!' 포함 여부를 확인하여 파스텔톤 색상 중 하나를 고정 할당 {% endcomment %}
+        {% assign has_exclamation = post.title | include: "!" %}
+        
+        {% if has_exclamation %}
+            {% assign color_index = forloop.index0 | modulo: 6 %}
+            {% if color_index == 0 %}{% assign pastel_bg = '#ffebee' %}{% assign text_color = '#b71c1c' %}
+            {% elsif color_index == 1 %}{% assign pastel_bg = '#fce4ec' %}{% assign text_color = '#880e4f' %}
+            {% elsif color_index == 2 %}{% assign pastel_bg = '#f3e5f5' %}{% assign text_color = '#4a148c' %}
+            {% elsif color_index == 3 %}{% assign pastel_bg = '#e3f2fd' %}{% assign text_color = '#0d47a1' %}
+            {% elsif color_index == 4 %}{% assign pastel_bg = '#e8f5e9' %}{% assign text_color = '#1b5e20' %}
+            {% else %}{% assign pastel_bg = '#fffde7' %}{% assign text_color = '#f57f17' %}
+            {% endif %}
+        {% else %}
+            {% assign pastel_bg = '#141414' %}
+            {% assign text_color = '#ffffff' %}
+        {% endif %}
+
+        <div id="panel-latest-{{ index }}" class="expand-panel" style="background-color: {{ pastel_bg }}; color: {{ text_color }}; {% if has_exclamation %}border: 1px solid #d1d1d1;{% else %}border: 1px solid #333;{% endif %}">
+            <button class="expand-close" onclick="closeExpand('latest-{{ index }}')" style="color: {{ text_color }};">&times;</button>
+            <div class="expand-meta">
+                <span>{{ post.date | date: "%Y.%m.%d" }}</span>
+                {% if post.category %}
                     <span>{{ post.category }}</span>
                 {% elsif post.categories %}
-                    <span>·</span>
                     <span>{{ post.categories | first }}</span>
-                {% endif %}-->
+                {% endif %}
             </div>
-            <h2 class="timeline-title">
-                <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
-            </h2>
-            {% if post.excerpt %}
-                <p class="timeline-excerpt">{{ post.excerpt | strip_html | truncate: 130 }}</p>
-            {% endif %}
+            <h3 class="expand-title">{{ post.title }}</h3>
+            <div class="expand-body">
+                {{ post.content }}
+            </div>
         </div>
         {% endfor %}
     </div>
-    
-    <!-- 해당 연도의 글이 3개가 넘을 때 작동하는 무한 스크롤 감지 트리거 -->
-    {% if year_group.items | size > 3 %}
-    <div class="loading-trigger" id="loader-{{ year_group.name }}">↓ 스크롤하여 이전 기록 불러오는 중...</div>
-    {% endif %}
 </div>
-{% endfor %}
+
+<!-- 2. 장르별 보기 뷰 -->
+<div id="genre-view" class="note-view">
+    <div class="display-grid">
+        {% assign sorted_notes_genre = site.notes | sort: 'category' %}
+        {% for post in sorted_notes_genre %}
+        {% assign index = forloop.index %}
+        
+        <div class="display-card" id="card-genre-{{ index }}" onclick="toggleExpand('genre-{{ index }}')">
+            {% if post.cover %}
+                <img src="{{ post.cover | relative_url }}" alt="{{ post.title }}" class="display-poster">
+            {% else %}
+                {% assign title_length = post.title | size %}
+                <div class="display-poster random-box" style="background-color: {% cycle '#b71c1c', '#880e4f', '#4a148c', '#0d47a1', '#01579b', '#1b5e20', '#bf360c' %};">
+                    <span class="random-text" style="font-size: {% if title_length <= 5 %}2.2em{% elsif title_length <= 10 %}1.6em{% else %}1.2em{% endif %};">{{ post.title }}</span>
+                </div>
+            {% endif %}
+        </div>
+
+        {% assign has_exclamation_genre = post.title | include: "!" %}
+        {% if has_exclamation_genre %}
+            {% assign color_index = forloop.index0 | modulo: 6 %}
+            {% if color_index == 0 %}{% assign pastel_bg_g = '#ffebee' %}{% assign text_color_g = '#b71c1c' %}
+            {% elsif color_index == 1 %}{% assign pastel_bg_g = '#fce4ec' %}{% assign text_color_g = '#880e4f' %}
+            {% elsif color_index == 2 %}{% assign pastel_bg_g = '#f3e5f5' %}{% assign text_color_g = '#4a148c' %}
+            {% elsif color_index == 3 %}{% assign pastel_bg_g = '#e3f2fd' %}{% assign text_color_g = '#0d47a1' %}
+            {% elsif color_index == 4 %}{% assign pastel_bg_g = '#e8f5e9' %}{% assign text_color_g = '#1b5e20' %}
+            {% else %}{% assign pastel_bg_g = '#fffde7' %}{% assign text_color_g = '#f57f17' %}
+            {% endif %}
+        {% else %}
+            {% assign pastel_bg_g = '#141414' %}
+            {% assign text_color_g = '#ffffff' %}
+        {% endif %}
+
+        <div id="panel-genre-{{ index }}" class="expand-panel" style="background-color: {{ pastel_bg_g }}; color: {{ text_color_g }}; {% if has_exclamation_genre %}border: 1px solid #d1d1d1;{% else %}border: 1px solid #333;{% endif %}">
+            <button class="expand-close" onclick="closeExpand('genre-{{ index }}')" style="color: {{ text_color_g }};">&times;</button>
+            <div class="expand-meta">
+                <span>{{ post.date | date: "%Y.%m.%d" }}</span>
+                {% if post.category %}
+                    <span>{{ post.category }}</span>
+                {% elsif post.categories %}
+                    <span>{{ post.categories | first }}</span>
+                {% endif %}
+            </div>
+            <h3 class="expand-title">{{ post.title }}</h3>
+            <div class="expand-body">
+                {{ post.content }}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
 
 <script>
-    // 연도 탭 전환 함수
-    function switchYear(year, event) {
-        event.preventDefault();
-        
-        document.querySelectorAll('.year-btn').forEach(btn => btn.classList.remove('active'));
-        event.currentTarget.classList.add('active');
+    /* 패널 여닫기 기능 외의 모든 복잡한 연산(랜덤, 정렬 등)은 제거하고 
+       오직 클릭했을 때 해당 패널을 켜고 끄는 최소한의 DOM 토글 기능만 남겼습니다. */
+    let activeKey = null;
 
-        document.querySelectorAll('.year-section').forEach(section => section.classList.remove('active'));
-        document.getElementById('section-' + year).classList.add('active');
-
-        history.pushState(null, null, '#' + year);
+    function toggleExpand(key) {
+        const panel = document.getElementById('panel-' + key);
+        if (activeKey === key) {
+            panel.style.display = 'none';
+            activeKey = null;
+            return;
+        }
+        if (activeKey !== null) {
+            document.getElementById('panel-' + activeKey).style.display = 'none';
+        }
+        panel.style.display = 'block';
+        activeKey = key;
+        setTimeout(() => {
+            panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }, 100);
     }
 
-    // 페이지 로드 시 해시 체크 및 무한 스크롤 연출 설정
-    document.addEventListener("DOMContentLoaded", function() {
-        const hash = window.location.hash.substring(1);
-        if (hash && document.getElementById('section-' + hash)) {
-            document.querySelectorAll('.year-btn').forEach(btn => btn.classList.remove('active'));
-            document.querySelectorAll('.year-section').forEach(sec => sec.classList.remove('active'));
-            
-            const targetBtn = Array.from(document.querySelectorAll('.year-btn')).find(b => b.getAttribute('href') === '#' + hash);
-            if (targetBtn) targetBtn.classList.add('active');
-            document.getElementById('section-' + hash).classList.add('active');
-        }
-
-        // 각 연도별 섹션마다 독립적인 무한 스크롤 적용
-        const yearSections = document.querySelectorAll('.year-section');
-        yearSections.forEach(section => {
-            const yearId = section.id.replace('section-', '');
-            const posts = section.querySelectorAll('.post-node-' + yearId);
-            const loader = section.querySelector('.loading-trigger');
-            
-            if (!loader) return;
-
-            let currentIndex = 3; // 처음 보여주는 개수 (3개)
-            const step = 4;       // 스크롤 내릴 때마다 추가로 띄워줄 개수
-
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        // ⏱️ 의도적인 딜레이(400ms)를 주어 스크롤을 내릴 때 천천히 차오르는 로딩 감성을 살림
-                        setTimeout(() => {
-                            const nextLimit = Math.min(currentIndex + step, posts.length);
-                            for (let i = currentIndex; i < nextLimit; i++) {
-                                posts[i].style.display = 'block';
-                            }
-                            currentIndex = nextLimit;
-
-                            if (currentIndex >= posts.length) {
-                                loader.innerText = "— 이 해의 모든 기록을 불러왔습니다 —";
-                                observer.unobserve(entry.target);
-                            }
-                        }, 400);
-                    }
-                });
-            }, { rootMargin: '100px' });
-
-            observer.observe(loader);
-        });
-    });
+    function closeExpand(key) {
+        document.getElementById('panel-' + key).style.display = 'none';
+        if (activeKey === key) activeKey = null;
+    }
 </script>
