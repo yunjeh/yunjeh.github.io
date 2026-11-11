@@ -132,7 +132,7 @@ title: Archive
     <div class="timeline-container">
         {% for post in year_group.items %}
         
-        {% comment %} 🎯 10으로 나눈 나머지가 0일 때만 당첨 (정확히 10% 확률) {% endcomment %}
+        {% comment %} 🎯 10% 확률로 알록달록한 파스텔톤 컬러 지정 {% endcomment %}
         {% assign sec_val = post.date | date: '%S' | plus: 0 %}
         {% assign prob_check = sec_val | modulo: 10 %}
 
@@ -146,25 +146,29 @@ title: Archive
             {% else %}{% assign pastel_bg = '#fffde7' %}{% assign text_color = '#f57f17' %}{% assign border_color = '#d1d1d1' %}
             {% endif %}
         {% else %}
-            {% comment %} 나머지 90%는 차분한 밝은 회색 유지 {% endcomment %}
             {% assign pastel_bg = '#e5e5e5' %}
             {% assign text_color = '#222222' %}
             {% assign border_color = '#ddd' %}
         {% endif %}
 
+        <!-- 타임라인 개별 박스 -->
         <div class="timeline-item" style="background-color: {{ pastel_bg }}; color: {{ text_color }}; border-color: {{ border_color }};">
+            
+            <!-- 1. 본문 영역 (HTML 태그 제거 없이 전체 노출을 원하시면 strip_html을 빼셔도 됩니다) -->
             <div class="timeline-content">
                 {{ post.content }}
             </div>
 
-            <div class="timeline-meta" style="border-top-color: {% if pastel_bg == '#e5e5e5' %}rgba(0,0,0,0.1){% else %}rgba(0,0,0,0.15){% endif %};">
-                <span>{{ post.date | date: "%Y.%m.%d. %H:%M" }}</span>
+            <!-- 2. 작성 일시 영역 (요청하신 스타일 테두리 적용) -->
+            <time class="post-date timeline-meta" style="border-top-color: {% if pastel_bg == '#e5e5e5' %}rgba(0,0,0,0.1){% else %}rgba(0,0,0,0.15){% endif %};">
+                {{ post.date | date: "%Y.%m.%d. %H:%M:%S" }}
                 {% if post.category %}
                     <span>{{ post.category }}</span>
                 {% elsif post.categories %}
                     <span>{{ post.categories | first }}</span>
                 {% endif %}
-            </div>
+            </time>
+
         </div>
         {% endfor %}
     </div>
