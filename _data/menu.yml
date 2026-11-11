@@ -9,11 +9,11 @@ entries:
   #      url: https://github.com/riggraz/no-style-please
   #    - title: "used by <a href='https://riggraz.dev'>riggraz.dev</a> and <a href='https://github.com/riggraz/no-style-please/network/dependents'>many others</a>"
 
-  - title: 최근 글 #Recent posts
+  - title: Recent posts
     post_list:
       limit: 5
       show_more: true
-      show_more_text: 아카이브.. #See archive...
+      show_more_text: See archive...
       show_more_url: archive
   - title: "&nbsp;"
 
@@ -39,12 +39,12 @@ entries:
   - title: "yearly"
     url: yearly
   - title: 
-  - title: "태그"
+  - title: "tags"
     url: tags
   - title: 
-  - title: "노트"
+  - title: "notes"
     url: notes
-  - title: "장소들"
+  - title: "places"
     url: places
   # title: Rating
   # url: rating
