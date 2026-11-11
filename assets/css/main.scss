@@ -9,13 +9,12 @@
 @import "sticky_notes.css";
 
 /* ===================================================
-   GLOBAL VARIABLES (모서리 둥글기 및 간격 시스템 통일)
+   GLOBAL DESIGN SYSTEM (컴팩트한 60% 간격 및 통일된 둥글기)
 =================================================== */
 :root {
-  --radius-sm: 4px;
-  --radius-md: 6px;  /* 덜 둥글고 깔끔한 느낌을 위한 기준 값 */
-  --radius-lg: 8px;
-  --content-spacing: 1.25rem; /* 요소 간 하단 간격 통일 기준 */
+  --radius-sharp: 2px;
+  --radius-subtle: 4px;      /* 눈에 띄게 덜 둥근 값 (4px) */
+  --content-spacing: 0.9rem;  /* 기존 간격의 약 60폭 수준으로 컴팩트하게 축소 */
 }
 
 /* ===================================================
@@ -97,9 +96,9 @@ body {
    HEADINGS
 =================================================== */
 h1, h2, h3, h4, h5, h6 {
-  line-height: 1.4;
+  line-height: 1.3;
   letter-spacing: -0.03em;
-  margin: 0.5rem 0 0.5rem 0;
+  margin: 0.3rem 0;
 }
 
 
@@ -107,27 +106,39 @@ h1, h2, h3, h4, h5, h6 {
    PARAGRAPH
 =================================================== */
 p {
-  margin: 1rem 0;
+  margin: 0.6rem 0;
 }
 
 
 /* ===================================================
-   POST LIST (Recent Posts 전용)
+   POST LIST & BLOG ELEMENTS (컴팩트 간격 및 모서리 통일)
 =================================================== */
 .post-list {
   max-width: 400px !important;
-  padding: 0 1px !important;
-  margin: 0.5rem 0 0.5rem 0 !important;
+  padding: 0 !important;
+  margin: 0.3rem 0 !important;
   list-style: none !important;
   font-size: 14px;
+}
+
+/* 모든 박스/컨테이너/포스트 요소의 모서리(4px) 및 간격 축소 적용 */
+.post-list > div,
+.calendar-sidebar,
+.diary-header,
+.diary-entry,
+#no-posts-msg,
+article,
+.tag-cloud-box .sidebar-tag-badge,
+pre,
+code {
+  border-radius: var(--radius-subtle) !important;
 }
 
 .post-list > div {
   position: relative;
   background: #e5e5e5;
-  padding: 10px 12px;
+  padding: 8px 10px;
   margin-bottom: var(--content-spacing);
-  border-radius: var(--radius-md); /* 덜 둥글게 통일 */
   border: 1px solid #ddd;
 }
 
@@ -139,7 +150,6 @@ p {
   white-space: nowrap;
   flex-shrink: 0;
 }
-
 
 /* 제목 */
 .post-title {
@@ -157,7 +167,7 @@ p {
 
 
 /* ===================================================
-   ARCHIVE & COMMON CONTAINER COMPONENTS
+   ARCHIVE & COMMON LAYOUT COMPONENTS
 =================================================== */
 .post-wrapper {
   margin-left: 15px;
@@ -170,11 +180,11 @@ p {
 .year-btn, .month-btn {
   width: 100%;
   text-align: left;
-  padding: 10px;
+  padding: 8px;
   background: transparent !important;
   border: none;
   cursor: pointer;
-  margin-top: 6px;
+  margin-top: 4px;
 }
 
 .months {
@@ -182,16 +192,20 @@ p {
 }
 
 .post-item {
-  padding: 6px 10px;
+  padding: 4px 8px;
 }
 
-/* 캘린더 사이드바 및 다이어리 컨테이너 내부 요소들의 모서리/간격 통일 */
+/* 다이어리 및 사이드바 요소들의 하단 간격을 60% 수준으로 좁힘 */
 .calendar-sidebar,
 .diary-header,
 .diary-entry,
 #no-posts-msg {
-  border-radius: var(--radius-md) !important; /* 덜 둥글게 통일 (6px) */
-  margin-bottom: var(--content-spacing) !important; /* 요소 간 간격 통일 */
+  margin-bottom: var(--content-spacing) !important;
+}
+
+/* 캘린더 내부 날짜 셀 */
+.cal-cell {
+  border-radius: var(--radius-sharp) !important;
 }
 
 
@@ -219,12 +233,11 @@ code {
   background: #000;
   color: #fff;
   padding: 0.1rem 0.3rem;
-  border-radius: var(--radius-sm);
 }
 
 pre {
   overflow-x: auto;
-  padding: 1rem;
+  padding: 0.8rem;
 }
 
 
@@ -232,12 +245,12 @@ pre {
    BLOCKQUOTE
 =================================================== */
 blockquote {
-  margin: 2rem 0;
-  padding: 1rem 1.25rem;
+  margin: 1.2rem 0;
+  padding: 0.8rem 1rem;
   border-left: 4px solid #999;
   background: rgba(255, 255, 255, 0.5);
   font-style: italic;
-  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+  border-radius: 0 var(--radius-subtle) var(--radius-subtle) 0 !important;
 }
 
 
@@ -251,7 +264,7 @@ table {
 
 th, td {
   border: 1px solid #000;
-  padding: 0.4rem;
+  padding: 0.3rem;
 }
 
 
@@ -262,7 +275,7 @@ img {
   max-width: 100%;
   display: block;
   margin: 0 auto;
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-subtle);
 }
 
 
@@ -272,8 +285,8 @@ img {
 .tag-section:target .post-list > div {
   background: #fff6a9 !important;
   position: relative;
-  padding: 10px 12px;
+  padding: 8px 10px;
   margin-bottom: var(--content-spacing);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-subtle);
   border: 1px solid #ddd;
 }
