@@ -92,35 +92,46 @@ layout: default
         position: relative;
         background: #f8fafc;
         border: 1px solid transparent;
-        padding-bottom: 4px;
     }
     .cal-cell:hover {
-        background: #f1f5f9;
-        color: #1e293b;
+        opacity: 0.85;
     }
     .cal-cell.today {
-        background: #e0f2fe;
-        color: #1e293b;
+        outline: 1.5px dashed #0284c7;
         font-weight: 700;
     }
     .cal-cell.selected {
         border: 1.5px solid #0284c7 !important;
-        color: #1e293b;
         font-weight: 700;
     }
-    .cal-cell.has-record::after {
-        content: "";
-        position: absolute;
-        bottom: 2px;
-        width: 4px;
-        height: 4px;
-        background-color: #10b981;
-        border-radius: 50%;
-    }
     .cal-cell.empty {
-        background: transparent;
+        background: transparent !important;
         cursor: default;
         border: none;
+    }
+
+    /* 🎯 게시물 개수에 따른 5단계 초록색 배경 밀도 (숫자 가독성을 위해 글자색은 자동 조정) */
+    .cal-cell.level-1 {
+        background-color: #eaf3ed; 
+        color: #2d4a35;
+    }
+    .cal-cell.level-2 {
+        background-color: #cce4d0; 
+        color: #1f3624;
+    }
+    .cal-cell.level-3 {
+        background-color: #9cd1a6; 
+        color: #142417;
+    }
+    .cal-cell.level-4 {
+        background-color: #68b877; 
+        color: #ffffff;
+        font-weight: 600;
+    }
+    .cal-cell.level-5 {
+        background-color: #3b944b; 
+        color: #ffffff;
+        font-weight: 600;
     }
 
     .sidebar-tags {
@@ -214,7 +225,7 @@ layout: default
             </div>
         </aside>
 
-        <!-- 우측 본문 영역 (헤더 삭제 후 본문만 깔끔하게 배치) -->
+        <!-- 우측 본문 영역 -->
         <div class="diary-container">
             <main class="diary-main">
                 <div id="posts-container">
@@ -259,7 +270,6 @@ layout: default
                     </article>
                   {% endfor %}
 
-                  <!-- 🎯 오늘 혹은 선택한 날짜에 기록이 없을 때 동적으로 문구를 띄워주는 메시지 박스 -->
                   <div id="no-posts-msg" style="display: none; text-align: center; padding: 30px; background: #fff; border-radius: var(--radius-subtle, 4px); color: #64748b; box-shadow: 0 1px 3px rgba(0,0,0,0.05); margin-bottom: var(--content-spacing, 0.9rem);">
                     <p id="no-posts-text" style="margin: 0; font-size: 0.95rem;"></p>
                   </div>
@@ -307,7 +317,7 @@ layout: default
         const todayObj = new Date();
         const todayMMDD = String(todayObj.getMonth() + 1).padStart(2, '0') + '-' + String(todayObj.getDate()).padStart(2, '0');
         let currentMMDD = todayMMDD;
-        let isToday = !dateParam; // 파라미터가 없으면 오늘 진입 상태
+        let isToday = !dateParam;
 
         if (dateParam) {
             if (/^\d{4}-\d{2}-\d{2}$/.test(dateParam)) {
@@ -327,7 +337,6 @@ layout: default
             }
         }
 
-        // 월 이동 버튼 설정
         const prevMonthDate = new Date(parseInt(targetYear, 10), targetMonth - 1, 1);
         const nextMonthDate = new Date(parseInt(targetYear, 10), targetMonth + 1, 1);
 
@@ -350,7 +359,6 @@ layout: default
             };
         }
 
-        // 달력 타이틀 및 그리드 생성
         const monthNames = ["1월", "2월", "3월", "4월", "5월", "6월", "7월", "8월", "9월", "10월", "11월", "12월"];
         const monthTitleElem = document.getElementById('cal-month-title');
         if (monthTitleElem) {
@@ -370,11 +378,12 @@ layout: default
                 daysGrid.appendChild(emptyCell);
             }
 
-            let recordsInYear = new Set();
+            // 🎯 해당 연도의 날짜별 게시물 개수(count) 집계
+            let recordCounts = {};
             if (window.allBlogPosts && Array.isArray(window.allBlogPosts)) {
                 window.allBlogPosts.forEach(p => {
                     if (p.year === targetYear) {
-                        recordsInYear.add(p.mmdd);
+                        recordCounts[p.mmdd] = (recordCounts[p.mmdd] || 0) + 1;
                     }
                 });
             }
@@ -398,15 +407,18 @@ layout: default
                 if (cellMMDD === currentMMDD) {
                     cell.classList.add('selected');
                 }
-                if (recordsInYear.has(cellMMDD)) {
-                    cell.classList.add('has-record');
+
+                // 🎯 게시물 개수에 따라 1~5단계 클래스 부여 (5개 이상이면 레벨 5로 고정)
+                const count = recordCounts[cellMMDD] || 0;
+                if (count > 0) {
+                    const level = Math.min(count, 5);
+                    cell.classList.add(`level-${level}`);
                 }
 
                 daysGrid.appendChild(cell);
             }
         }
 
-        // 본문 포스트 필터링 및 맞춤형 문구 출력
         const entries = document.querySelectorAll('.diary-entry');
         let visibleCount = 0;
 
