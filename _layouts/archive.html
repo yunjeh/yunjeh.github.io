@@ -92,7 +92,7 @@ layout: default
         position: relative;
         background: #f8fafc;
         border: 1px solid transparent;
-        padding-bottom: 4px; /* 초록 점이 들어갈 하단 여유 공간 확보 */
+        padding-bottom: 4px;
     }
     .cal-cell:hover {
         background: #f1f5f9;
@@ -108,8 +108,6 @@ layout: default
         color: #1e293b;
         font-weight: 700;
     }
-    
-    /* 🎯 초록 점 위치를 날짜 숫자와 조금 더 떼어내어 아래로 내림 */
     .cal-cell.has-record::after {
         content: "";
         position: absolute;
@@ -119,7 +117,6 @@ layout: default
         background-color: #10b981;
         border-radius: 50%;
     }
-    
     .cal-cell.empty {
         background: transparent;
         cursor: default;
@@ -161,36 +158,6 @@ layout: default
         max-width: 600px;
         min-width: 0;
         width: 100%;
-    }
-    .diary-header {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        background: #ffffff;
-        padding: 14px 18px;
-        border-radius: var(--radius-subtle, 4px);
-        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-        margin-bottom: var(--content-spacing, 0.9rem);
-    }
-    .current-date {
-        font-size: 1.05rem;
-        font-weight: 600;
-        margin: 0;
-        color: #1e293b;
-    }
-    .nav-btn {
-        background: none;
-        border: 1px solid #e2e8f0;
-        border-radius: var(--radius-sharp, 2px);
-        padding: 5px 10px;
-        cursor: pointer;
-        font-size: 0.8rem;
-        color: #475569;
-        text-decoration: none;
-        transition: background 0.2s;
-    }
-    .nav-btn:hover {
-        background: #f1f5f9;
     }
 
     @media (max-width: 768px) {
@@ -240,7 +207,6 @@ layout: default
                     {% for tag in all_tags %}
                         {% assign trimmed_tag = tag | strip %}
                         {% if trimmed_tag != "" %}
-                            <!-- 🎯 태그 클릭 시 해시(#)나 쿼리 스트링을 정확히 찝어서 전달하도록 수정 -->
                             <a href="/tags#{{ trimmed_tag }}" class="sidebar-tag-badge">#{{ trimmed_tag }}</a>
                         {% endif %}
                     {% endfor %}
@@ -248,14 +214,8 @@ layout: default
             </div>
         </aside>
 
-        <!-- 우측 본문 영역 -->
+        <!-- 우측 본문 영역 (헤더 삭제 후 본문만 깔끔하게 배치) -->
         <div class="diary-container">
-            <header class="diary-header">
-                <a href="#" id="prev-btn" class="nav-btn">◀ 전날</a>
-                <h1 class="current-date" id="header-date-text">기록</h1>
-                <a href="#" id="next-btn" class="nav-btn">다음날 ▶</a>
-            </header>
-
             <main class="diary-main">
                 <div id="posts-container">
                   <script>
@@ -299,9 +259,9 @@ layout: default
                     </article>
                   {% endfor %}
 
+                  <!-- 🎯 오늘 혹은 선택한 날짜에 기록이 없을 때 동적으로 문구를 띄워주는 메시지 박스 -->
                   <div id="no-posts-msg" style="display: none; text-align: center; padding: 30px; background: #fff; border-radius: var(--radius-subtle, 4px); color: #64748b; box-shadow: 0 1px 3px rgba(0,0,0,0.05); margin-bottom: var(--content-spacing, 0.9rem);">
-                    <p style="margin: 0; font-size: 0.95rem;">이 날짜에 작성된 기록이 없습니다.</p>
-                    <p style="font-size: 0.85rem; margin-top: 6px; color: #94a3b8;">달력에서 다른 날짜를 선택해 보세요!</p>
+                    <p id="no-posts-text" style="margin: 0; font-size: 0.95rem;"></p>
                   </div>
                 </div>
 
@@ -347,6 +307,7 @@ layout: default
         const todayObj = new Date();
         const todayMMDD = String(todayObj.getMonth() + 1).padStart(2, '0') + '-' + String(todayObj.getDate()).padStart(2, '0');
         let currentMMDD = todayMMDD;
+        let isToday = !dateParam; // 파라미터가 없으면 오늘 진입 상태
 
         if (dateParam) {
             if (/^\d{4}-\d{2}-\d{2}$/.test(dateParam)) {
@@ -361,32 +322,12 @@ layout: default
                 targetMonth = parseInt(parts[0], 10) - 1;
                 targetDay = parseInt(parts[1], 10);
             }
+            if (currentMMDD === todayMMDD && targetYear === todayObj.getFullYear().toString()) {
+                isToday = true;
+            }
         }
 
-        const currentDate = new Date(parseInt(targetYear, 10), targetMonth, targetDay);
-
-        const headerTextElem = document.getElementById('header-date-text');
-        if (headerTextElem) {
-            headerTextElem.innerText = currentDate.toLocaleDateString('ko-KR', { month: 'long', day: 'numeric' });
-        }
-
-        let prevDate = new Date(currentDate);
-        prevDate.setDate(currentDate.getDate() - 1);
-        let nextDate = new Date(currentDate);
-        nextDate.setDate(currentDate.getDate() + 1);
-
-        function formatDateFull(d) {
-            const y = d.getFullYear();
-            const m = String(d.getMonth() + 1).padStart(2, '0');
-            const day = String(d.getDate()).padStart(2, '0');
-            return `${y}-${m}-${day}`;
-        }
-        
-        const prevBtn = document.getElementById('prev-btn');
-        const nextBtn = document.getElementById('next-btn');
-        if (prevBtn) prevBtn.href = `/archive?date=${formatDateFull(prevDate)}`;
-        if (nextBtn) nextBtn.href = `/archive?date=${formatDateFull(nextDate)}`;
-
+        // 월 이동 버튼 설정
         const prevMonthDate = new Date(parseInt(targetYear, 10), targetMonth - 1, 1);
         const nextMonthDate = new Date(parseInt(targetYear, 10), targetMonth + 1, 1);
 
@@ -409,6 +350,7 @@ layout: default
             };
         }
 
+        // 달력 타이틀 및 그리드 생성
         const monthNames = ["1월", "2월", "3월", "4월", "5월", "6월", "7월", "8월", "9월", "10월", "11월", "12월"];
         const monthTitleElem = document.getElementById('cal-month-title');
         if (monthTitleElem) {
@@ -464,6 +406,7 @@ layout: default
             }
         }
 
+        // 본문 포스트 필터링 및 맞춤형 문구 출력
         const entries = document.querySelectorAll('.diary-entry');
         let visibleCount = 0;
 
@@ -477,9 +420,17 @@ layout: default
             }
         });
 
-        const noPostsMsg = document.getElementById('no-posts-msg');
-        if (noPostsMsg && visibleCount === 0) {
-            noPostsMsg.style.display = 'block';
+        if (visibleCount === 0) {
+            const noPostsMsg = document.getElementById('no-posts-msg');
+            const noPostsText = document.getElementById('no-posts-text');
+            if (noPostsMsg && noPostsText) {
+                if (isToday) {
+                    noPostsText.innerText = "오늘 작성된 기록이 없습니다.";
+                } else {
+                    noPostsText.innerText = "이 날짜에 작성된 기록이 없습니다.";
+                }
+                noPostsMsg.style.display = 'block';
+            }
         }
 
     } catch (err) {
