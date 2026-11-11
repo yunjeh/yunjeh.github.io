@@ -3,7 +3,6 @@ layout: default
 ---
 
 <style>
-    /* 전체 페이지 래퍼 */
     .archive-page-wrapper {
         width: 100%;
         max-width: 880px;
@@ -12,7 +11,6 @@ layout: default
         box-sizing: border-box;
     }
 
-    /* 최상단 가장 왼쪽에 배치되는 백 링크 */
     .archive-back-link {
         margin-bottom: 16px;
         text-align: left;
@@ -26,7 +24,6 @@ layout: default
         box-sizing: border-box;
     }
 
-    /* 사이드바 캘린더 스타일 (간격 및 깨짐 현상 완벽 정돈) */
     .calendar-sidebar {
         width: 230px;
         background: #ffffff;
@@ -37,7 +34,6 @@ layout: default
         box-sizing: border-box;
     }
 
-    /* 달력 상단 월 이동 헤더 */
     .cal-header-wrapper {
         display: flex;
         align-items: center;
@@ -73,7 +69,7 @@ layout: default
         grid-template-columns: repeat(7, 1fr);
         width: 100%;
         text-align: center;
-        gap: 2px; /* 셀 간격을 좁혀 레이아웃 깨짐 방지 */
+        gap: 2px;
     }
     .cal-day-name {
         color: #94a3b8;
@@ -111,8 +107,6 @@ layout: default
         color: #1e293b;
         font-weight: 700;
     }
-
-    /* 🎯 해당 연도에 기록이 있는 날짜 표시용 인디케이터 (밑줄 혹은 도트) */
     .cal-cell.has-record::after {
         content: "";
         position: absolute;
@@ -122,15 +116,12 @@ layout: default
         background-color: #10b981;
         border-radius: 50%;
     }
-
-    /* 빈 셀 스타일 */
     .cal-cell.empty {
         background: transparent;
         cursor: default;
         border: none;
     }
 
-    /* 캘린더 아래 태그 클라우드 */
     .sidebar-tags {
         margin-top: 16px;
         padding-top: 12px;
@@ -161,7 +152,6 @@ layout: default
         color: #1e293b;
     }
 
-    /* 우측 본문 영역 */
     .diary-container {
         flex-grow: 1;
         max-width: 600px;
@@ -216,7 +206,6 @@ layout: default
 </style>
 
 <div class="archive-page-wrapper">
-    <!-- 🎯 최상단 가장 왼쪽에 배치되는 백 링크 -->
     <div class="archive-back-link">
         {% include back_link.html %}
     </div>
@@ -225,9 +214,9 @@ layout: default
         <!-- 좌측 사이드바 (캘린더 + 태그 클라우드) -->
         <aside class="calendar-sidebar">
             <div class="cal-header-wrapper">
-                <button id="prev-month-btn" class="cal-month-btn">◀</button>
-                <div class="cal-header" id="cal-month-title">로딩 중...</div>
-                <button id="next-month-btn" class="cal-month-btn">▶</button>
+                <button id="prev-month-btn" class="cal-month-btn" type="button">◀</button>
+                <div class="cal-header" id="cal-month-title">캘린더</div>
+                <button id="next-month-btn" class="cal-month-btn" type="button">▶</button>
             </div>
             <div class="cal-grid">
                 <div class="cal-day-name">일</div>
@@ -258,7 +247,7 @@ layout: default
         <div class="diary-container">
             <header class="diary-header">
                 <a href="#" id="prev-btn" class="nav-btn">◀ 전날</a>
-                <h1 class="current-date" id="header-date-text">로딩 중...</h1>
+                <h1 class="current-date" id="header-date-text">기록</h1>
                 <a href="#" id="next-btn" class="nav-btn">다음날 ▶</a>
             </header>
 
@@ -266,14 +255,17 @@ layout: default
                 <div id="posts-container">
                   {% assign sorted_posts = site.posts | sort: "date" | reverse %}
                   
-                  <!-- 🎯 자바스크립트에서 읽어갈 수 있도록 전체 포스트의 날짜 데이터를 숨겨둠 -->
-                  <div id="all-posts-data" style="display:none;" 
-                       data-posts='[
-                         {% for post in sorted_posts %}
-                           {"year": "{{ post.date | date: "%Y" }}", "mmdd": "{{ post.date | date: "%m-%d" }}"}{% unless forloop.last %},{% endunless %}
-                         {% endfor %}
-                       ]'>
-                  </div>
+                  <!-- 안전한 데이터 저장을 위해 data attribute 대신 직접 배열로 순회 준비 -->
+                  <script>
+                    window.allBlogPosts = [
+                      {% for post in sorted_posts %}
+                        {
+                          year: "{{ post.date | date: '%Y' }}",
+                          mmdd: "{{ post.date | date: '%m-%d' }}"
+                        }{% unless forloop.last %},{% endunless %}
+                      {% endfor %}
+                    ];
+                  </script>
 
                   {% for post in sorted_posts %}
                     {% assign post_year = post.date | date: "%Y" %}
@@ -321,10 +313,11 @@ layout: default
 {%- endif -%}
 
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
+(function() {
+    try {
         const currentRealYear = new Date().getFullYear().toString();
 
-        // 1. 포스트 날짜 메타 텍스트 보기 좋게 포맷팅
+        // 1. 포스트 날짜 포맷팅
         const metaElements = document.querySelectorAll('.entry-meta');
         metaElements.forEach(el => {
             const rawDateStr = el.getAttribute('data-raw-date');
@@ -336,19 +329,18 @@ layout: default
                     const d = String(dateObj.getDate()).padStart(2, '0');
                     const weekdays = ['일', '월', '화', '수', '목', '금', '토'];
                     const wDay = weekdays[dateObj.getDay()];
-                    const timePart = rawDateStr.split(' ')[1];
-
+                    const timePart = rawDateStr.split(' ')[1] || '';
                     el.innerText = `${y}. ${m}. ${d}. (${wDay}) ${timePart}`;
                 }
             }
         });
 
-        // 2. URL 파라미터 및 날짜 처리 (월 이동 지원을 위해 연/월/일 파싱 보강)
+        // 2. URL 파라미터 파싱
         const urlParams = new URLSearchParams(window.location.search);
-        let dateParam = urlParams.get('date'); // 형식: YYYY-MM-DD 또는 MM-DD
+        let dateParam = urlParams.get('date');
         
         let targetYear = currentRealYear;
-        let targetMonth = new Date().getMonth(); // 0~11
+        let targetMonth = new Date().getMonth(); 
         let targetDay = new Date().getDate();
 
         const todayObj = new Date();
@@ -372,10 +364,13 @@ layout: default
 
         const currentDate = new Date(parseInt(targetYear, 10), targetMonth, targetDay);
 
-        // 상단 날짜 텍스트 설정
-        document.getElementById('header-date-text').innerText = currentDate.toLocaleDateString('ko-KR', { month: 'long', day: 'numeric' });
+        // 헤더 날짜 표시
+        const headerTextElem = document.getElementById('header-date-text');
+        if (headerTextElem) {
+            headerTextElem.innerText = currentDate.toLocaleDateString('ko-KR', { month: 'long', day: 'numeric' });
+        }
 
-        // 전날 / 다음날 버튼 링크 (연도 유지)
+        // 전날 / 다음날 버튼 설정
         let prevDate = new Date(currentDate);
         prevDate.setDate(currentDate.getDate() - 1);
         let nextDate = new Date(currentDate);
@@ -387,5 +382,113 @@ layout: default
             const day = String(d.getDate()).padStart(2, '0');
             return `${y}-${m}-${day}`;
         }
-        document.getElementById('prev-btn').href = `/archive?date=${formatDateFull(prevDate)}`;
-        document.getElementById('next-btn').href
+        
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        if (prevBtn) prevBtn.href = `/archive?date=${formatDateFull(prevDate)}`;
+        if (nextBtn) nextBtn.href = `/archive?date=${formatDateFull(nextDate)}`;
+
+        // 월 이동 버튼 설정
+        const prevMonthDate = new Date(parseInt(targetYear, 10), targetMonth - 1, 1);
+        const nextMonthDate = new Date(parseInt(targetYear, 10), targetMonth + 1, 1);
+
+        function formatMonthParam(d) {
+            const y = d.getFullYear();
+            const m = String(d.getMonth() + 1).padStart(2, '0');
+            return `${y}-${m}-01`;
+        }
+
+        const prevMonthBtn = document.getElementById('prev-month-btn');
+        const nextMonthBtn = document.getElementById('next-month-btn');
+        if (prevMonthBtn) {
+            prevMonthBtn.onclick = function() {
+                window.location.href = `/archive?date=${formatMonthParam(prevMonthDate)}`;
+            };
+        }
+        if (nextMonthBtn) {
+            nextMonthBtn.onclick = function() {
+                window.location.href = `/archive?date=${formatMonthParam(nextMonthDate)}`;
+            };
+        }
+
+        // 3. 달력 타이틀 및 그리드 생성
+        const monthNames = ["1월", "2월", "3월", "4월", "5월", "6월", "7월", "8월", "9월", "10월", "11월", "12월"];
+        const monthTitleElem = document.getElementById('cal-month-title');
+        if (monthTitleElem) {
+            monthTitleElem.innerText = `${targetYear}년 ${monthNames[targetMonth]}`;
+        }
+
+        const firstDayIndex = new Date(targetYear, targetMonth, 1).getDay();
+        const totalDays = new Date(targetYear, targetMonth + 1, 0).getDate();
+
+        const daysGrid = document.getElementById('cal-days-grid');
+        if (daysGrid) {
+            daysGrid.innerHTML = '';
+
+            for (let i = 0; i < firstDayIndex; i++) {
+                const emptyCell = document.createElement('div');
+                emptyCell.className = 'cal-cell empty';
+                daysGrid.appendChild(emptyCell);
+            }
+
+            // 해당 연도에 작성된 포스트 수집
+            let recordsInYear = new Set();
+            if (window.allBlogPosts && Array.isArray(window.allBlogPosts)) {
+                window.allBlogPosts.forEach(p => {
+                    if (p.year === targetYear) {
+                        recordsInYear.add(p.mmdd);
+                    }
+                });
+            }
+
+            for (let day = 1; day <= totalDays; day++) {
+                const dayStr = String(day).padStart(2, '0');
+                const cellMMDD = `${String(targetMonth + 1).padStart(2, '0')}-${dayStr}`;
+                const cellFullDate = `${targetYear}-${cellMMDD}`;
+
+                const cell = document.createElement('div');
+                cell.className = 'cal-cell';
+                cell.innerText = day;
+
+                cell.onclick = function() {
+                    window.location.href = `/archive?date=${cellFullDate}`;
+                };
+
+                if (cellMMDD === todayMMDD && targetYear === todayObj.getFullYear().toString()) {
+                    cell.classList.add('today');
+                }
+                if (cellMMDD === currentMMDD) {
+                    cell.classList.add('selected');
+                }
+                if (recordsInYear.has(cellMMDD)) {
+                    cell.classList.add('has-record');
+                }
+
+                daysGrid.appendChild(cell);
+            }
+        }
+
+        // 4. 본문 포스트 필터링
+        const entries = document.querySelectorAll('.diary-entry');
+        let visibleCount = 0;
+
+        entries.forEach(entry => {
+            const entryMMDD = entry.getAttribute('data-month-day');
+            if (entryMMDD === currentMMDD) {
+                entry.style.display = 'block';
+                visibleCount++;
+            } else {
+                entry.style.display = 'none';
+            }
+        });
+
+        const noPostsMsg = document.getElementById('no-posts-msg');
+        if (noPostsMsg && visibleCount === 0) {
+            noPostsMsg.style.display = 'block';
+        }
+
+    } catch (err) {
+        console.error("Archive script error:", err);
+    }
+})();
+</script>
