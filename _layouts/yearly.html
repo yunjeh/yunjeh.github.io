@@ -6,19 +6,19 @@ layout: default
     .archive-page-wrapper {
         width: 100%;
         max-width: 880px;
-        margin: 30px auto;
-        padding: 0 16px;
+        margin: 0 auto;
+        padding: 0;
         box-sizing: border-box;
     }
 
     .archive-back-link {
-        margin-bottom: 16px;
+        margin-bottom: 14px;
         text-align: left;
     }
 
     .site-wrapper {
         display: flex;
-        gap: 24px;
+        gap: 20px;
         width: 100%;
         align-items: flex-start;
         box-sizing: border-box;
@@ -48,7 +48,6 @@ layout: default
         margin: 0;
         padding: 2px 6px;
     }
-
     .cal-month-btn {
         background: none;
         border: 1px solid #e2e8f0;
@@ -283,9 +282,7 @@ layout: default
 <script>
 (function() {
     try {
-        const todayObj = new Date();
-        const currentRealYear = todayObj.getFullYear().toString();
-        const todayMMDD = String(todayObj.getMonth() + 1).padStart(2, '0') + '-' + String(todayObj.getDate()).padStart(2, '0');
+        const currentRealYear = new Date().getFullYear().toString();
 
         const metaElements = document.querySelectorAll('.entry-meta');
         metaElements.forEach(el => {
@@ -308,9 +305,11 @@ layout: default
         let dateParam = urlParams.get('date');
         
         let targetYear = currentRealYear;
-        let targetMonth = todayObj.getMonth(); 
-        let targetDay = todayObj.getDate();
+        let targetMonth = new Date().getMonth(); 
+        let targetDay = new Date().getDate();
 
+        const todayObj = new Date();
+        const todayMMDD = String(todayObj.getMonth() + 1).padStart(2, '0') + '-' + String(todayObj.getDate()).padStart(2, '0');
         let currentMMDD = todayMMDD;
         let isToday = !dateParam;
 
@@ -345,12 +344,12 @@ layout: default
         const nextMonthBtn = document.getElementById('next-month-btn');
         if (prevMonthBtn) {
             prevMonthBtn.onclick = function() {
-                window.location.href = `/archive?date=${formatMonthParam(prevMonthDate)}`;
+                window.location.href = `/yearly?date=${formatMonthParam(prevMonthDate)}`;
             };
         }
         if (nextMonthBtn) {
             nextMonthBtn.onclick = function() {
-                window.location.href = `/archive?date=${formatMonthParam(nextMonthDate)}`;
+                window.location.href = `/yearly?date=${formatMonthParam(nextMonthDate)}`;
             };
         }
 
@@ -392,7 +391,7 @@ layout: default
                 cell.innerText = day;
 
                 cell.onclick = function() {
-                    window.location.href = `/archive?date=${cellFullDate}`;
+                    window.location.href = `/yearly?date=${cellFullDate}`;
                 };
 
                 if (cellMMDD === todayMMDD && targetYear === todayObj.getFullYear().toString()) {
@@ -439,7 +438,7 @@ layout: default
         }
 
     } catch (err) {
-        console.error("Archive script error:", err);
+        console.error("Yearly script error:", err);
     }
 })();
 </script>
