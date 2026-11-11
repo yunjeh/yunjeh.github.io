@@ -62,13 +62,13 @@ body {
 .w {
   max-width: 900px !important;
   margin: 0 auto !important;
-  padding: 1.5rem 0 !important;
+  padding: 1.0rem 0.2rem !important;
 }
 
 @media (max-width: 768px) {
   .w {
-    margin: 0 1.0rem;
-    padding: 0 1.5rem;
+    margin: 0 auto;
+    padding: 0 0.2rem;
   }
   body {
     font-size: 14px;
@@ -79,7 +79,7 @@ body {
   .post-list {
     width: 90%;
     max-width: none;
-    margin: 0.5rem auto;
+    margin: 0.2rem auto;
   }
 }
 
