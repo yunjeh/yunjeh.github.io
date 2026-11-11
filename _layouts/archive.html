@@ -78,7 +78,7 @@ title: Archive
         flex-direction: column;
     }
 
-    /* 🎯 개별 포스트 박스 (좌우 마진과 상하 간격이 동적으로 변주됨) */
+    /* 🎯 개별 포스트 박스 */
     .timeline-item {
         position: relative;
         background: var(--box-bg, #e5e5e5);
@@ -92,30 +92,30 @@ title: Archive
         filter: brightness(0.97);
     }
 
-    /* 박스 내부 본문 디자인 정돈 */
+    /* 박스 내부 본문 디자인 정돈 (상하 간격 축소) */
     .timeline-content {
         font-size: 14px;
         line-height: 1.6;
-        margin-bottom: 10px;
+        margin-bottom: 6px; /* 본문과 날짜 사이 간격을 좁힘 */
     }
 
     .timeline-content p {
-        margin: 0 0 0.8em 0;
+        margin: 0 0 0.6em 0;
     }
 
     .timeline-content p:last-child {
         margin-bottom: 0;
     }
 
-    /* 작성 일시 규격 */
+    /* 작성 일시 규격 (구분선 바 제거 및 상단 여백 최소화) */
     .post-date {
         font-size: 12px;
         font-weight: 400;
         color: #aaa;
         display: block;
-        border-top: 1px solid rgba(0,0,0,0.08);
-        padding-top: 8px;
-        margin-top: 8px;
+        border-top: none; /* 👈 구분선 바 완전히 제거 */
+        padding-top: 0;
+        margin-top: 4px;  /* 날짜 위쪽 여백을 바짝 붙임 */
         font-family: 'Courier New', Courier, monospace;
     }
 </style>
@@ -157,7 +157,7 @@ title: Archive
             {% assign border_color = '#ddd' %}
         {% endif %}
 
-        {% comment %} 🎯 2. 좌우 마진 변주 계산 (초 단위 값을 활용해 좌측 또는 우측으로 미세하게 밀어냄) {% endcomment %}
+        {% comment %} 🎯 2. 좌우 마진 변주 계산 {% endcomment %}
         {% assign margin_type = sec_val | modulo: 4 %}
         {% if margin_type == 0 %}
             {% assign ml = "0px" %}{% assign mr = "35px" %}
@@ -169,17 +169,17 @@ title: Archive
             {% assign ml = "35px" %}{% assign mr = "0px" %}
         {% endif %}
 
-        {% comment %} 🎯 3. 작성 일시(분/초)에 비례한 상하 간격(margin-bottom) 계산 (대략 16px ~ 48px 사이로 변주) {% endcomment %}
-        {% assign dynamic_space = sec_val | plus: min_val | modulo: 4 | times: 10 | plus: 16 %}
+        {% comment %} 🎯 3. 상하 간격 전반적으로 축소 (기존보다 좁은 8px ~ 28px 사이로 변주) {% endcomment %}
+        {% assign dynamic_space = sec_val | plus: min_val | modulo: 4 | times: 6 | plus: 8 %}
 
-        <!-- 타임라인 아이템 (인라인 스타일로 동적 마진 주입) -->
+        <!-- 타임라인 아이템 -->
         <div class="timeline-item" style="background-color: {{ pastel_bg }}; color: {{ text_color }}; border-color: {{ border_color }}; margin-left: {{ ml }}; margin-right: {{ mr }}; margin-bottom: {{ dynamic_space }}px;">
             
             <div class="timeline-content">
                 {{ post.content | strip_newlines }}
             </div>
 
-            <time class="post-date" style="border-top-color: {% if pastel_bg == 'var(--box-bg, #e5e5e5)' %}rgba(0,0,0,0.1){% else %}rgba(0,0,0,0.15){% endif %};">
+            <time class="post-date">
                 {{ post.date | date: "%Y.%m.%d. %H:%M:%S" }}
                 {% if post.category %}
                     · {{ post.category }}
