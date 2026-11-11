@@ -141,25 +141,26 @@ title: Archive
     <div class="timeline-container">
         {% for post in year_group.items %}
         
-        {% assign has_exclamation = post.title | include: "!" %}
-        {% if has_exclamation %}
-            {% comment %} 🎯 반복되는 패턴을 없애기 위해 '날짜의 초(second)'와 '제목 글자수'를 조합하여 불규칙한 인덱스 생성 {% endcomment %}
-            {% assign sec_num = post.date | date: '%S' | plus: 0 %}
-            {% assign title_len = post.title | size %}
-            {% assign random_seed = sec_num | plus: title_len | modulo: 6 %}
+        {% comment %} 🎯 느낌표 조건 없이, 날짜의 초와 제목 글자수를 조합하여 띄엄띄엄 불규칙하게 색상 인덱스 부여 {% endcomment %}
+        {% assign sec_num = post.date | date: '%S' | plus: 0 %}
+        {% assign title_len = post.title | size %}
+        {% assign random_seed = sec_num | plus: title_len | modulo: 7 %}
 
-            {% if random_seed == 0 %}{% assign pastel_bg = '#ffebee' %}{% assign text_color = '#b71c1c' %}
-            {% elsif random_seed == 1 %}{% assign pastel_bg = '#fce4ec' %}{% assign text_color = '#880e4f' %}
-            {% elsif random_seed == 2 %}{% assign pastel_bg = '#f3e5f5' %}{% assign text_color = '#4a148c' %}
-            {% elsif random_seed == 3 %}{% assign pastel_bg = '#e3f2fd' %}{% assign text_color = '#0d47a1' %}
-            {% elsif random_seed == 4 %}{% assign pastel_bg = '#e8f5e9' %}{% assign text_color = '#1b5e20' %}
-            {% else %}{% assign pastel_bg = '#fffde7' %}{% assign text_color = '#f57f17' %}
-            {% endif %}
-            {% assign border_color = '#d1d1d1' %}
+        {% if random_seed == 0 %}
+            {% assign pastel_bg = '#ffebee' %}{% assign text_color = '#b71c1c' %}{% assign border_color = '#d1d1d1' %}
+        {% elsif random_seed == 1 %}
+            {% assign pastel_bg = '#fce4ec' %}{% assign text_color = '#880e4f' %}{% assign border_color = '#d1d1d1' %}
+        {% elsif random_seed == 2 %}
+            {% assign pastel_bg = '#f3e5f5' %}{% assign text_color = '#4a148c' %}{% assign border_color = '#d1d1d1' %}
+        {% elsif random_seed == 3 %}
+            {% assign pastel_bg = '#e3f2fd' %}{% assign text_color = '#0d47a1' %}{% assign border_color = '#d1d1d1' %}
+        {% elsif random_seed == 4 %}
+            {% assign pastel_bg = '#e8f5e9' %}{% assign text_color = '#1b5e20' %}{% assign border_color = '#d1d1d1' %}
+        {% elsif random_seed == 5 %}
+            {% assign pastel_bg = '#fffde7' %}{% assign text_color = '#f57f17' %}{% assign border_color = '#d1d1d1' %}
         {% else %}
-            {% assign pastel_bg = '#e5e5e5' %}
-            {% assign text_color = '#222222' %}
-            {% assign border_color = '#ddd' %}
+            {% comment %} 나머지는 기본 디자인 시스템의 차분한 회색 배경 유지 {% endcomment %}
+            {% assign pastel_bg = '#e5e5e5' %}{% assign text_color = '#222222' %}{% assign border_color = '#ddd' %}
         {% endif %}
 
         <div class="timeline-item" style="background-color: {{ pastel_bg }}; color: {{ text_color }}; border-color: {{ border_color }};">
@@ -172,11 +173,8 @@ title: Archive
                 {% endif %}
             </div>
             <h2 class="timeline-title">
-                <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
+                <a href="{{ post.url | relative_url }}" style="color: {{ text_color }};">{{ post.title }}</a>
             </h2>
-            {% if post.excerpt %}
-                <p class="timeline-excerpt">{{ post.excerpt | strip_html | truncate: 130 }}</p>
-            {% endif %}
         </div>
         {% endfor %}
     </div>
