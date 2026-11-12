@@ -21,8 +21,8 @@ title: Archive
     }
 
     .post-list > div {
-        width: 100%; /* 👈 박스 폭이 컨테이너에 딱 맞아 떨어지도록 설정 */
-        box-sizing: border-box; /* 👈 패딩과 테두리가 폭을 깎아먹지 않게 보호 */
+        width: 100%;
+        box-sizing: border-box;
         position: relative;
         background: var(--box-bg, #e5e5e5);
         padding: var(--box-padding, 16px);
@@ -35,34 +35,35 @@ title: Archive
         filter: brightness(0.97);
     }
 
-    .post-list > div > div:first-child {
-        margin-bottom: 4px;
+    /*   */
+    .post-list > div > div {
+        margin: 0;
     }
 
-    .post-list > div > div:first-child p {
+    .post-list > div > div p {
         margin: 0 0 0.5em 0;
     }
 
-    .post-list > div > div:first-child p:last-child {
+    .post-list > div > div p:last-child {
         margin-bottom: 0;
     }
 
+    /*   */
     .post-date {
         font-size: 12px;
         font-weight: 400;
         color: #aaa;
         white-space: nowrap;
         flex-shrink: 0;
-        display: block;
-        margin-top: 2px;
-        font-family: 'Courier New', Courier, monospace;
+        display: inline; /* 👈  인라인 처리 엔터 방지 */
+        margin-left: 6px;
     }
 </style>
 
 <div class="post-list">
   {% for post in site.posts %}
   
-  {% comment %} 🎯 1. 파스텔톤 컬러 지정 {% endcomment %}
+  {% comment %} 🎯 1. 파스텔톤 {% endcomment %}
   {% assign sec_val = post.date | date: '%S' | plus: 0 %}
   {% assign min_val = post.date | date: '%M' | plus: 0 %}
   {% assign prob_check = sec_val | modulo: 10 %}
@@ -94,7 +95,7 @@ title: Archive
       {% assign ml = "25px" %}{% assign mr = "0px" %}
   {% endif %}
 
-  {% comment %} 🎯 3. 상하 간격 비례 {% endcomment %}
+  {% comment %} 🎯 3. 상하 간격 {% endcomment %}
   {% assign dynamic_space = sec_val | plus: min_val | modulo: 6 | times: 4 | plus: 4 %}
 
   <div style="background-color: {{ pastel_bg }}; color: {{ text_color }}; border-color: {{ border_color }}; margin-left: {{ ml }}; margin-right: {{ mr }}; margin-bottom: {{ dynamic_space }}px;">
