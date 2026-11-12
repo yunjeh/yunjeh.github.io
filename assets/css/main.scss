@@ -86,11 +86,8 @@ body {
   h1 {
     font-size: 1.6rem;
   }
-  .post-list {
-    width: 90%;
-    max-width: none;
-    margin: 0.2rem auto;
-  }
+  /* .post-list 관련 규격을 제거하여 모바일에서도 원래 고정 폭 유지 */
+
 }
 
 /* ===================================================
