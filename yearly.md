@@ -1,5 +1,5 @@
 ---
 layout: yearly
-title: n년 다이어리
+title: 오늘
 permalink: /yearly/
 ---
