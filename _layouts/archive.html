@@ -7,15 +7,107 @@ title: Archive
 
 <h1>{{ page.title }}</h1>
 
+<style>
+    /* 홈페이지 메인과 동일한 .post-list 규격 */
+    .post-list {
+        max-width: 400px !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        list-style: none !important;
+        font-size: 14px;
+        display: flex;
+        flex-direction: column;
+    }
 
+    .post-list > div {
+        position: relative;
+        background: var(--box-bg, #e5e5e5);
+        padding: var(--box-padding, 16px);
+        border-radius: var(--radius-subtle, 6px);
+        border: 1px solid #ddd;
+        transition: filter 0.2s ease;
+    }
 
-    <div class="post-list">
-      {% for post in site.posts %}
-      <div>
-        {{ post.content | strip_html | strip_newlines }}
-        <time class="post-date">
-          {{ post.date | date: "%Y.%m.%d. %H:%M:%S" }}
-        </time>
-      </div>
-      {% endfor %}
+    .post-list > div:hover {
+        filter: brightness(0.97);
+    }
+
+    /* 본문 간격 미세 조정 */
+    .post-list > div > div:first-child {
+        margin-bottom: 4px;
+    }
+
+    .post-list > div > div:first-child p {
+        margin: 0 0 0.5em 0;
+    }
+
+    .post-list > div > div:first-child p:last-child {
+        margin-bottom: 0;
+    }
+
+    /* 날짜 규격 */
+    .post-date {
+        font-size: 12px;
+        font-weight: 400;
+        color: #aaa;
+        white-space: nowrap;
+        flex-shrink: 0;
+        display: block;
+        margin-top: 2px;
+        font-family: 'Courier New', Courier, monospace;
+    }
+</style>
+
+<div class="post-list">
+  {% for post in site.posts %}
+  
+  {% comment %} 🎯 1. 10% 확률로 아주 드물게 알록달록한 파스텔톤 컬러 지정 {% endcomment %}
+  {% assign sec_val = post.date | date: '%S' | plus: 0 %}
+  {% assign min_val = post.date | date: '%M' | plus: 0 %}
+  {% assign prob_check = sec_val | modulo: 10 %}
+
+  {% if prob_check == 0 %}
+      {% assign color_picker = sec_val | modulo: 6 %}
+      {% if color_picker == 0 %}{% assign pastel_bg = '#ffebee' %}{% assign text_color = '#b71c1c' %}{% assign border_color = '#d1d1d1' %}
+      {% elsif color_picker == 1 %}{% assign pastel_bg = '#fce4ec' %}{% assign text_color = '#880e4f' %}{% assign border_color = '#d1d1d1' %}
+      {% elsif color_picker == 2 %}{% assign pastel_bg = '#f3e5f5' %}{% assign text_color = '#4a148c' %}{% assign border_color = '#d1d1d1' %}
+      {% elsif color_picker == 3 %}{% assign pastel_bg = '#e3f2fd' %}{% assign text_color = '#0d47a1' %}{% assign border_color = '#d1d1d1' %}
+      {% elsif color_picker == 4 %}{% assign pastel_bg = '#e8f5e9' %}{% assign text_color = '#1b5e20' %}{% assign border_color = '#d1d1d1' %}
+      {% else %}{% assign pastel_bg = '#fffde7' %}{% assign text_color = '#f57f17' %}{% assign border_color = '#d1d1d1' %}
+      {% endif %}
+  {% else %}
+      {% assign pastel_bg = 'var(--box-bg, #e5e5e5)' %}
+      {% assign text_color = 'inherit' %}
+      {% assign border_color = '#ddd' %}
+  {% endif %}
+
+  {% comment %} 🎯 2. 좌우 마진 변주 계산 (지그재그 리듬감) {% endcomment %}
+  {% assign margin_type = sec_val | modulo: 4 %}
+  {% if margin_type == 0 %}
+      {% assign ml = "0px" %}{% assign mr = "25px" %}
+  {% elsif margin_type == 1 %}
+      {% assign ml = "15px" %}{% assign mr = "5px" %}
+  {% elsif margin_type == 2 %}
+      {% assign ml = "5px" %}{% assign mr = "20px" %}
+  {% else %}
+      {% assign ml = "25px" %}{% assign mr = "0px" %}
+  {% endif %}
+
+  {% comment %} 🎯 3. 상하 간격 압축 및 시간차 비례 변주 (상한선 적용) {% endcomment %}
+  {% assign dynamic_space = sec_val | plus: min_val | modulo: 6 | times: 4 | plus: 4 %}
+
+  <div style="background-color: {{ pastel_bg }}; color: {{ text_color }}; border-color: {{ border_color }}; margin-left: {{ ml }}; margin-right: {{ mr }}; margin-bottom: {{ dynamic_space }}px;">
+    <div>
+      {{ post.content | strip_html | strip_newlines }}
+      <time class="post-date">
+        {{ post.date | date: "%Y.%m.%d. %H:%M:%S" }}
+        {% if post.category %}
+            · {{ post.category }}
+        {% elsif post.categories %}
+            · {{ post.categories | first }}
+        {% endif %}
+      </time>
     </div>
+  </div>
+  {% endfor %}
+</div>
