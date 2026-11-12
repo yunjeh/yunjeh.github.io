@@ -29,13 +29,26 @@ title: Archive
         border-radius: var(--radius-subtle, 6px);
         border: 1px solid #ddd;
         transition: filter 0.2s ease;
+        
+        /* 🎯 글이 등장할 때 부드럽고 천천히 나타나도록 애니메이션 적용 (0.8초 동안 여유 있게 페이드인) */
+        animation: fadeInUp 0.8s ease both;
+    }
+
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(15px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
     }
 
     .post-list > div:hover {
         filter: brightness(0.97);
     }
 
-    /*   */
     .post-list > div > div {
         margin: 0;
     }
@@ -48,15 +61,13 @@ title: Archive
         margin-bottom: 0;
     }
 
-    /*   */
     .post-date {
         font-size: 12px;
         font-weight: 400;
         color: #aaa;
         white-space: nowrap;
         flex-shrink: 0;
-        display: inline; /* 👈  인라인 처리 엔터 방지 */
-        /* margin-left: 6px; */
+        display: inline;
     }
 </style>
 
