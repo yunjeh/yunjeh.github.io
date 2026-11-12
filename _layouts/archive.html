@@ -10,7 +10,7 @@ title: Archive
 
 
     <div class="post-list">
-      {% for post %}
+      {% for post in site.posts %}
       <div>
         {{ post.content | strip_html | strip_newlines }}
         <time class="post-date">
