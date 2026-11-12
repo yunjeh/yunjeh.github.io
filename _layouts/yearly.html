@@ -160,23 +160,39 @@ layout: default
 
     .diary-container {
         flex-grow: 1;
-        max-width: 600px;
+        max-width: 400px;
         min-width: 0;
         width: 100%;
     }
 
+    /* 🎯 모바일 전용 촘촘한 여백 조정 */
     @media (max-width: 768px) {
+        .archive-page-wrapper {
+            padding: 0 4px !important;
+        }
         .site-wrapper {
             flex-direction: column-reverse;
             align-items: stretch;
+            gap: 12px;
         }
         .diary-container {
-            max-width: 100%;
+            max-width: 100% !important;
             width: 100%;
         }
         .calendar-sidebar {
             width: 100%;
-            margin-top: 20px;
+            margin-top: 10px;
+            padding: 10px !important;
+        }
+        .cal-grid {
+            gap: 1px !important;
+        }
+        .cal-day-name {
+            padding-bottom: 4px;
+        }
+        .diary-entry {
+            padding: 12px !important;
+            margin-bottom: 8px !important;
         }
     }
 </style>
