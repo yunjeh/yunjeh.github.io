@@ -10,6 +10,7 @@ title: Archive
 <style>
     /* 홈페이지 메인과 동일한 .post-list 규격 */
     .post-list {
+        width: 100% !important;
         max-width: 400px !important;
         padding: 0 !important;
         margin: 0 !important;
@@ -20,6 +21,8 @@ title: Archive
     }
 
     .post-list > div {
+        width: 100%; /* 👈 박스 폭이 컨테이너에 딱 맞아 떨어지도록 설정 */
+        box-sizing: border-box; /* 👈 패딩과 테두리가 폭을 깎아먹지 않게 보호 */
         position: relative;
         background: var(--box-bg, #e5e5e5);
         padding: var(--box-padding, 16px);
@@ -32,7 +35,6 @@ title: Archive
         filter: brightness(0.97);
     }
 
-    /* 본문 간격 미세 조정 */
     .post-list > div > div:first-child {
         margin-bottom: 4px;
     }
@@ -45,7 +47,6 @@ title: Archive
         margin-bottom: 0;
     }
 
-    /* 날짜 규격 */
     .post-date {
         font-size: 12px;
         font-weight: 400;
@@ -61,7 +62,7 @@ title: Archive
 <div class="post-list">
   {% for post in site.posts %}
   
-  {% comment %} 🎯 1. 10% 확률로 아주 드물게 알록달록한 파스텔톤 컬러 지정 {% endcomment %}
+  {% comment %} 🎯 1. 파스텔톤 컬러 지정 {% endcomment %}
   {% assign sec_val = post.date | date: '%S' | plus: 0 %}
   {% assign min_val = post.date | date: '%M' | plus: 0 %}
   {% assign prob_check = sec_val | modulo: 10 %}
@@ -81,7 +82,7 @@ title: Archive
       {% assign border_color = '#ddd' %}
   {% endif %}
 
-  {% comment %} 🎯 2. 좌우 마진 변주 계산 (지그재그 리듬감) {% endcomment %}
+  {% comment %} 🎯 2. 좌우 마진 {% endcomment %}
   {% assign margin_type = sec_val | modulo: 4 %}
   {% if margin_type == 0 %}
       {% assign ml = "0px" %}{% assign mr = "25px" %}
@@ -93,7 +94,7 @@ title: Archive
       {% assign ml = "25px" %}{% assign mr = "0px" %}
   {% endif %}
 
-  {% comment %} 🎯 3. 상하 간격 압축 및 시간차 비례 변주 (상한선 적용) {% endcomment %}
+  {% comment %} 🎯 3. 상하 간격 비례 {% endcomment %}
   {% assign dynamic_space = sec_val | plus: min_val | modulo: 6 | times: 4 | plus: 4 %}
 
   <div style="background-color: {{ pastel_bg }}; color: {{ text_color }}; border-color: {{ border_color }}; margin-left: {{ ml }}; margin-right: {{ mr }}; margin-bottom: {{ dynamic_space }}px;">
