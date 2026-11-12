@@ -30,7 +30,7 @@ title: Archive
         border: 1px solid #ddd;
         transition: filter 0.2s ease;
 
-        /* 🎯 순수 CSS 스크롤 뷰 애니메이션 (자바스크립트 불필요) */
+        /* 순수 CSS 스크롤 뷰 애니메이션 */
         animation: fadeInScroll linear both;
         animation-timeline: view();
         animation-range: entry 0% cover 30%;
@@ -71,6 +71,17 @@ title: Archive
         flex-shrink: 0;
         display: inline;
     }
+
+    /* ===================================================
+       🎯 모바일 화면 (768px 이하) 전용 여백 고정 규칙
+    =================================================== */
+    @media (max-width: 768px) {
+        .post-list > div {
+            margin-left: 0 !important;   /* 좌측 마진 변주 제거 */
+            margin-right: 0 !important;  /* 우측 마진 변주 제거 */
+            margin-bottom: 12px !important; /* 상하 간격을 통일된 일정한 간격으로 고정 */
+        }
+    }
 </style>
 
 <div class="post-list">
@@ -96,7 +107,7 @@ title: Archive
       {% assign border_color = '#ddd' %}
   {% endif %}
 
-  {% comment %} 🎯 2. 좌우 마진 {% endcomment %}
+  {% comment %} 🎯 2. 좌우 마진 (데스크탑용) {% endcomment %}
   {% assign margin_type = sec_val | modulo: 4 %}
   {% if margin_type == 0 %}
       {% assign ml = "0px" %}{% assign mr = "25px" %}
@@ -108,7 +119,7 @@ title: Archive
       {% assign ml = "25px" %}{% assign mr = "0px" %}
   {% endif %}
 
-  {% comment %} 🎯 3. 상하 간격 {% endcomment %}
+  {% comment %} 🎯 3. 상하 간격 (데스크탑용) {% endcomment %}
   {% assign dynamic_space = sec_val | plus: min_val | modulo: 6 | times: 4 | plus: 4 %}
 
   <div style="background-color: {{ pastel_bg }}; color: {{ text_color }}; border-color: {{ border_color }}; margin-left: {{ ml }}; margin-right: {{ mr }}; margin-bottom: {{ dynamic_space }}px;">
