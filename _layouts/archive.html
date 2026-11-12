@@ -29,15 +29,17 @@ title: Archive
         border-radius: var(--radius-subtle, 6px);
         border: 1px solid #ddd;
         transition: filter 0.2s ease;
-        
-        /* 🎯 글이 등장할 때 부드럽고 천천히 나타나도록 애니메이션 적용 (0.8초 동안 여유 있게 페이드인) */
-        animation: fadeInUp 0.8s ease both;
+
+        /* 🎯 순수 CSS 스크롤 뷰 애니메이션 (자바스크립트 불필요) */
+        animation: fadeInScroll linear both;
+        animation-timeline: view();
+        animation-range: entry 0% cover 30%;
     }
 
-    @keyframes fadeInUp {
+    @keyframes fadeInScroll {
         from {
             opacity: 0;
-            transform: translateY(15px);
+            transform: translateY(20px);
         }
         to {
             opacity: 1;
